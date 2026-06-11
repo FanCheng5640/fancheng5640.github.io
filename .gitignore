@@ -17,7 +17,8 @@ package-lock.json
 .bundle/
 
 # Ignore folders related to IDEs
-.vscode/
+.vscode/*
+!.vscode/settings.json
 
 # Ignore files created by MacOS
 .DS_Store
