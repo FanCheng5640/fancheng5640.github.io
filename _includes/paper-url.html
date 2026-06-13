@@ -1,0 +1,12 @@
+{%- assign paper_url = include.url | default: "" | strip -%}
+{%- if paper_url contains "://" -%}
+{{- paper_url -}}
+{%- elsif paper_url != "" -%}
+{%- assign local_paper_url = paper_url | relative_url -%}
+{%- assign cache_bust_version = site.time | date: "%Y%m%d%H%M%S" -%}
+{%- if local_paper_url contains "?" -%}
+{{- local_paper_url -}}&v={{- cache_bust_version -}}
+{%- else -%}
+{{- local_paper_url -}}?v={{- cache_bust_version -}}
+{%- endif -%}
+{%- endif -%}

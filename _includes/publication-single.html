@@ -49,12 +49,8 @@
         <a class="publication__article-link" href="{{ article_url }}" target="_blank" rel="noopener"><i class="fa fa-external-link-alt" aria-hidden="true"></i> Article</a>
       {% endif %}
       {% if post.paperurl %}
-        {% assign paper_url = post.paperurl %}
-        {% if paper_url contains "://" %}
-          <a class="publication__download" href="{{ paper_url }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
-        {% else %}
-          <a class="publication__download" href="{{ paper_url | relative_url }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
-        {% endif %}
+        {% capture paper_href %}{% include paper-url.html url=post.paperurl %}{% endcapture %}
+        <a class="publication__download" href="{{ paper_href | strip }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
       {% endif %}
     </p>
     {% if post.opn_url %}
