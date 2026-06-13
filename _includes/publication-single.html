@@ -56,9 +56,6 @@
           <a class="publication__download" href="{{ paper_url | relative_url }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
         {% endif %}
       {% endif %}
-      {% if post.opn_url %}
-        <a class="publication__opn-link" href="{{ post.opn_url }}" target="_blank" rel="noopener"><i class="fa fa-newspaper" aria-hidden="true"></i> OPN feature</a>
-      {% endif %}
     </p>
     {% if post.opn_url %}
       <p class="publication__opn-note">Selected by <i>Optics &amp; Photonics News</i>{% if post.opn_issue %}: <a href="{{ post.opn_url }}" target="_blank" rel="noopener">{{ post.opn_title | default: post.opn_issue }}</a> ({{ post.opn_issue }}){% endif %}.</p>

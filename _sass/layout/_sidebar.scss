@@ -237,7 +237,7 @@
     display: block;
   }
 
-  button {
+  > .author__follow-button {
     margin-bottom: 0;
 
     @include breakpoint($large) {
@@ -351,6 +351,10 @@
     font-size: $type-size-5;
     cursor: pointer;
     text-align: left;
+  }
+
+  .author__email-copy-button span {
+    overflow-wrap: anywhere;
   }
 
   .author__email-copy-button:hover,

@@ -6,6 +6,8 @@
     if (!button) {
       return;
     }
+    event.preventDefault();
+    event.stopPropagation();
 
     var email = button.getAttribute("data-copy-email");
     var status = button.parentElement.querySelector(".author__email-copy-status");
@@ -54,7 +56,7 @@
     } catch (error) {
       setStatus("Copy failed");
     }
-  });
+  }, true);
 </script>
 
 {% include analytics.html %}

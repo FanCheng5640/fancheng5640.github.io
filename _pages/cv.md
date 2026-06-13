@@ -18,14 +18,14 @@ Education
 School of Electrical Engineering, Tel Aviv University  
 Tel Aviv, Israel | 03/2021 - Present  
 Optics (optical microresonators)  
-Advisor: Prof. Tal Carmon ([Google Scholar](https://scholar.google.com/citations?user=tiFit0cAAAAJ&hl=en&inst=2457744612629960019), [lab](https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/))
+Advisor: [Prof. Tal Carmon](https://scholar.google.com/citations?user=tiFit0cAAAAJ&hl=en&inst=2457744612629960019) ([Lab](https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/))
 
 ### M.Sc. in Optics
 
 Shanxi University  
 Taiyuan, China | 09/2014 - 07/2017  
 Optics (optical microresonators)  
-Advisors: Prof. Tiancai Zhang ([Google Scholar](https://scholar.google.com/citations?user=DTAaDZAAAAAJ&hl=en&inst=2457744612629960019)); Prof. Pengfei Zhang ([Google Scholar](https://scholar.google.com/citations?user=Grjz9fgAAAAJ&hl=en&inst=2457744612629960019))
+Advisors: [Prof. Tiancai Zhang](https://scholar.google.com/citations?user=DTAaDZAAAAAJ&hl=en&inst=2457744612629960019); [Prof. Pengfei Zhang](https://scholar.google.com/citations?user=Grjz9fgAAAAJ&hl=en&inst=2457744612629960019)
 
 ### B.Sc. in Physics
 

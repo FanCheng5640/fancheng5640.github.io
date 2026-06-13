@@ -122,9 +122,9 @@ $(document).ready(function () {
   fitvids();
 
   // Follow menu drop down
-  $(".author__urls-wrapper button").on("click", function () {
+  $(".author__urls-wrapper > .author__follow-button").on("click", function () {
     $(".author__urls").fadeToggle("fast", function () { });
-    $(".author__urls-wrapper button").toggleClass("open");
+    $(".author__urls-wrapper > .author__follow-button").toggleClass("open");
   });
 
   // Restore the follow menu if toggled on a window resize
