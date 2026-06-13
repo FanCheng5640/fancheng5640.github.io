@@ -1,0 +1,25 @@
+fancheng5640.github.io 引用清单
+==============================
+
+[2026-06-13] Google Scholar citation profile data
+    使用位置：.github/scripts/sync_google_scholar.py；_data/google_scholar.json；_pages/publications.html
+
+    方法/来源：从公开 Google Scholar profile 页面读取引用指标表和年度引用图数据，用于 Publications 页面的 Google Scholar 风格引用图。
+
+    URL：https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en
+
+    官方说明：Google Scholar Profiles 页面说明 profile 会展示 citations、citation graph 和 citation metrics，并且指标会随 Scholar 在网上找到的新引用自动更新。
+
+    官方说明URL：https://scholar.google.com/intl/en/scholar/citations.html
+
+
+[2026-06-13] Journal Citation Reports / Journal Impact Factor data
+    使用位置：_data/journal_metrics.json；.github/scripts/sync_orcid_publications.py；_pages/publications.html；_includes/publication-single.html
+
+    方法/来源：影响因子集中记录在 _data/journal_metrics.json；页面只统一显示数据年份，不在每篇论文后重复年份。
+
+    官方说明：Clarivate 2025 Journal Citation Reports release provides 2024 data；Web of Science Journals API can provide JCR journal-level metadata including Journal Impact Factor but requires API key/subscription.
+
+    JCR release URL：https://journalcitationreports.zendesk.com/hc/en-gb/articles/36310787349521-2025
+
+    API URL：https://developer.clarivate.com/apis/wos-journal

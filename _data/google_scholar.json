@@ -1,0 +1,54 @@
+{
+  "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
+  "source": "Google Scholar",
+  "updated": "2026-06-13",
+  "summary_title": "Google Scholar citations",
+  "metrics": {
+    "citations": {
+      "all": 45,
+      "recent": 41
+    },
+    "h_index": {
+      "all": 3,
+      "recent": 3
+    },
+    "i10_index": {
+      "all": 2,
+      "recent": 1
+    }
+  },
+  "citations_by_year": [
+    {
+      "year": 2019,
+      "citations": 1
+    },
+    {
+      "year": 2020,
+      "citations": 3
+    },
+    {
+      "year": 2021,
+      "citations": 0
+    },
+    {
+      "year": 2022,
+      "citations": 1
+    },
+    {
+      "year": 2023,
+      "citations": 1
+    },
+    {
+      "year": 2024,
+      "citations": 13
+    },
+    {
+      "year": 2025,
+      "citations": 18
+    },
+    {
+      "year": 2026,
+      "citations": 8
+    }
+  ]
+}

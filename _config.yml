@@ -189,11 +189,13 @@ exclude:
   - gulpfile.js
   - LICENSE
   - local
+  - 本地PDF论文
   - log
   - node_modules
   - package.json*
   - Rakefile
   - README
+  - 需求清单.txt
   - tmp
   - vendor
 keep_files:
@@ -226,13 +228,13 @@ kramdown:
 # These settings control the types of collections used by the template
 collections:
   teaching:
-    output: true
+    output: false
     permalink: /:collection/:path/
   publications:
     output: true
     permalink: /:collection/:path/
   portfolio:
-    output: true
+    output: false
     permalink: /:collection/:path/
   talks:
     output: true

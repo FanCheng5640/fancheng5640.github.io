@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "metric_year": 2024,
+    "release": "2025 Journal Citation Reports release",
+    "release_note_url": "https://journalcitationreports.zendesk.com/hc/en-gb/articles/36310787349521-2025",
+    "api_note_url": "https://developer.clarivate.com/apis/wos-journal",
+    "updated": "2026-06-13"
+  },
+  "journals": [
+    {
+      "name": "Nature Communications",
+      "impact_factor": 15.7,
+      "source": "https://www.nature.com/ncomms/journal-impact"
+    },
+    {
+      "name": "Optica",
+      "impact_factor": 8.5,
+      "source": "https://opg.optica.org/optica/journal/optica/about.cfm"
+    },
+    {
+      "name": "Photonics Research",
+      "impact_factor": 7.2,
+      "source": "https://opg.optica.org/prj/"
+    },
+    {
+      "name": "Applied Physics Letters",
+      "impact_factor": 3.6,
+      "source": "https://pubs.aip.org/aip/apl/pages/about"
+    },
+    {
+      "name": "Optics Express",
+      "impact_factor": 3.3,
+      "source": "https://opg.optica.org/oe/about"
+    },
+    {
+      "name": "AIP Advances",
+      "impact_factor": 1.4,
+      "source": "https://pubs.aip.org/aip/adv/pages/about"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{% include base_path %}
+
+{% if post.id %}
+  {% assign title = post.title | markdownify | remove: "<p>" | remove: "</p>" %}
+{% else %}
+  {% assign title = post.title %}
+{% endif %}
+
+{% assign article_url = post.originalurl | default: post.link %}
+{% assign publication_anchor = post.url | default: post.permalink | slugify %}
+{% assign publication_metric = site.data.journal_metrics.journals | where: "name", post.venue | first %}
+{% assign is_starred = false %}
+{% if include.featured or post.featured %}
+  {% assign is_starred = true %}
+{% endif %}
+{% if include.anchor_prefix %}
+  {% assign publication_anchor = include.anchor_prefix | append: "-" | append: publication_anchor %}
+{% endif %}
+
+<div class="publication__item{% if is_starred %} publication__item--starred{% endif %}{% if include.featured %} publication__item--featured-section{% endif %}{% if include.anchor_prefix %} publication__item--all-section{% endif %}"{% if include.anchor_prefix %} id="{{ publication_anchor }}"{% endif %}>
+  <article class="archive__item publication__entry" itemscope itemtype="http://schema.org/CreativeWork">
+    <h2 class="archive__item-title publication__title" itemprop="headline">
+      {% if is_starred %}<i class="fa fa-star publication__title-star" aria-hidden="true"></i><span class="sr-only">Featured work: </span>{% endif %}
+      {{ title }}
+    </h2>
+
+    {% if post.authors and post.authors != "" %}
+      <p class="publication__authors">{{ post.authors }}</p>
+    {% endif %}
+
+    <p class="publication__meta">
+      {% if post.venue %}<i class="publication__venue">{{ post.venue }}</i>{% endif %}{% if post.date %}{% if post.venue %}, {% endif %}{{ post.date | default: "1900-01-01" | date: "%B %Y" }}{% endif %}
+      {% if publication_metric %}
+        <span class="publication__badge">IF {{ publication_metric.impact_factor }}</span>
+      {% elsif post.journal_impact_factor and post.journal_impact_factor != 0 %}
+        <span class="publication__badge">IF {{ post.journal_impact_factor }}</span>
+      {% endif %}
+    </p>
+
+    <p class="publication__links">
+      {% if article_url and article_url != "" %}
+        <a class="publication__article-link" href="{{ article_url }}" target="_blank" rel="noopener"><i class="fa fa-external-link-alt" aria-hidden="true"></i> Article</a>
+      {% endif %}
+      {% if post.paperurl %}
+        {% assign paper_url = post.paperurl %}
+        {% if paper_url contains "://" %}
+          <a class="publication__download" href="{{ paper_url }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
+        {% else %}
+          <a class="publication__download" href="{{ paper_url | relative_url }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
+        {% endif %}
+      {% endif %}
+    </p>
+  </article>
+</div>

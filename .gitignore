@@ -5,12 +5,22 @@ _site/
 # Ignore the directory for local files during development
 local/
 
+# Keep manually downloaded paper PDFs local-only
+本地PDF论文/
+
 # Ignore the Gemfile that is generated
 Gemfile.lock
 
 # Ignore files created by npm
 node_modules
 package-lock.json
+
+# Ignore Python bytecode caches
+__pycache__/
+*.py[cod]
+
+# Keep local project task notes private
+需求清单.txt
 
 # Ignore the vendor file at root level and bundle for alternative installation
 /vendor/

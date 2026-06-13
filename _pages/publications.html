@@ -8,36 +8,116 @@ author_profile: true
 {% include base_path %}
 
 {% assign publications_sorted = site.publications | sort: "date" | reverse %}
-{% assign first_author_publications = site.publications | where: "first_author", true | sort: "summary_order" %}
-{% assign coauthor_publications = site.publications | where: "first_author", false | sort: "summary_order" %}
+{% assign first_author_publications = site.publications | where: "first_author", true | sort: "journal_impact_factor" | reverse %}
+{% assign corresponding_author_publications = site.publications | where: "corresponding_author", true | sort: "journal_impact_factor" | reverse %}
+{% assign coauthor_publications = site.publications | where: "first_author", false | where: "corresponding_author", false | sort: "journal_impact_factor" | reverse %}
 {% assign featured_publications = site.publications | where: "featured", true | sort: "date" | reverse %}
 {% assign first_author_by_venue = first_author_publications | group_by: "venue" %}
+{% assign corresponding_author_by_venue = corresponding_author_publications | group_by: "venue" %}
 {% assign coauthor_by_venue = coauthor_publications | group_by: "venue" %}
 
-<h2>PUBLICATIONS ({{ site.publications | size }})</h2><hr />
-<ul>
-  <li><strong>First author ({{ first_author_publications | size }}):</strong>
-    {% for venue_group in first_author_by_venue %}
-      {{ venue_group.name }} ({{ venue_group.items | size }}){% unless forloop.last %}, {% endunless %}
-    {% endfor %}
-  </li>
-  <li><strong>Co-author ({{ coauthor_publications | size }}):</strong>
-    {% for venue_group in coauthor_by_venue %}
-      {{ venue_group.name }} ({{ venue_group.items | size }}){% unless forloop.last %}, {% endunless %}
-    {% endfor %}
-  </li>
-</ul>
-
 {% if site.author.googlescholar %}
-  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+  <div class="wordwrap publication-note"><a href="{{site.author.googlescholar}}">Google Scholar</a></div>
 {% endif %}
 
-<h2>Featured works</h2><hr />
+{% assign scholar = site.data.google_scholar %}
+{% if scholar and scholar.citations_by_year and scholar.citations_by_year.size > 0 %}
+  {% assign max_citations = 0 %}
+  {% for point in scholar.citations_by_year %}
+    {% if point.citations > max_citations %}
+      {% assign max_citations = point.citations %}
+    {% endif %}
+  {% endfor %}
+
+  <section class="scholar-metrics" aria-labelledby="scholar-metrics-title">
+    <h2 id="scholar-metrics-title">{{ scholar.summary_title }}</h2>
+    <div class="scholar-metrics__content">
+      <table class="scholar-metrics__table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">All</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Citations</th>
+            <td>{{ scholar.metrics.citations.all }}</td>
+          </tr>
+          <tr>
+            <th scope="row">h-index</th>
+            <td>{{ scholar.metrics.h_index.all }}</td>
+          </tr>
+          <tr>
+            <th scope="row">i10-index</th>
+            <td>{{ scholar.metrics.i10_index.all }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="scholar-metrics__chart" aria-label="Google Scholar citations by year">
+        {% for point in scholar.citations_by_year %}
+          {% assign bar_height = point.citations | times: 100 | divided_by: max_citations %}
+          <div class="scholar-metrics__bar-group">
+            <span class="scholar-metrics__value">{{ point.citations }}</span>
+            <span class="scholar-metrics__bar" style="height: {{ bar_height }}%;"></span>
+            <span class="scholar-metrics__year">{{ point.year }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <p class="scholar-metrics__source">Source: <a href="{{ scholar.profile_url }}">Google Scholar</a>; last synced {{ scholar.updated }}.</p>
+  </section>
+{% endif %}
+
+<h2>PUBLICATIONS ({{ site.publications | size }})</h2><hr />
+{% assign impact_meta = site.data.journal_metrics.metadata %}
+{% if impact_meta %}
+  <p class="publication-impact-note">JIF: {{ impact_meta.metric_year }} JCR data.</p>
+{% endif %}
+<div class="publication-summary">
+  <section class="publication-summary__section">
+    <h3>First author ({{ first_author_publications | size }})</h3>
+    <ul class="publication-summary__venues">
+    {% for venue_group in first_author_by_venue %}
+      <li>
+        <strong>{{ venue_group.name }} ({{ venue_group.items | size }})</strong>
+      </li>
+    {% endfor %}
+    </ul>
+  </section>
+
+  {% if corresponding_author_publications.size > 0 %}
+  <section class="publication-summary__section">
+    <h3>Corresponding author ({{ corresponding_author_publications | size }})</h3>
+    <ul class="publication-summary__venues">
+    {% for venue_group in corresponding_author_by_venue %}
+      <li>
+        <strong>{{ venue_group.name }} ({{ venue_group.items | size }})</strong>
+      </li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="publication-summary__section">
+    <h3>Co-author ({{ coauthor_publications | size }})</h3>
+    <ul class="publication-summary__venues">
+    {% for venue_group in coauthor_by_venue %}
+      <li>
+        <strong>{{ venue_group.name }} ({{ venue_group.items | size }})</strong>
+      </li>
+    {% endfor %}
+    </ul>
+  </section>
+</div>
+
+<h2 class="publication-section-heading publication-section-heading--featured"><i class="fa fa-star publication-section-heading__icon" aria-hidden="true"></i> Featured works</h2><hr />
 {% for post in featured_publications %}
-  {% include archive-single.html %}
+  {% include publication-single.html featured=true %}
 {% endfor %}
 
-<h2>All Publications</h2><hr />
+<h2 class="publication-section-heading publication-section-heading--all">All Publications</h2><hr />
 {% for post in publications_sorted %}
-  {% include archive-single.html %}
+  {% include publication-single.html anchor_prefix="publication" %}
 {% endfor %}
