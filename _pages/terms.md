@@ -36,4 +36,4 @@ If you wish to disable cookies, you may do so through your web browser options. 
 
 #### Google Analytics
 
-Google Analytics is a web analytics tool I use to help understand how visitors engage with this website. It reports website trends using cookies and web beacons without identifying individual visitors. You can read [Google Analytics Privacy Policy](https://www.google.com/analytics/learn/privacy.html).
+If enabled, Google Analytics is used only to understand aggregate website traffic such as page views, time, and approximate visitor geography. These analytics are for private site-owner review and are not displayed publicly. You can read the [Google Analytics Privacy Policy](https://www.google.com/analytics/learn/privacy.html).

@@ -1,32 +1,34 @@
-.publication-note {
-  margin-bottom: 1rem;
-}
-
 .scholar-metrics {
   margin-bottom: 1.4rem;
 }
 
 .scholar-metrics__content {
   display: grid;
-  grid-template-columns: minmax(11rem, 0.8fr) minmax(16rem, 1.5fr);
-  gap: 1.2rem;
+  grid-template-columns: 8.2rem minmax(16rem, 1fr);
+  gap: 0.8rem;
   align-items: end;
 }
 
 .scholar-metrics__table {
-  width: 100%;
+  width: 8.2rem;
+  max-width: 8.2rem;
   border-collapse: collapse;
 }
 
 .scholar-metrics__table th,
 .scholar-metrics__table td {
-  padding: 0.25rem 0.4rem;
+  padding: 0.12rem 0.28rem;
   text-align: right;
   border-bottom: 1px solid #e5e5e5;
 }
 
 .scholar-metrics__table th:first-child {
+  width: 5.4rem;
   text-align: left;
+}
+
+.scholar-metrics__table td {
+  width: 2.1rem;
 }
 
 .scholar-metrics__chart {
@@ -40,12 +42,25 @@
 
 .scholar-metrics__bar-group {
   display: grid;
-  grid-template-rows: 1.2rem 8rem 1.4rem;
+  grid-template-rows: 9.2rem 1.4rem;
   justify-items: center;
   align-items: end;
   min-width: 1.65rem;
   color: #666;
   font-size: 0.78rem;
+}
+
+.scholar-metrics__bar-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 9.2rem;
+}
+
+.scholar-metrics__value {
+  margin-bottom: 0.18rem;
+  line-height: 1;
 }
 
 .scholar-metrics__bar {
@@ -68,17 +83,36 @@
   margin-bottom: 0.85rem;
 }
 
-.publication-summary__section h3 {
+.publication-summary__role {
   margin-bottom: 0.25rem;
+  font-weight: 700;
 }
 
 .publication-summary__venues {
-  margin-top: 0.25rem;
-  padding-left: 1.2rem;
+  margin-top: 0.35rem;
+  padding-left: 0.9rem;
+  list-style: none;
 }
 
 .publication-summary__venues li {
-  margin-bottom: 0.25rem;
+  position: relative;
+  margin-bottom: 0.18rem;
+  padding-left: 0.85rem;
+}
+
+.publication-summary__venues li::before {
+  content: "";
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: var(--global-text-color);
+}
+
+.publication-summary__venue-name {
+  font-weight: 600;
 }
 
 .publication-section-heading {
@@ -153,7 +187,7 @@
 }
 
 .publication__meta {
-  color: var(--global-text-color-light);
+  color: var(--global-text-color);
 }
 
 .publication__venue {

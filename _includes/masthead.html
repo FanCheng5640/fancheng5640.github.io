@@ -5,8 +5,8 @@
       <nav id="site-nav" class="greedy-nav">
         <button><span class="navicon"></span></button>
         <ul class="visible-links">
-          <li class="masthead__menu-item masthead__menu-item--lg persist {% if page.url == '/' or page.url == '/index.html' %}selected{% endif %}">
-            <a href="{{ base_path }}/">{{ site.title }}</a>
+          <li class="masthead__menu-item masthead__menu-item--lg masthead__site-title">
+            <span>{{ site.title }}</span>
           </li>
           {% for link in site.data.navigation.main %}
             {% if link.url contains 'http' %}
@@ -14,7 +14,15 @@
             {% else %}
               {% assign domain = base_path %}
             {% endif %}
-            <li class="masthead__menu-item {% if page.url contains link.url and link.url != '/' %}selected{% endif %}">
+            {% assign link_selected = false %}
+            {% if link.url == '/' %}
+              {% if page.url == '/' or page.url == '/index.html' %}
+                {% assign link_selected = true %}
+              {% endif %}
+            {% elsif page.url contains link.url %}
+              {% assign link_selected = true %}
+            {% endif %}
+            <li class="masthead__menu-item {% if link_selected %}selected{% endif %}">
               <a href="{{ domain }}{{ link.url }}">{{ link.title }}</a>
             </li>
           {% endfor %}

@@ -8,6 +8,9 @@ local/
 # Keep manually downloaded paper PDFs local-only
 本地PDF论文/
 
+# Keep personal photos local-only
+本地个人照片/
+
 # Ignore the Gemfile that is generated
 Gemfile.lock
 

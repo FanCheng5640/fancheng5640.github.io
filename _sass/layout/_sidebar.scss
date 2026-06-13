@@ -210,10 +210,11 @@
 
 .author__bio {
   margin: 0;
+  line-height: 1.35;
 
   @include breakpoint($large) {
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 }
 

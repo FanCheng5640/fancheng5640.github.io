@@ -1,13 +1,15 @@
 ---
 permalink: /
-title: "About"
+title: "Fan Cheng"
 author_profile: true
 redirect_from:
   - /about/
   - /about.html
 ---
 
-I am a Ph.D. candidate in the School of Electrical Engineering at Tel Aviv University, working with Prof. Tal Carmon.
+## Current Position
+
+Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
 
 ## News
 
@@ -15,22 +17,11 @@ I am a Ph.D. candidate in the School of Electrical Engineering at Tel Aviv Unive
 - March 2024: Published first-author work on cavity continuum in *Photonics Research*.
 - 2021-present: Ph.D. candidate in Electrical Engineering, Tel Aviv University.
 
-## Current Position
+{% assign research_interests = site.author.research_interests %}
+{% if research_interests and research_interests.items %}
+## {{ research_interests.title }}
 
-Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
-
-## Research
-
-My experimental research centers on:
-
-- Liquid-droplet microcavities
-- Optical microresonators
-- Whispering-gallery modes (WGM)
-
-## Awards
-
-Awards and honors will be updated here.
-
-## Service
-
-Journal reviewer: to be updated.
+{% for interest in research_interests.items %}
+- {{ interest }}
+{% endfor %}
+{% endif %}

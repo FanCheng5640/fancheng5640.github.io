@@ -3,11 +3,15 @@
 {% if page.author and site.data.authors[page.author] %}
   {% assign author = site.data.authors[page.author] %}{% else %}{% assign author = site.author %}
 {% endif %}
+{% assign local_avatar_path = "/本地个人照片/fan-cheng-photo.png" %}
+{% assign local_avatar_file = site.static_files | where: "path", local_avatar_path | first %}
 
 <div itemscope itemtype="http://schema.org/Person">
 
   <div class="author__avatar">
-    {% if author.avatar contains "://" %}
+    {% if jekyll.environment == "development" and local_avatar_file %}
+      <img src="{{ local_avatar_path | relative_url }}" class="author__avatar" alt="{{ author.name }}" fetchpriority="high" />
+    {% elsif author.avatar contains "://" %}
     	<img src="{{ author.avatar }}" alt="{{ author.name }}"  fetchpriority="high" />
     {% else %}
     	<img src="{{ author.avatar | prepend: "/images/" | prepend: base_path }}" class="author__avatar" alt="{{ author.name }}"  fetchpriority="high" />
@@ -17,7 +21,17 @@
   <div class="author__content">
     <h3 class="author__name">{{ author.name }}</h3>
     {% if author.pronouns %}<p class="author__pronouns">{{ author.pronouns }}</p>{% endif %}
-    {% if author.bio %}<p class="author__bio">{{ author.bio }}</p>{% endif %}
+    {% if author.bio %}
+      <div class="author__bio">
+        {% if author.bio.first %}
+          {% for bio_line in author.bio %}
+            <div>{{ bio_line }}</div>
+          {% endfor %}
+        {% else %}
+          {{ author.bio }}
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
 
   <div class="author__urls-wrapper">

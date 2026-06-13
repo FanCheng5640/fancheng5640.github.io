@@ -66,6 +66,10 @@
   }
 }
 
+.masthead__site-title {
+  color: var(--global-text-color);
+}
+
 .masthead__menu-item.selected a {
   color: var(--global-text-color);
   font-weight: 700;

@@ -26,7 +26,17 @@ author:
   avatar           : "profile.png"
   name             : "Fan Cheng"
   pronouns         : # example: "she/her"  
-  bio              : "Ph.D. candidate in optics studying liquid-droplet microcavities, optical microresonators, and whispering-gallery modes."
+  bio:
+    - "Ph.D. Candidate"
+    - "School of Electrical Engineering"
+    - "Tel Aviv University"
+    - "Israel"
+  research_interests:
+    title: "RESEARCH INTERESTS (Experimental)"
+    items:
+      - "Liquid-droplet microcavities"
+      - "Optical microresonators"
+      - "Whispering-gallery-modes (WGM)"
   location         : "Tel Aviv, Israel"
   employer         : "Tel Aviv University"
   uri              : "https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/"
@@ -157,7 +167,10 @@ social:
     - "https://www.researchgate.net/profile/Fan-Cheng-19"
 
 
-# Analytics
+# Private analytics
+# Keep disabled until a personal analytics property exists.
+# GA4 setup: provider "google-analytics-4", tracking_id "G-..."
+# Analytics snippets render only in JEKYLL_ENV=production, so local preview is not counted.
 analytics:
   provider               :  "false" # false (default), "google", "google-universal", "google-analytics-4", "custom"
   google:
@@ -190,6 +203,7 @@ exclude:
   - LICENSE
   - local
   - 本地PDF论文
+  - 本地个人照片/original/
   - log
   - node_modules
   - package.json*
