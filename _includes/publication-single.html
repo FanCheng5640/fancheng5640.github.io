@@ -9,6 +9,10 @@
 {% assign article_url = post.originalurl | default: post.link %}
 {% assign publication_anchor = post.url | default: post.permalink | slugify %}
 {% assign publication_metric = site.data.journal_metrics.journals | where: "name", post.venue | first %}
+{% assign publication_citation = nil %}
+{% if post.doi and site.data.google_scholar.publication_citations %}
+  {% assign publication_citation = site.data.google_scholar.publication_citations | where: "doi", post.doi | first %}
+{% endif %}
 {% assign is_starred = false %}
 {% if include.featured or post.featured %}
   {% assign is_starred = true %}
@@ -35,6 +39,9 @@
       {% elsif post.journal_impact_factor and post.journal_impact_factor != 0 %}
         <span class="publication__badge">IF {{ post.journal_impact_factor }}</span>
       {% endif %}
+      {% if publication_citation %}
+        <span class="publication__badge publication__badge--citations">Cited by {{ publication_citation.citation_count }}</span>
+      {% endif %}
     </p>
 
     <p class="publication__links">
@@ -49,6 +56,14 @@
           <a class="publication__download" href="{{ paper_url | relative_url }}" target="_blank" rel="noopener"><i class="fa fa-file-pdf" aria-hidden="true"></i> PDF</a>
         {% endif %}
       {% endif %}
+      {% if post.opn_url %}
+        <a class="publication__opn-link" href="{{ post.opn_url }}" target="_blank" rel="noopener"><i class="fa fa-newspaper" aria-hidden="true"></i> OPN feature</a>
+      {% endif %}
     </p>
+    {% if post.opn_url %}
+      <p class="publication__opn-note">Selected by <i>Optics &amp; Photonics News</i>{% if post.opn_issue %}: <a href="{{ post.opn_url }}" target="_blank" rel="noopener">{{ post.opn_title | default: post.opn_issue }}</a> ({{ post.opn_issue }}){% endif %}.</p>
+    {% endif %}
+    {% include media-coverage-links.html items=post.media_coverage %}
+    {% include video-interview-links.html items=post.video_interviews %}
   </article>
 </div>

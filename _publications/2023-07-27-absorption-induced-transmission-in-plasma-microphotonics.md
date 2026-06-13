@@ -20,6 +20,9 @@ originalurl: "https://doi.org/10.1038/s41467-023-40205-0"
 link: "https://doi.org/10.1038/s41467-023-40205-0"
 paperurl: "/files/papers/2023-nat-commun-plasma-microphotonics.pdf"
 pdf_source: ""
+opn_title: "Plasma Microcavities"
+opn_issue: "Optics & Photonics News, Dec 2023"
+opn_url: "https://www.optica-opn.org/home/articles/volume_34/december_2023/extras/plasma_microcavities/"
 citation: "Baheej Bathish, Raanan Gad, <strong><u>Fan Cheng</u></strong>, Kristoffer Karlsson, Ramgopal Madugani, Mark Douvidzon, Síle Nic Chormaic, and Tal Carmon (2023). &quot;Absorption-induced transmission in plasma microphotonics.&quot; <i>Nature Communications</i>, 14(1), 4535. https://doi.org/10.1038/s41467-023-40205-0"
 ---
 

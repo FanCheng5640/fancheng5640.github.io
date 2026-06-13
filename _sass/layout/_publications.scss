@@ -177,7 +177,10 @@
 
 .publication__authors,
 .publication__meta,
-.publication__links {
+.publication__links,
+.publication__opn-note,
+.publication__media-coverage,
+.publication__video-interviews {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
 }
@@ -210,6 +213,11 @@
   font-weight: 600;
 }
 
+.publication__badge--citations {
+  background: #e8f1fb;
+  color: #1f5f96;
+}
+
 .publication__links a {
   display: inline-block;
   margin-right: 0.8rem;
@@ -221,4 +229,19 @@
 
 .publication__download {
   font-weight: 600;
+}
+
+.publication__opn-link {
+  font-weight: 600;
+}
+
+.publication__opn-note {
+  color: var(--global-text-color);
+  font-size: 0.9rem;
+}
+
+.publication__media-coverage,
+.publication__video-interviews {
+  color: var(--global-text-color);
+  font-size: 0.9rem;
 }

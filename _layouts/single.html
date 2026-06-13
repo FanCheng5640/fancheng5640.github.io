@@ -3,6 +3,10 @@ layout: default
 ---
 
 {% include base_path %}
+{% assign page_publication_citation = nil %}
+{% if page.collection == 'publications' and page.doi and site.data.google_scholar.publication_citations %}
+  {% assign page_publication_citation = site.data.google_scholar.publication_citations | where: "doi", page.doi | first %}
+{% endif %}
 
 {% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
   {% include page__hero.html %}
@@ -37,7 +41,7 @@ layout: default
         {% if page.collection == 'teaching' %}
           <p> {{ page.type }}, <i>{{ page.venue }}</i>, {{ page.date | default: "1900-01-01" | date: "%Y" }} </p>
         {% elsif page.venue and page.date %}
-          <p>Published in <i>{{ page.venue }}</i>, {{ page.date | default: "1900-01-01" | date: "%Y" }} </p>
+          <p>Published in <i>{{ page.venue }}</i>, {{ page.date | default: "1900-01-01" | date: "%Y" }}{% if page_publication_citation %} <span class="publication__badge publication__badge--citations">Cited by {{ page_publication_citation.citation_count }}</span>{% endif %}</p>
         {% elsif page.date %}
           <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].date_label | default: "Published:" }}</strong> <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time></p>
         {% endif %}    
@@ -72,6 +76,12 @@ layout: default
         {% elsif page.bibtexurl %}
           <p style="font-size: smaller"><a href="{{ page.bibtexurl }}">Download Bibtex</a></p>
         {% endif %}
+
+        {% if page.opn_url %}
+          <p class="publication__opn-note">Selected by <i>Optics &amp; Photonics News</i>{% if page.opn_issue %}: <a href="{{ page.opn_url }}" target="_blank" rel="noopener">{{ page.opn_title | default: page.opn_issue }}</a> ({{ page.opn_issue }}){% endif %}.</p>
+        {% endif %}
+        {% include media-coverage-links.html items=page.media_coverage %}
+        {% include video-interview-links.html items=page.video_interviews %}
 
         {% if page.link %}<div><a href="{{ page.link }}" class="btn">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
       </section>

@@ -28,18 +28,17 @@ author:
   pronouns         : # example: "she/her"  
   bio:
     - "Ph.D. Candidate"
-    - "School of Electrical Engineering"
-    - "Tel Aviv University"
-    - "Israel"
   research_interests:
-    title: "RESEARCH INTERESTS (Experimental)"
+    title: "Research interests (Experimental)"
     items:
       - "Liquid-droplet microcavities"
       - "Optical microresonators"
       - "Whispering-gallery-modes (WGM)"
   location         : "Tel Aviv, Israel"
-  employer         : "Tel Aviv University"
-  uri              : "https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/"
+  employer:
+    - "School of Electrical Engineering"
+    - "Tel Aviv University"
+  uri              : "https://fancheng5640.github.io"
   email            : "fancheng@mail.tau.ac.il" 
 
   # Academic websites

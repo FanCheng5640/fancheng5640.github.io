@@ -399,3 +399,17 @@
   font-size: $type-size-6;
   text-transform: uppercase;
 }
+
+.site-news {
+  padding-left: 1.2rem;
+}
+
+.site-news__item {
+  margin: 0.25rem 0;
+  padding: 0.05rem 0.45rem;
+}
+
+.site-news__item--key {
+  border-left: 3px solid #b58a00;
+  background: rgba(255, 213, 79, 0.2);
+}

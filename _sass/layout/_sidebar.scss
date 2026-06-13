@@ -308,6 +308,14 @@
     white-space: nowrap;
   }
 
+  .author__url-lines {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    vertical-align: top;
+    white-space: normal;
+  }
+
   a {
     display: block;
     margin-bottom: 5px;
@@ -321,5 +329,38 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  .author__email-copy {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: normal;
+  }
+
+  .author__email-copy-button {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 0 5px;
+    padding: 2px 6px 2px 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: $type-size-5;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .author__email-copy-button:hover,
+  .author__email-copy-button:focus {
+    text-decoration: underline;
+  }
+
+  .author__email-copy-status {
+    color: var(--global-text-color);
+    font-size: $type-size-6;
+    font-weight: 600;
   }
 }

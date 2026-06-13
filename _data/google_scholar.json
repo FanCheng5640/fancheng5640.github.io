@@ -50,5 +50,70 @@
       "year": 2026,
       "citations": 8
     }
+  ],
+  "publication_citations": [
+    {
+      "doi": "10.1364/oe.26.031500",
+      "title": "Nondestructive measurement of nanofiber diameters using microfiber tip",
+      "citation_count": 12,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:u5HHmVD_uO8C",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=11075354479402646840",
+      "matched_by": "normalized_title",
+      "source_title": "Nondestructive measurement of nanofiber diameters using microfiber tip"
+    },
+    {
+      "doi": "10.1038/s41467-023-40205-0",
+      "title": "Absorption-induced transmission in plasma microphotonics",
+      "citation_count": 9,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:u-x6o8ySG0sC",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=8479134549555414394",
+      "matched_by": "normalized_title",
+      "source_title": "Absorption-induced transmission in plasma microphotonics"
+    },
+    {
+      "doi": "10.1364/PRJ.505164",
+      "title": "Cavity continuum",
+      "citation_count": 1,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:qjMakFHDy7sC",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=11510359544973097361",
+      "matched_by": "normalized_title",
+      "source_title": "Cavity continuum"
+    },
+    {
+      "doi": "10.1063/5.0197109",
+      "title": "Radiation pressure induced oscillations of an optically levitating mirror",
+      "citation_count": 1,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:Tyk-4Ss8FVUC",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=8724838849246993430",
+      "matched_by": "normalized_title",
+      "source_title": "Radiation pressure induced oscillations of an optically levitating mirror"
+    },
+    {
+      "doi": "10.1364/OE.561188",
+      "title": "Observation of spectrally continuous resonance enhancement by mode coalescence",
+      "citation_count": 3,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:LkGwnXOMwfcC",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12790902583016848862",
+      "matched_by": "normalized_title",
+      "source_title": "Observation of spectrally continuous resonance enhancement by mode coalescence"
+    },
+    {
+      "doi": "10.1364/OPTICA.560597",
+      "title": "Photonic origami of silica on a silicon chip with microresonators and concave mirrors",
+      "citation_count": 0,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:_FxGoFyzp5QC",
+      "citations_url": "",
+      "matched_by": "normalized_title",
+      "source_title": "Photonic origami of silica on a silicon chip with microresonators and concave mirrors"
+    },
+    {
+      "doi": "10.1063/5.0279509",
+      "title": "Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities",
+      "citation_count": 0,
+      "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:Se3iqnhoufwC",
+      "citations_url": "",
+      "matched_by": "normalized_title",
+      "source_title": "Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities"
+    }
   ]
 }

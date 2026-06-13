@@ -1,5 +1,62 @@
 <script type="module" src="{{ base_path }}/assets/js/main.min.js"></script>
 
+<script>
+  document.addEventListener("click", function(event) {
+    var button = event.target.closest("[data-copy-email]");
+    if (!button) {
+      return;
+    }
+
+    var email = button.getAttribute("data-copy-email");
+    var status = button.parentElement.querySelector(".author__email-copy-status");
+    var setStatus = function(message) {
+      if (!status) {
+        return;
+      }
+      status.textContent = message;
+      window.clearTimeout(status._copyTimer);
+      status._copyTimer = window.setTimeout(function() {
+        status.textContent = "";
+      }, 1800);
+    };
+    var fallbackCopy = function() {
+      var input = document.createElement("textarea");
+      input.value = email;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.left = "-9999px";
+      document.body.appendChild(input);
+      input.select();
+      var copied = document.execCommand("copy");
+      document.body.removeChild(input);
+      if (!copied) {
+        throw new Error("copy command failed");
+      }
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(email).then(function() {
+        setStatus("Copied");
+      }).catch(function() {
+        try {
+          fallbackCopy();
+          setStatus("Copied");
+        } catch (error) {
+          setStatus("Copy failed");
+        }
+      });
+      return;
+    }
+
+    try {
+      fallbackCopy();
+      setStatus("Copied");
+    } catch (error) {
+      setStatus("Copy failed");
+    }
+  });
+</script>
+
 {% include analytics.html %}
 
 {% include comments-providers/scripts.html %}
