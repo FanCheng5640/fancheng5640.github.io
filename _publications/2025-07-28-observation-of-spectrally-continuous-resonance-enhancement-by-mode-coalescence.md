@@ -19,6 +19,10 @@ authors: "Nitzan Shani, Amit Kumar Shakya, <strong><u>Fan Cheng</u></strong>, Vl
 originalurl: "https://doi.org/10.1364/OE.561188"
 link: "https://doi.org/10.1364/OE.561188"
 paperurl: "/files/papers/2025-opt-express-mode-coalescence.pdf"
+figure_image: "/files/papers/figures/2025-opt-express-mode-coalescence-fig2.png"
+figure_thumb: "/files/papers/figures/2025-opt-express-mode-coalescence-fig2-thumb.jpg"
+figure_label: "Fig. 2"
+figure_alt: "Fig. 2 from Observation of spectrally continuous resonance enhancement by mode coalescence."
 pdf_source: ""
 citation: "Nitzan Shani, Amit Kumar Shakya, <strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Lev Deych, and Tal Carmon (2025). &quot;Observation of spectrally continuous resonance enhancement by mode coalescence.&quot; <i>Optics Express</i>, 33(15), 31722. https://doi.org/10.1364/OE.561188"
 ---

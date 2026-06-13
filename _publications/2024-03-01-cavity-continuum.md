@@ -19,6 +19,10 @@ authors: "<strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Mark Douvidzon, 
 originalurl: "https://doi.org/10.1364/PRJ.505164"
 link: "https://doi.org/10.1364/PRJ.505164"
 paperurl: "/files/papers/2024-photonics-research-cavity-continuum.pdf"
+figure_image: "/files/papers/figures/2024-photonics-research-cavity-continuum-fig2.png"
+figure_thumb: "/files/papers/figures/2024-photonics-research-cavity-continuum-fig2-thumb.jpg"
+figure_label: "Fig. 2"
+figure_alt: "Fig. 2 from Cavity continuum."
 pdf_source: "https://arxiv.org/pdf/2312.12632"
 citation: "<strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Mark Douvidzon, Lev Deych, and Tal Carmon (2024). &quot;Cavity continuum.&quot; <i>Photonics Research</i>, 12(3), 391. https://doi.org/10.1364/PRJ.505164"
 ---

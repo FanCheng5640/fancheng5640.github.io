@@ -47,6 +47,82 @@ var toggleTheme = () => {
   setTheme(new_theme);
 };
 
+let initPublicationFigureDialogs = () => {
+  const triggers = document.querySelectorAll("[data-publication-figure-open]");
+  triggers.forEach((trigger) => {
+    const dialogId = trigger.getAttribute("aria-controls");
+    const dialog = dialogId ? document.getElementById(dialogId) : null;
+    if (!dialog || typeof dialog.showModal !== "function") {
+      return;
+    }
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    });
+  });
+
+  const dialogs = document.querySelectorAll("[data-publication-figure-dialog]");
+  dialogs.forEach((dialog) => {
+    const closeButton = dialog.querySelector("[data-publication-figure-close]");
+    if (closeButton) {
+      closeButton.addEventListener("click", () => dialog.close());
+    }
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+  });
+};
+
+let copyTextToClipboard = (text) => {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise((resolve, reject) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      const ok = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      ok ? resolve() : reject(new Error("copy command failed"));
+    } catch (err) {
+      document.body.removeChild(textarea);
+      reject(err);
+    }
+  });
+};
+
+let initCopyButtons = () => {
+  const buttons = document.querySelectorAll("[data-copy-text]");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const text = button.getAttribute("data-copy-text") || "";
+      const statusId = button.getAttribute("data-copy-status-id");
+      const status = statusId ? document.getElementById(statusId) : null;
+      copyTextToClipboard(text).then(() => {
+        if (status) {
+          status.textContent = "Copied";
+          window.setTimeout(() => {
+            status.textContent = "";
+          }, 1800);
+        }
+      }).catch(() => {
+        if (status) {
+          status.textContent = "Copy failed";
+        }
+      });
+    });
+  });
+};
+
 /* ==========================================================================
    Plotly integration script so that Markdown codeblocks will be rendered
    ========================================================================== */
@@ -120,6 +196,9 @@ $(document).ready(function () {
 
   // FitVids init
   fitvids();
+
+  initPublicationFigureDialogs();
+  initCopyButtons();
 
   // Follow menu drop down
   $(".author__urls-wrapper > .author__follow-button").on("click", function () {
