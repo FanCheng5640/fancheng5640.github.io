@@ -18,7 +18,7 @@ venue: "Applied Physics Letters"
 authors: "<strong><u>Fan Cheng</u></strong> and Tal Carmon"
 originalurl: "https://doi.org/10.1063/5.0279509"
 link: "https://doi.org/10.1063/5.0279509"
-paperurl: "/files/papers/2025-apl-droplet-evaporation.pdf"
+paperurl: "/files/papers/2025-apl-droplet-evaporation.pdf?v=fbac8e98a8f7"
 pdf_source: "https://einstein.nju.edu.cn/upload/uploadify/20250925/20250922-AppliedPhysicsLetters_202509251317130813.pdf"
 citation: "<strong><u>Fan Cheng</u></strong> and Tal Carmon (2025). &quot;Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities.&quot; <i>Applied Physics Letters</i>, 127(12), 121101. https://doi.org/10.1063/5.0279509"
 ---
