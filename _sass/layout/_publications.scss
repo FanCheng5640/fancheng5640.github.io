@@ -200,7 +200,9 @@
 
 .publication__item--featured-section:hover,
 .publication__item--featured-section:focus-within {
-  background: #fff8e6;
+  background: #fff5d0;
+  border-color: #dfc66a;
+  box-shadow: 0 0 0 0.14rem rgba(255, 194, 10, 0.22);
 }
 
 .publication__item--all-section:hover,
@@ -297,8 +299,8 @@
 
 .publication__item--featured-section:hover .publication__title,
 .publication__item--featured-section:focus-within .publication__title {
-  background: #fff8e6;
-  border-bottom-color: #f0dfad;
+  background: #fff5d0;
+  border-bottom-color: #dfc66a;
 }
 
 .publication__item--all-section:hover .publication__title,
