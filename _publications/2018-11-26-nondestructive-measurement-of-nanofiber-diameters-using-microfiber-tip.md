@@ -15,7 +15,7 @@ permalink: "/publication/2018-11-26-nondestructive-measurement-of-nanofiber-diam
 excerpt: "Optics Express, 2018."
 date: "2018-11-26"
 venue: "Optics Express"
-authors: "Pengfei Zhang, <strong><u>Fan Cheng</u></strong>, Xin Wang, Lijun Song, Chang-Ling Zou, Gang Li, and Tiancai Zhang"
+authors: "Pengfei Zhang<sup class='publication__corresponding-marker' title='Corresponding author' aria-label='Corresponding author'>*</sup>, <strong><u>Fan Cheng</u></strong>, Xin Wang, Lijun Song, Chang-Ling Zou, Gang Li, and Tiancai Zhang"
 originalurl: "https://doi.org/10.1364/oe.26.031500"
 link: "https://doi.org/10.1364/oe.26.031500"
 paperurl: "/files/papers/2018-opt-express-nanofiber-diameter.pdf"

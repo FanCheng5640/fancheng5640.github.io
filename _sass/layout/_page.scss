@@ -451,6 +451,23 @@
   white-space: nowrap;
 }
 
+.cv-advisors {
+  display: inline-grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 0.35rem;
+  align-items: baseline;
+  max-width: 100%;
+}
+
+.cv-advisors__label,
+.cv-advisors__joiner {
+  color: inherit;
+}
+
+.cv-advisors__joiner {
+  justify-self: end;
+}
+
 .cv-education__logo-link {
   display: flex;
   justify-content: flex-start;

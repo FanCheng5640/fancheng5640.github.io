@@ -15,7 +15,7 @@ permalink: "/publication/2025-09-20-photonic-origami-of-silica-on-a-silicon-chip
 excerpt: "Optica, 2025."
 date: "2025-09-20"
 venue: "Optica"
-authors: "Manya Malhotra, Ronen Ben-Daniel, <strong><u>Fan Cheng</u></strong>, and Tal Carmon"
+authors: "Manya Malhotra, Ronen Ben-Daniel, <strong><u>Fan Cheng</u></strong>, and Tal Carmon<sup class='publication__corresponding-marker' title='Corresponding author' aria-label='Corresponding author'>*</sup>"
 originalurl: "https://doi.org/10.1364/OPTICA.560597"
 link: "https://doi.org/10.1364/OPTICA.560597"
 paperurl: "/files/papers/2025-optica-photonic-origami.pdf"

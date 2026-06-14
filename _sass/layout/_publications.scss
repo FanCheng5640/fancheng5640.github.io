@@ -170,8 +170,18 @@
 .publication-summary .publication-summary__venue-link,
 .publication-summary .publication-summary__venue-summary,
 .publication-summary .publication-summary__paper-list a {
+  border-radius: 0.18rem;
   color: inherit;
   text-decoration: none;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+  width: fit-content;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.publication-summary .publication-summary__venue-link,
+.publication-summary .publication-summary__venue-summary {
+  justify-self: start;
 }
 
 .publication-summary .publication-summary__venue-link:hover,
@@ -180,7 +190,9 @@
 .publication-summary .publication-summary__venue-summary:focus,
 .publication-summary .publication-summary__paper-list a:hover,
 .publication-summary .publication-summary__paper-list a:focus {
-  text-decoration: underline;
+  background: rgba(255, 213, 79, 0.26);
+  box-shadow: 0 0 0 0.13rem rgba(255, 213, 79, 0.26);
+  text-decoration: none;
 }
 
 .publication-summary .publication-summary__venue-link:hover,
@@ -194,7 +206,7 @@
 .publication-summary .publication-summary__venue-link:focus .publication-summary__venue-title,
 .publication-summary .publication-summary__venue-summary:hover .publication-summary__venue-title,
 .publication-summary .publication-summary__venue-summary:focus .publication-summary__venue-title {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .publication-summary__venue-details {
@@ -441,6 +453,15 @@
 
 .publication__author-name {
   white-space: nowrap;
+}
+
+.publication__corresponding-marker {
+  margin-left: 0.08em;
+  color: #8a5a00;
+  font-size: 0.78em;
+  font-weight: 800;
+  line-height: 0;
+  vertical-align: super;
 }
 
 .publication__meta {

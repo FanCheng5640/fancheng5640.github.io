@@ -15,7 +15,7 @@ permalink: "/publication/2025-09-22-resonantly-enhanced-evaporation-sensing-in-l
 excerpt: "Applied Physics Letters, 2025."
 date: "2025-09-22"
 venue: "Applied Physics Letters"
-authors: "<strong><u>Fan Cheng</u></strong> and Tal Carmon"
+authors: "<strong><u>Fan Cheng</u></strong> and Tal Carmon<sup class='publication__corresponding-marker' title='Corresponding author' aria-label='Corresponding author'>*</sup>"
 originalurl: "https://doi.org/10.1063/5.0279509"
 link: "https://doi.org/10.1063/5.0279509"
 paperurl: "/files/papers/2025-apl-droplet-evaporation.pdf"

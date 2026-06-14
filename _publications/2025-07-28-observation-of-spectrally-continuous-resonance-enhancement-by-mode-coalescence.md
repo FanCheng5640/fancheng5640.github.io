@@ -15,7 +15,7 @@ permalink: "/publication/2025-07-28-observation-of-spectrally-continuous-resonan
 excerpt: "Optics Express, 2025."
 date: "2025-07-28"
 venue: "Optics Express"
-authors: "Nitzan Shani, Amit Kumar Shakya, <strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Lev Deych, and Tal Carmon"
+authors: "Nitzan Shani, Amit Kumar Shakya, <strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Lev Deych, and Tal Carmon<sup class='publication__corresponding-marker' title='Corresponding author' aria-label='Corresponding author'>*</sup>"
 originalurl: "https://doi.org/10.1364/OE.561188"
 link: "https://doi.org/10.1364/OE.561188"
 paperurl: "/files/papers/2025-opt-express-mode-coalescence.pdf"
