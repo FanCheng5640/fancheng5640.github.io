@@ -17,7 +17,8 @@
 .scholar-metrics__content {
   display: grid;
   grid-template-columns: 8.2rem minmax(16rem, 1fr);
-  gap: 0.8rem;
+  column-gap: 1.45rem;
+  row-gap: 0.8rem;
   align-items: end;
 }
 
@@ -47,9 +48,11 @@
   display: flex;
   align-items: end;
   gap: 0.42rem;
+  justify-self: start;
+  width: max-content;
+  max-width: 100%;
   min-height: 11rem;
   padding-top: 1.2rem;
-  border-bottom: 1px solid #d7d7d7;
 }
 
 .scholar-metrics__bar-group {
@@ -58,6 +61,7 @@
   justify-items: center;
   align-items: end;
   min-width: 1.65rem;
+  border-bottom: 1px solid #d7d7d7;
   color: #666;
   font-size: 0.78rem;
 }
@@ -135,7 +139,7 @@
   padding-left: 0.45rem;
   border-left: 3px solid #2f7300;
   background: rgba(47, 115, 0, 0.06);
-  color: #204f00;
+  color: var(--global-text-color);
   font-size: 1rem;
   font-weight: 800;
 }
@@ -163,27 +167,56 @@
   font-weight: 600;
 }
 
-.publication-summary__venue-link,
-.publication-summary__venue-label {
+.publication-summary .publication-summary__venue-link,
+.publication-summary .publication-summary__venue-summary,
+.publication-summary .publication-summary__paper-list a {
   color: inherit;
   text-decoration: none;
 }
 
-.publication-summary__venue-link:hover,
-.publication-summary__venue-link:focus,
-.publication-summary__paper-list a:hover,
-.publication-summary__paper-list a:focus {
+.publication-summary .publication-summary__venue-link:hover,
+.publication-summary .publication-summary__venue-link:focus,
+.publication-summary .publication-summary__venue-summary:hover,
+.publication-summary .publication-summary__venue-summary:focus,
+.publication-summary .publication-summary__paper-list a:hover,
+.publication-summary .publication-summary__paper-list a:focus {
   text-decoration: underline;
 }
 
-.publication-summary__venue-label {
+.publication-summary .publication-summary__venue-link:hover,
+.publication-summary .publication-summary__venue-link:focus,
+.publication-summary .publication-summary__venue-summary:hover,
+.publication-summary .publication-summary__venue-summary:focus {
+  text-decoration: none;
+}
+
+.publication-summary .publication-summary__venue-link:hover .publication-summary__venue-title,
+.publication-summary .publication-summary__venue-link:focus .publication-summary__venue-title,
+.publication-summary .publication-summary__venue-summary:hover .publication-summary__venue-title,
+.publication-summary .publication-summary__venue-summary:focus .publication-summary__venue-title {
+  text-decoration: underline;
+}
+
+.publication-summary__venue-details {
+  min-width: 0;
+}
+
+.publication-summary__venue-summary {
   cursor: pointer;
+  list-style: none;
+}
+
+.publication-summary__venue-summary::-webkit-details-marker {
+  display: none;
 }
 
 .publication-summary__venue-name--priority {
-  border-bottom: 1px solid rgba(47, 115, 0, 0.38);
-  color: #204f00;
-  font-weight: 750;
+  font-weight: 700;
+}
+
+.publication-summary__venue-name--priority .publication-summary__venue-title {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.02em;
 }
 
 .publication-summary__venue-spacer {
@@ -191,20 +224,13 @@
   height: 1em;
 }
 
-.publication-summary__venue-toggle {
-  width: 0.95rem;
-  height: 0.95rem;
-  margin: 0.2em 0 0;
-}
-
 .publication-summary__paper-list {
   display: none;
-  grid-column: 2;
   margin: 0.18rem 0 0.25rem;
   padding-left: 1rem;
 }
 
-.publication-summary__venue-toggle:checked ~ .publication-summary__paper-list {
+.publication-summary__venue-details[open] .publication-summary__paper-list {
   display: block;
 }
 
@@ -215,11 +241,10 @@
   list-style: disc;
 }
 
-.publication-summary__paper-list a {
+.publication-summary .publication-summary__paper-list a {
   color: inherit;
   font-size: 0.9rem;
   line-height: 1.25;
-  text-decoration: none;
 }
 
 @media (max-width: 520px) {
@@ -430,6 +455,7 @@
   color: #4f6500;
   font-size: 0.78em;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .publication__badge--citations {
@@ -541,6 +567,11 @@
   max-height: none;
   object-fit: contain;
   object-position: right center;
+  transition: none;
+}
+
+.publication__figure--list img {
+  transition: none;
 }
 
 .publication__item--has-visual-media .publication__figure--list .publication__figure-trigger img {

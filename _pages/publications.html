@@ -74,7 +74,6 @@ hide_title: true
 {% endif %}
 
 <h2 class="publication-count-heading">PUBLICATIONS ({{ site.publications | size }})</h2><hr class="publication-count-rule" />
-{% assign impact_meta = site.data.journal_metrics.metadata %}
 <div class="publication-summary">
   <section class="publication-summary__section">
     <h3 class="publication-summary__role">First author ({{ first_author_publications | size }})</h3>
@@ -103,6 +102,3 @@ hide_title: true
 {% for post in publications_sorted %}
   {% include publication-single.html anchor_prefix="publication" %}
 {% endfor %}
-{% if impact_meta %}
-  <p class="publication-impact-note">Journal Impact Factor (JIF): {{ impact_meta.metric_year }} JCR data.</p>
-{% endif %}

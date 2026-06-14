@@ -13,7 +13,7 @@
     <div class="publication__visual-cluster">
       <figure class="publication__figure publication__figure--{{ figure_context }} publication__figure--orientation-{{ figure_orientation }}">
         <a class="publication__figure-trigger" href="{{ figure_image | relative_url }}" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ figure_dialog_id }}" title="View larger image">
-          <img src="{{ figure_thumb | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
+          <img src="{{ figure_thumb | relative_url }}" alt="{{ figure_alt | escape }}" loading="eager" decoding="async">
         </a>
         <dialog id="{{ figure_dialog_id }}" class="publication__figure-dialog" data-publication-figure-dialog aria-label="Publication image">
           <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close enlarged figure" title="Close">&times;</button>

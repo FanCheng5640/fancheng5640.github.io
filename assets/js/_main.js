@@ -181,13 +181,44 @@ let initPublicationListLayout = () => {
     if (!lineHeight) {
       lineHeight = fontSize * 1.2;
     }
-    return element.getBoundingClientRect().height / lineHeight;
+
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      },
+    });
+    const centers = [];
+    while (walker.nextNode()) {
+      const range = document.createRange();
+      range.selectNodeContents(walker.currentNode);
+      Array.from(range.getClientRects()).forEach((rect) => {
+        if (rect.width > 1 && rect.height > 1) {
+          centers.push(rect.top + (rect.height / 2));
+        }
+      });
+    }
+
+    if (centers.length === 0) {
+      return element.getBoundingClientRect().height / lineHeight;
+    }
+
+    const lineThreshold = Math.max(4, lineHeight * 0.65);
+    return centers
+      .sort((a, b) => a - b)
+      .reduce((count, center) => {
+        if (count === 0 || Math.abs(center - centers[count - 1]) > lineThreshold) {
+          centers[count] = center;
+          return count + 1;
+        }
+        return count;
+      }, 0);
   };
 
   const layoutItem = (item) => {
     const authors = item.querySelector(".publication__authors");
     const cluster = item.querySelector(".publication__visual-cluster");
     const logoRow = item.querySelector(".publication__journal-logo-row");
+    const meta = item.querySelector(".publication__meta");
     const image = cluster ? cluster.querySelector(".publication__figure-trigger img") : null;
     const figure = cluster ? cluster.querySelector(".publication__figure--list") : null;
     const videoCount = item.querySelectorAll(".publication__video-card").length;
@@ -196,22 +227,89 @@ let initPublicationListLayout = () => {
       return;
     }
 
+    const revealCluster = () => {
+      cluster.style.removeProperty("visibility");
+      item.classList.add("publication__item--layout-ready");
+    };
+
+    item.classList.remove("publication__item--layout-ready");
+    cluster.style.visibility = "hidden";
     image.style.removeProperty("max-height");
     cluster.style.removeProperty("width");
     cluster.style.removeProperty("max-width");
     item.classList.remove("publication__item--figure-after-authors");
-    authors.before(cluster);
+    item.classList.remove("publication__item--figure-after-meta");
+
+    cluster.style.display = "none";
+    const baselineCounts = {
+      authors: getLineCount(authors),
+      meta: meta ? getLineCount(meta) : 1,
+    };
+    cluster.style.removeProperty("display");
 
     const isSingleColumn = window.matchMedia("(max-width: 520px)").matches;
-    const shouldPlaceAfterAuthors = isSingleColumn || getLineCount(authors) > 1.18;
+    const isLandscapeFigure = figure && figure.classList.contains("publication__figure--orientation-landscape");
+    const isPortraitFigure = figure && figure.classList.contains("publication__figure--orientation-portrait");
+    authors.before(cluster);
+
+    const getCurrentCounts = () => ({
+      authors: getLineCount(authors),
+      meta: meta ? getLineCount(meta) : 1,
+    });
+    const exceedsBaseline = (counts) => (
+      counts.authors > baselineCounts.authors ||
+      counts.meta > baselineCounts.meta
+    );
+
+    let currentCounts = getCurrentCounts();
+    let shouldPlaceAfterAuthors = isSingleColumn || exceedsBaseline(currentCounts);
+
+    if (shouldPlaceAfterAuthors && !isSingleColumn) {
+      const initialClusterWidth = Math.floor(cluster.getBoundingClientRect().width);
+      let low = 1;
+      let high = initialClusterWidth;
+      let bestWidth = 0;
+
+      while (low <= high) {
+        const testWidth = Math.floor((low + high) / 2);
+        cluster.style.width = `${testWidth}px`;
+        cluster.style.maxWidth = `${testWidth}px`;
+        currentCounts = getCurrentCounts();
+
+        if (exceedsBaseline(currentCounts)) {
+          high = testWidth - 1;
+        } else {
+          bestWidth = testWidth;
+          low = testWidth + 1;
+        }
+      }
+
+      if (bestWidth > 0) {
+        cluster.style.width = `${bestWidth}px`;
+        cluster.style.maxWidth = `${bestWidth}px`;
+        currentCounts = getCurrentCounts();
+        shouldPlaceAfterAuthors = exceedsBaseline(currentCounts);
+      }
+
+      if (shouldPlaceAfterAuthors) {
+        cluster.style.removeProperty("width");
+        cluster.style.removeProperty("max-width");
+      }
+    }
 
     if (shouldPlaceAfterAuthors) {
       item.classList.add("publication__item--figure-after-authors");
       authors.after(cluster);
+      currentCounts = getCurrentCounts();
+      if (meta && currentCounts.meta > baselineCounts.meta) {
+        item.classList.add("publication__item--figure-after-meta");
+        meta.after(cluster);
+      }
     }
 
     if (
       shouldPlaceAfterAuthors &&
+      !cluster.style.width &&
       (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
       figure &&
       figure.classList.contains("publication__figure--orientation-landscape")
@@ -221,41 +319,50 @@ let initPublicationListLayout = () => {
     }
 
     if (!logoRow) {
+      revealCluster();
       return;
     }
 
     window.requestAnimationFrame(() => {
-      const imageBox = image.getBoundingClientRect();
-      const logoBox = logoRow.getBoundingClientRect();
-      const availableHeight = Math.floor(logoBox.bottom - imageBox.top - 1);
-      const canGrowToLogo =
-        shouldPlaceAfterAuthors &&
-        (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
-        figure &&
-        figure.classList.contains("publication__figure--orientation-landscape");
+      try {
+        const imageBox = image.getBoundingClientRect();
+        const logoBox = logoRow.getBoundingClientRect();
+        const availableHeight = Math.floor(logoBox.bottom - imageBox.top - 1);
+        const canGrowLandscapeToLogo =
+          shouldPlaceAfterAuthors &&
+          (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
+          isLandscapeFigure;
+        const canGrowPortraitToLogo =
+          !shouldPlaceAfterAuthors &&
+          (videoCount > 1 || item.classList.contains("publication__item--text-figure-only")) &&
+          isPortraitFigure;
+        const canGrowToLogo = canGrowLandscapeToLogo || canGrowPortraitToLogo;
 
-      if (canGrowToLogo && availableHeight > imageBox.height + 1) {
-        image.style.maxHeight = `${availableHeight}px`;
+        if (canGrowToLogo && availableHeight > imageBox.height + 1) {
+          image.style.maxHeight = `${availableHeight}px`;
+        }
+
+        const adjustedImageBox = image.getBoundingClientRect();
+        const finalAvailableHeight = Math.floor(logoBox.bottom - adjustedImageBox.top - 1);
+        if (finalAvailableHeight <= 0) {
+          return;
+        }
+
+        if (adjustedImageBox.height > finalAvailableHeight) {
+          image.style.maxHeight = `${finalAvailableHeight}px`;
+          return;
+        }
+
+        const overflow = adjustedImageBox.bottom - logoBox.bottom;
+        if (overflow <= 1) {
+          return;
+        }
+
+        const nextHeight = Math.max(48, Math.floor(adjustedImageBox.height - overflow - 1));
+        image.style.maxHeight = `${nextHeight}px`;
+      } finally {
+        revealCluster();
       }
-
-      const adjustedImageBox = image.getBoundingClientRect();
-      const finalAvailableHeight = Math.floor(logoBox.bottom - adjustedImageBox.top - 1);
-      if (finalAvailableHeight <= 0) {
-        return;
-      }
-
-      if (adjustedImageBox.height > finalAvailableHeight) {
-        image.style.maxHeight = `${finalAvailableHeight}px`;
-        return;
-      }
-
-      const overflow = adjustedImageBox.bottom - logoBox.bottom;
-      if (overflow <= 1) {
-        return;
-      }
-
-      const nextHeight = Math.max(48, Math.floor(adjustedImageBox.height - overflow - 1));
-      image.style.maxHeight = `${nextHeight}px`;
     });
   };
 

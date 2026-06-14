@@ -13,6 +13,11 @@
 {% assign journal_mark = journal_brand.mark | default: post.venue %}
 {% assign journal_logo = journal_brand.logo %}
 {% assign publication_metric = site.data.journal_metrics.journals | where: "name", post.venue | first %}
+{% assign impact_meta = site.data.journal_metrics.metadata %}
+{% assign impact_badge_title = nil %}
+{% if impact_meta %}
+  {% assign impact_badge_title = "Journal Impact Factor (JIF): " | append: impact_meta.metric_year | append: " JCR data." %}
+{% endif %}
 {% assign publication_citation = nil %}
 {% if post.doi and site.data.google_scholar.publication_citations %}
   {% assign publication_citation = site.data.google_scholar.publication_citations | where: "doi", post.doi | first %}
@@ -54,9 +59,9 @@
     <p class="publication__meta">
       {% if post.venue %}<i class="publication__venue">{{ post.venue }}</i>{% endif %}{% if post.date %}{% if post.venue %}, {% endif %}{{ post.date | default: "1900-01-01" | date: "%m/%Y" }}{% endif %}
       {% if publication_metric %}
-        <span class="publication__badge">IF {{ publication_metric.impact_factor }}</span>
+        <span class="publication__badge"{% if impact_badge_title %} title="{{ impact_badge_title | escape }}"{% endif %}>IF {{ publication_metric.impact_factor }}</span>
       {% elsif post.journal_impact_factor and post.journal_impact_factor != 0 %}
-        <span class="publication__badge">IF {{ post.journal_impact_factor }}</span>
+        <span class="publication__badge"{% if impact_badge_title %} title="{{ impact_badge_title | escape }}"{% endif %}>IF {{ post.journal_impact_factor }}</span>
       {% endif %}
       {% if publication_citation %}
         <span class="publication__badge publication__badge--citations">Cited by {{ publication_citation.citation_count }}</span>
