@@ -375,11 +375,22 @@
 
 .publication__visual-cluster {
   float: right;
-  display: block;
-  width: min(38%, 15rem);
-  max-width: 15rem;
+  display: flex;
+  justify-content: flex-end;
+  width: min(42%, 18rem);
+  max-width: 18rem;
   margin: 0 0 0.65rem 1rem;
   text-align: right;
+}
+
+.publication__item--has-visual-media .publication__visual-cluster {
+  width: min(34%, 14rem);
+  max-width: 14rem;
+}
+
+.publication__item--text-figure-only .publication__visual-cluster {
+  width: min(52%, 22rem);
+  max-width: 22rem;
 }
 
 .publication__figure--list {
@@ -395,6 +406,7 @@
 .publication__figure-trigger {
   position: relative;
   display: inline-flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -409,13 +421,14 @@
 }
 
 .publication__figure--list .publication__figure-trigger {
-  display: flex;
-  width: min(230px, 100%);
-  height: 230px;
+  display: inline-flex;
+  width: auto;
+  max-width: 100%;
+  height: auto;
   margin-left: auto;
   margin-right: 0;
   min-height: 0;
-  padding: 0.18rem;
+  padding: 0;
   overflow: hidden;
 }
 
@@ -436,16 +449,25 @@
   display: block;
   width: 100%;
   max-height: 8.2rem;
+  margin-bottom: 0;
   object-fit: contain;
 }
 
 .publication__figure--list .publication__figure-trigger img {
-  width: 100%;
+  width: auto;
   max-width: 100%;
-  height: 100%;
+  height: auto;
   max-height: none;
   object-fit: contain;
-  object-position: center;
+  object-position: right center;
+}
+
+.publication__item--has-visual-media .publication__figure--list .publication__figure-trigger img {
+  max-height: 14rem;
+}
+
+.publication__item--text-figure-only .publication__figure--list .publication__figure-trigger img {
+  max-height: 20rem;
 }
 
 .publication__figure--single .publication__figure-trigger img {
@@ -641,18 +663,25 @@
     text-align: right;
   }
 
+  .publication__item--has-visual-media .publication__visual-cluster,
+  .publication__item--text-figure-only .publication__visual-cluster {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .publication__item .publication__journal-logo {
     max-width: min(100%, 18rem);
     max-height: 3rem;
   }
 
   .publication__figure--list .publication__figure-trigger img {
-    max-height: none;
+    max-height: 18rem;
   }
 
   .publication__figure--list .publication__figure-trigger {
-    width: min(250px, 100%);
-    height: 250px;
+    width: auto;
+    max-width: min(100%, 18rem);
+    height: auto;
   }
 
   .publication__copy-control {

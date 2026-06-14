@@ -21,6 +21,13 @@
 {% if include.featured or post.featured %}
   {% assign is_starred = true %}
 {% endif %}
+{% assign has_visual_media = false %}
+{% if post.visualizations and post.visualizations.size > 0 %}
+  {% assign has_visual_media = true %}
+{% endif %}
+{% if post.video_interviews and post.video_interviews.size > 0 %}
+  {% assign has_visual_media = true %}
+{% endif %}
 {% if include.anchor_prefix %}
   {% assign publication_anchor = include.anchor_prefix | append: "-" | append: publication_anchor %}
 {% endif %}
@@ -28,7 +35,7 @@
 {% assign publication_copy_status_id = "publication-copy-status-" | append: publication_copy_uid %}
 {% assign publication_copy_text = post.title | strip_html | strip_newlines | escape %}
 
-<div class="publication__item publication__item--venue-{{ venue_slug }}{% if is_starred %} publication__item--starred{% endif %}{% if include.featured %} publication__item--featured-section{% endif %}{% if include.anchor_prefix %} publication__item--all-section{% endif %}" data-journal-mark="{{ journal_mark | escape }}"{% if include.anchor_prefix %} id="{{ publication_anchor }}"{% endif %}>
+<div class="publication__item publication__item--venue-{{ venue_slug }}{% if is_starred %} publication__item--starred{% endif %}{% if include.featured %} publication__item--featured-section{% endif %}{% if include.anchor_prefix %} publication__item--all-section{% endif %}{% if has_visual_media %} publication__item--has-visual-media{% else %} publication__item--text-figure-only{% endif %}" data-journal-mark="{{ journal_mark | escape }}"{% if include.anchor_prefix %} id="{{ publication_anchor }}"{% endif %}>
   <article class="archive__item publication__entry" itemscope itemtype="http://schema.org/CreativeWork">
     <h2 class="archive__item-title publication__title" itemprop="headline">
       <span class="publication__title-line">
