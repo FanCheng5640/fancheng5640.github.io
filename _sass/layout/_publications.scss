@@ -455,12 +455,19 @@
   white-space: nowrap;
 }
 
+.publication__corresponding-author {
+  white-space: nowrap;
+}
+
 .publication__corresponding-marker {
+  display: inline;
+  position: static;
+  top: auto;
   margin-left: 0.08em;
   color: #8a5a00;
   font-size: 0.78em;
   font-weight: 800;
-  line-height: 0;
+  line-height: 1;
   vertical-align: super;
 }
 
