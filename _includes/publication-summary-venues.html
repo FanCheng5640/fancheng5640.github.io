@@ -1,0 +1,30 @@
+<ul class="publication-summary__venues">
+{% for venue_group in include.groups %}
+  {% assign venue_items = venue_group.items | sort: "date" | reverse %}
+  {% assign priority_class = "" %}
+  {% if forloop.index <= 3 %}
+    {% assign priority_class = " publication-summary__venue-name--priority" %}
+  {% endif %}
+  <li>
+    {% if venue_items.size == 1 %}
+      {% assign venue_post = venue_items | first %}
+      {% assign venue_anchor_base = venue_post.url | default: venue_post.permalink | slugify %}
+      {% assign venue_anchor = "publication-" | append: venue_anchor_base %}
+      <span class="publication-summary__venue-spacer" aria-hidden="true"></span>
+      <a class="publication-summary__venue-name publication-summary__venue-link{{ priority_class }}" href="#{{ venue_anchor }}">{{ venue_group.name }} ({{ venue_items.size }})</a>
+    {% else %}
+      {% assign venue_slug = venue_group.name | slugify %}
+      {% assign venue_toggle_id = "publication-summary-" | append: include.role_slug | append: "-" | append: venue_slug %}
+      <input class="publication-summary__venue-toggle" type="checkbox" id="{{ venue_toggle_id }}">
+      <label class="publication-summary__venue-name publication-summary__venue-label{{ priority_class }}" for="{{ venue_toggle_id }}">{{ venue_group.name }} ({{ venue_items.size }})</label>
+      <ul class="publication-summary__paper-list">
+      {% for venue_post in venue_items %}
+        {% assign paper_anchor_base = venue_post.url | default: venue_post.permalink | slugify %}
+        {% assign paper_anchor = "publication-" | append: paper_anchor_base %}
+        <li><a href="#{{ paper_anchor }}">{{ venue_post.title }}</a></li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>

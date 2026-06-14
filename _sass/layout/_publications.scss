@@ -110,44 +110,123 @@
   }
 }
 
+.publication-count-heading {
+  margin-bottom: 0.2rem;
+}
+
+.publication-count-rule {
+  margin: 0 0 0.55rem;
+}
+
 .publication-summary {
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.05rem;
 }
 
 .publication-summary__section {
-  margin-bottom: 0.85rem;
+  display: grid;
+  grid-template-columns: minmax(8.6rem, max-content) minmax(0, 1fr);
+  column-gap: 0.7rem;
+  align-items: baseline;
+  margin-bottom: 0.45rem;
 }
 
 .publication-summary__role {
-  margin-bottom: 0.25rem;
-  font-weight: 700;
+  margin: 0;
+  padding-left: 0.45rem;
+  border-left: 3px solid #2f7300;
+  background: rgba(47, 115, 0, 0.06);
+  color: #204f00;
+  font-size: 1rem;
+  font-weight: 800;
 }
 
 .publication-summary__venues {
-  margin-top: 0.35rem;
-  padding-left: 0.9rem;
+  margin: 0;
+  padding-left: 0;
   list-style: none;
 }
 
 .publication-summary__venues li {
-  position: relative;
-  margin-bottom: 0.18rem;
-  padding-left: 0.85rem;
+  display: grid;
+  grid-template-columns: 1.05rem minmax(0, 1fr);
+  column-gap: 0.36rem;
+  align-items: baseline;
+  margin-bottom: 0.22rem;
+  padding-left: 0;
 }
 
 .publication-summary__venues li::before {
-  content: "";
-  position: absolute;
-  top: 0.62em;
-  left: 0;
-  width: 0.32rem;
-  height: 0.32rem;
-  border-radius: 50%;
-  background: var(--global-text-color);
+  display: none;
 }
 
 .publication-summary__venue-name {
   font-weight: 600;
+}
+
+.publication-summary__venue-link,
+.publication-summary__venue-label {
+  color: inherit;
+  text-decoration: none;
+}
+
+.publication-summary__venue-link:hover,
+.publication-summary__venue-link:focus,
+.publication-summary__paper-list a:hover,
+.publication-summary__paper-list a:focus {
+  text-decoration: underline;
+}
+
+.publication-summary__venue-label {
+  cursor: pointer;
+}
+
+.publication-summary__venue-name--priority {
+  border-bottom: 1px solid rgba(47, 115, 0, 0.38);
+  color: #204f00;
+  font-weight: 750;
+}
+
+.publication-summary__venue-spacer {
+  width: 0.95rem;
+  height: 1em;
+}
+
+.publication-summary__venue-toggle {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin: 0.2em 0 0;
+}
+
+.publication-summary__paper-list {
+  display: none;
+  grid-column: 2;
+  margin: 0.18rem 0 0.25rem;
+  padding-left: 1rem;
+}
+
+.publication-summary__venue-toggle:checked ~ .publication-summary__paper-list {
+  display: block;
+}
+
+.publication-summary__paper-list li {
+  display: list-item;
+  margin: 0.12rem 0;
+  padding-left: 0;
+  list-style: disc;
+}
+
+.publication-summary__paper-list a {
+  color: inherit;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+@media (max-width: 520px) {
+  .publication-summary__section {
+    grid-template-columns: 1fr;
+    row-gap: 0.22rem;
+  }
 }
 
 .publication-section-heading {

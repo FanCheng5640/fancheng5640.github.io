@@ -250,6 +250,9 @@
   display: none;
   position: absolute;
   right: 0;
+  box-sizing: border-box;
+  width: min(72vw, 15.5rem);
+  max-width: calc(100vw - 1rem);
   margin-top: 15px;
   padding: 10px;
   list-style-type: none;
@@ -263,6 +266,8 @@
   @include breakpoint($large) {
     display: block;
     position: relative;
+    width: 100%;
+    max-width: none;
     margin: 0;
     padding: 0;
     border: 0;
@@ -306,29 +311,55 @@
 
   li {
     white-space: nowrap;
+    text-align: left;
   }
 
   .author__url-lines {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     gap: 2px;
-    vertical-align: top;
     white-space: normal;
   }
 
   a {
-    display: block;
+    display: grid;
+    grid-template-columns: 1.35rem minmax(0, 1fr);
+    column-gap: 0.35rem;
+    align-items: start;
     margin-bottom: 5px;
     padding-right: 5px;
     padding-top: 2px;
     padding-bottom: 2px;
     color: inherit;
     font-size: $type-size-5;
+    text-align: left;
     text-decoration: none;
 
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  .author__desktop {
+    @media screen and (min-width: 1024px) {
+      display: grid;
+      grid-template-columns: 1.35rem minmax(0, 1fr);
+      column-gap: 0.35rem;
+      align-items: start;
+      margin-bottom: 5px;
+      white-space: normal;
+    }
+  }
+
+  .icon-pad-right {
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  a .icon-pad-right,
+  .author__desktop > .icon-pad-right,
+  .author__email-icon {
+    justify-self: start;
   }
 
   .author__email-copy {
@@ -339,8 +370,10 @@
   }
 
   .author__email-copy-button {
-    display: inline-flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1.35rem minmax(0, 1fr) 1.25rem;
+    column-gap: 0.35rem;
+    align-items: start;
     gap: 0.35rem;
     max-width: 100%;
     margin: 0 0 5px;

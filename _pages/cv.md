@@ -23,7 +23,7 @@ Education
       Advisor: <a href="https://scholar.google.com/citations?user=tiFit0cAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Open Prof. Tal Carmon's Google Scholar profile">Prof. Tal Carmon</a> (<a href="https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/" title="Open Prof. Tal Carmon's lab website">Lab</a>)</p>
     </div>
     <a class="cv-education__logo-link" href="http://en.wikipedia.org/wiki/Tel_Aviv_University" target="_blank" rel="noopener" title="Open Tel Aviv University Wikipedia page">
-      <img class="cv-education__logo" src="/images/logos/tel-aviv-university-logo.png" alt="Tel Aviv University logo" loading="lazy" decoding="async">
+      <img class="cv-education__logo" src="/images/logos/tel-aviv-university-logo-cv.png" alt="Tel Aviv University logo" loading="lazy" decoding="async">
     </a>
   </section>
 
@@ -36,7 +36,7 @@ Education
       Advisors: <a href="https://scholar.google.com/citations?user=DTAaDZAAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Open Prof. Tiancai Zhang's Google Scholar profile">Prof. Tiancai Zhang</a>; <a href="https://scholar.google.com/citations?user=Grjz9fgAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Open Prof. Pengfei Zhang's Google Scholar profile">Prof. Pengfei Zhang</a></p>
     </div>
     <a class="cv-education__logo-link" href="https://en.wikipedia.org/wiki/Shanxi_University" target="_blank" rel="noopener" title="Open Shanxi University Wikipedia page">
-      <img class="cv-education__logo" src="/images/logos/shanxi-university-logo.jpg" alt="Shanxi University logo" loading="lazy" decoding="async">
+      <img class="cv-education__logo" src="/images/logos/shanxi-university-logo-cv.png" alt="Shanxi University logo" loading="lazy" decoding="async">
     </a>
   </section>
 
@@ -47,7 +47,7 @@ Education
       Taiyuan, China | 09/2010 - 07/2014</p>
     </div>
     <a class="cv-education__logo-link" href="https://en.wikipedia.org/wiki/Shanxi_University" target="_blank" rel="noopener" title="Open Shanxi University Wikipedia page">
-      <img class="cv-education__logo" src="/images/logos/shanxi-university-logo.jpg" alt="Shanxi University logo" loading="lazy" decoding="async">
+      <img class="cv-education__logo" src="/images/logos/shanxi-university-logo-cv.png" alt="Shanxi University logo" loading="lazy" decoding="async">
     </a>
   </section>
 </div>

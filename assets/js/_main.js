@@ -168,6 +168,185 @@ let initCopyButtons = () => {
   });
 };
 
+let initPublicationListLayout = () => {
+  const items = document.querySelectorAll(".publication__item");
+  if (items.length === 0) {
+    return;
+  }
+
+  const getLineCount = (element) => {
+    const styles = window.getComputedStyle(element);
+    const fontSize = parseFloat(styles.fontSize) || 16;
+    let lineHeight = parseFloat(styles.lineHeight);
+    if (!lineHeight) {
+      lineHeight = fontSize * 1.2;
+    }
+    return element.getBoundingClientRect().height / lineHeight;
+  };
+
+  const layoutItem = (item) => {
+    const authors = item.querySelector(".publication__authors");
+    const cluster = item.querySelector(".publication__visual-cluster");
+    const logoRow = item.querySelector(".publication__journal-logo-row");
+    const image = cluster ? cluster.querySelector(".publication__figure-trigger img") : null;
+    const figure = cluster ? cluster.querySelector(".publication__figure--list") : null;
+    const videoCount = item.querySelectorAll(".publication__video-card").length;
+
+    if (!authors || !cluster || !image) {
+      return;
+    }
+
+    image.style.removeProperty("max-height");
+    cluster.style.removeProperty("width");
+    cluster.style.removeProperty("max-width");
+    item.classList.remove("publication__item--figure-after-authors");
+    authors.before(cluster);
+
+    const isSingleColumn = window.matchMedia("(max-width: 520px)").matches;
+    const shouldPlaceAfterAuthors = isSingleColumn || getLineCount(authors) > 1.18;
+
+    if (shouldPlaceAfterAuthors) {
+      item.classList.add("publication__item--figure-after-authors");
+      authors.after(cluster);
+    }
+
+    if (
+      shouldPlaceAfterAuthors &&
+      (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
+      figure &&
+      figure.classList.contains("publication__figure--orientation-landscape")
+    ) {
+      cluster.style.width = "min(100%, 34rem)";
+      cluster.style.maxWidth = "34rem";
+    }
+
+    if (!logoRow) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      const imageBox = image.getBoundingClientRect();
+      const logoBox = logoRow.getBoundingClientRect();
+      const availableHeight = Math.floor(logoBox.bottom - imageBox.top - 1);
+      const canGrowToLogo =
+        shouldPlaceAfterAuthors &&
+        (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
+        figure &&
+        figure.classList.contains("publication__figure--orientation-landscape");
+
+      if (canGrowToLogo && availableHeight > imageBox.height + 1) {
+        image.style.maxHeight = `${availableHeight}px`;
+      }
+
+      const adjustedImageBox = image.getBoundingClientRect();
+      const finalAvailableHeight = Math.floor(logoBox.bottom - adjustedImageBox.top - 1);
+      if (finalAvailableHeight <= 0) {
+        return;
+      }
+
+      if (adjustedImageBox.height > finalAvailableHeight) {
+        image.style.maxHeight = `${finalAvailableHeight}px`;
+        return;
+      }
+
+      const overflow = adjustedImageBox.bottom - logoBox.bottom;
+      if (overflow <= 1) {
+        return;
+      }
+
+      const nextHeight = Math.max(48, Math.floor(adjustedImageBox.height - overflow - 1));
+      image.style.maxHeight = `${nextHeight}px`;
+    });
+  };
+
+  const layoutAll = () => {
+    items.forEach(layoutItem);
+  };
+
+  let resizeTimer = null;
+  const scheduleLayout = () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(layoutAll, 80);
+  };
+
+  layoutAll();
+  window.addEventListener("resize", scheduleLayout);
+  items.forEach((item) => {
+    const image = item.querySelector(".publication__visual-cluster img");
+    if (image && !image.complete) {
+      image.addEventListener("load", scheduleLayout, { once: true });
+    }
+  });
+};
+
+let initCvEducationLayout = () => {
+  const groups = document.querySelectorAll(".cv-education");
+  if (groups.length === 0) {
+    return;
+  }
+
+  const measureTextWidth = (body) => {
+    const bodyBox = body.getBoundingClientRect();
+    const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      },
+    });
+    let maxTextRight = bodyBox.left;
+    let hasText = false;
+
+    while (walker.nextNode()) {
+      const range = document.createRange();
+      range.selectNodeContents(walker.currentNode);
+      Array.from(range.getClientRects()).forEach((rect) => {
+        if (rect.width > 1 && rect.height > 1) {
+          hasText = true;
+          maxTextRight = Math.max(maxTextRight, rect.right);
+        }
+      });
+    }
+
+    if (!hasText) {
+      return bodyBox.width;
+    }
+    return maxTextRight - bodyBox.left;
+  };
+
+  const layoutAll = () => {
+    const isSingleColumn = window.matchMedia("(max-width: 520px)").matches;
+    groups.forEach((group) => {
+      group.style.removeProperty("--cv-education-body-width");
+      if (isSingleColumn) {
+        return;
+      }
+
+      const items = Array.from(group.querySelectorAll(".cv-education__item"));
+      const logo = group.querySelector(".cv-education__logo-link");
+      if (items.length === 0 || !logo) {
+        return;
+      }
+
+      const maxTextWidth = Math.max(...items.map((item) => measureTextWidth(item.querySelector(".cv-education__body"))));
+      const columnGap = parseFloat(window.getComputedStyle(items[0]).columnGap) || 0;
+      const maxBodyWidth = group.getBoundingClientRect().width - logo.getBoundingClientRect().width - columnGap;
+      if (maxBodyWidth <= 0) {
+        return;
+      }
+
+      group.style.setProperty("--cv-education-body-width", `${Math.ceil(Math.min(maxTextWidth, maxBodyWidth))}px`);
+    });
+  };
+
+  let resizeTimer = null;
+  const scheduleLayout = () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(layoutAll, 80);
+  };
+
+  layoutAll();
+  window.addEventListener("resize", scheduleLayout);
+};
+
 /* ==========================================================================
    Plotly integration script so that Markdown codeblocks will be rendered
    ========================================================================== */
@@ -244,6 +423,8 @@ $(document).ready(function () {
 
   initPublicationFigureDialogs();
   initCopyButtons();
+  initPublicationListLayout();
+  initCvEducationLayout();
 
   // Follow menu drop down
   $(".author__urls-wrapper > .author__follow-button").on("click", function () {
