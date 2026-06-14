@@ -37,7 +37,14 @@ layout: default
         <header>
           {% if page.title %}
             <h1 class="page__title" itemprop="headline">
-              <span class="publication__title-text">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</span>{% if page.collection == 'publications' %}{% include copy-title-button.html text=page.title uid=page.url %}{% endif %}
+              {% if page.collection == 'publications' %}
+                {% assign page_copy_uid = page.url | slugify %}
+                {% assign page_copy_status_id = "publication-copy-status-" | append: page_copy_uid %}
+                {% assign page_copy_text = page.title | strip_html | strip_newlines | escape %}
+                <button class="publication__title-copy-text publication__title-text" type="button" data-copy-text="{{ page_copy_text }}" data-copy-status-id="{{ page_copy_status_id }}" title="Copy title" aria-label="Copy publication title">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</button>{% include copy-title-button.html text=page.title uid=page.url status_id=page_copy_status_id %}
+              {% else %}
+                <span class="publication__title-text">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</span>
+              {% endif %}
             </h1>
           {% endif %}
           {% if page.read_time %}

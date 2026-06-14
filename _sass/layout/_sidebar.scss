@@ -341,9 +341,10 @@
   .author__email-copy-button {
     display: inline-flex;
     align-items: center;
+    gap: 0.35rem;
     max-width: 100%;
     margin: 0 0 5px;
-    padding: 2px 6px 2px 0;
+    padding: 2px 4px 2px 0;
     border: 0;
     background: transparent;
     color: inherit;
@@ -353,17 +354,37 @@
     text-align: left;
   }
 
-  .author__email-copy-button span {
+  .author__email-copy-text {
     overflow-wrap: anywhere;
+  }
+
+  .author__email-copy-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid #c8c8c8;
+    border-radius: 0.2rem;
+    color: #555;
+    font-size: 0.74rem;
   }
 
   .author__email-copy-button:hover,
   .author__email-copy-button:focus {
-    text-decoration: underline;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .author__email-copy-button:hover .author__email-copy-icon,
+  .author__email-copy-button:focus .author__email-copy-icon {
+    border-color: #555;
+    box-shadow: 0 0 0 0.12rem rgba(90, 90, 90, 0.14);
   }
 
   .author__email-copy-status {
-    color: var(--global-text-color);
+    color: #555;
     font-size: $type-size-6;
     font-weight: 600;
   }

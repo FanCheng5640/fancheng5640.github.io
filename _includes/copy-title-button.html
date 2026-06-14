@@ -1,6 +1,10 @@
 {% assign copy_text = include.text | strip_html | strip_newlines | escape %}
 {% assign copy_uid = include.uid | default: copy_text | slugify %}
-{% assign copy_status_id = "publication-copy-status-" | append: copy_uid %}
+{% if include.status_id %}
+  {% assign copy_status_id = include.status_id %}
+{% else %}
+  {% assign copy_status_id = "publication-copy-status-" | append: copy_uid %}
+{% endif %}
 <span class="publication__copy-control">
   <button class="publication__copy-button" type="button" data-copy-text="{{ copy_text }}" data-copy-status-id="{{ copy_status_id }}" title="Copy title" aria-label="Copy publication title">
     <i class="fa fa-copy" aria-hidden="true"></i>

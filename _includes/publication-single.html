@@ -8,6 +8,9 @@
 
 {% assign article_url = post.originalurl | default: post.link %}
 {% assign publication_anchor = post.url | default: post.permalink | slugify %}
+{% assign venue_slug = post.venue | default: "journal" | slugify %}
+{% assign journal_brand = site.data.journal_branding | where: "name", post.venue | first %}
+{% assign journal_mark = journal_brand.mark | default: post.venue %}
 {% assign publication_metric = site.data.journal_metrics.journals | where: "name", post.venue | first %}
 {% assign publication_citation = nil %}
 {% if post.doi and site.data.google_scholar.publication_citations %}
@@ -20,15 +23,18 @@
 {% if include.anchor_prefix %}
   {% assign publication_anchor = include.anchor_prefix | append: "-" | append: publication_anchor %}
 {% endif %}
+{% assign publication_copy_uid = publication_anchor | slugify %}
+{% assign publication_copy_status_id = "publication-copy-status-" | append: publication_copy_uid %}
+{% assign publication_copy_text = post.title | strip_html | strip_newlines | escape %}
 
-<div class="publication__item{% if is_starred %} publication__item--starred{% endif %}{% if include.featured %} publication__item--featured-section{% endif %}{% if include.anchor_prefix %} publication__item--all-section{% endif %}"{% if include.anchor_prefix %} id="{{ publication_anchor }}"{% endif %}>
+<div class="publication__item publication__item--venue-{{ venue_slug }}{% if is_starred %} publication__item--starred{% endif %}{% if include.featured %} publication__item--featured-section{% endif %}{% if include.anchor_prefix %} publication__item--all-section{% endif %}" data-journal-mark="{{ journal_mark | escape }}"{% if include.anchor_prefix %} id="{{ publication_anchor }}"{% endif %}>
   <article class="archive__item publication__entry" itemscope itemtype="http://schema.org/CreativeWork">
     <h2 class="archive__item-title publication__title" itemprop="headline">
       {% if is_starred %}<i class="fa fa-star publication__title-star" aria-hidden="true"></i><span class="sr-only">Featured work: </span>{% endif %}
-      <span class="publication__title-text">{{ title }}</span>{% include copy-title-button.html text=post.title uid=publication_anchor %}
+      <button class="publication__title-copy-text publication__title-text" type="button" data-copy-text="{{ publication_copy_text }}" data-copy-status-id="{{ publication_copy_status_id }}" title="Copy title" aria-label="Copy publication title">{{ title }}</button>{% include copy-title-button.html text=post.title uid=publication_anchor status_id=publication_copy_status_id %}
     </h2>
 
-    {% include publication-figure.html item=post context="list" %}
+    {% include publication-figure.html item=post context="list" journal_mark=journal_mark %}
 
     {% if post.authors and post.authors != "" %}
       <p class="publication__authors">{{ post.authors }}</p>
