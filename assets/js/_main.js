@@ -532,6 +532,32 @@ let initPublicationListLayout = () => {
   });
 };
 
+let initPublicationAuthorNameWrap = () => {
+  const authorBlocks = document.querySelectorAll(".publication__authors");
+  authorBlocks.forEach((block) => {
+    if (block.dataset.namesWrapped === "true") {
+      return;
+    }
+
+    const parts = block.innerHTML.split(/(,\s+|\s+and\s+)/i);
+    block.innerHTML = parts.map((part) => {
+      if (!part.trim() || /^,\s+$/.test(part) || /^\s+and\s+$/i.test(part)) {
+        return part;
+      }
+      const leading = part.match(/^\s*/)[0];
+      const trailing = part.match(/\s*$/)[0];
+      const name = part.trim();
+      const conjunctionMatch = name.match(/^and\s+/i);
+      if (conjunctionMatch) {
+        const conjunction = conjunctionMatch[0];
+        return `${leading}${conjunction}<span class="publication__author-name">${name.slice(conjunction.length)}</span>${trailing}`;
+      }
+      return `${leading}<span class="publication__author-name">${name}</span>${trailing}`;
+    }).join("");
+    block.dataset.namesWrapped = "true";
+  });
+};
+
 let initCvEducationLayout = () => {
   const groups = document.querySelectorAll(".cv-education");
   if (groups.length === 0) {
@@ -574,14 +600,15 @@ let initCvEducationLayout = () => {
       }
 
       const items = Array.from(group.querySelectorAll(".cv-education__item"));
-      const logo = group.querySelector(".cv-education__logo-link");
-      if (items.length === 0 || !logo) {
+      const logos = Array.from(group.querySelectorAll(".cv-education__logo-link"));
+      if (items.length === 0 || logos.length === 0) {
         return;
       }
 
       const maxTextWidth = Math.max(...items.map((item) => measureTextWidth(item.querySelector(".cv-education__body"))));
       const columnGap = parseFloat(window.getComputedStyle(items[0]).columnGap) || 0;
-      const maxBodyWidth = group.getBoundingClientRect().width - logo.getBoundingClientRect().width - columnGap;
+      const maxLogoWidth = Math.max(...logos.map((logo) => logo.getBoundingClientRect().width));
+      const maxBodyWidth = group.getBoundingClientRect().width - maxLogoWidth - columnGap;
       if (maxBodyWidth <= 0) {
         return;
       }
@@ -598,6 +625,13 @@ let initCvEducationLayout = () => {
 
   layoutAll();
   window.addEventListener("resize", scheduleLayout);
+  groups.forEach((group) => {
+    group.querySelectorAll(".cv-education__logo").forEach((image) => {
+      if (!image.complete) {
+        image.addEventListener("load", scheduleLayout, { once: true });
+      }
+    });
+  });
 };
 
 /* ==========================================================================
@@ -676,6 +710,7 @@ $(document).ready(function () {
 
   initPublicationFigureDialogs();
   initCopyButtons();
+  initPublicationAuthorNameWrap();
   initPublicationListLayout();
   initCvEducationLayout();
 

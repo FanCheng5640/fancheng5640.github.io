@@ -35,4 +35,4 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
   <li class="site-news__item">Nov 26, 2018: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2018-11-26-nondestructive-measurement-of-nanofiber-diameters-using-microfiber-tip"><em>Optics Express</em></a>.</li>
 </ul>
 
-<p class="site-last-updated">Last updated: {{ site.time | date: "%Y-%m-%d %H:%M" }}</p>
+<p class="site-last-updated">Last updated: {{ site.time | date: "%b %d, %Y" }}</p>

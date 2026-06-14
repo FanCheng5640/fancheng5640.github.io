@@ -164,7 +164,7 @@
 }
 
 .publication-summary__venue-name {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .publication-summary .publication-summary__venue-link,
@@ -437,6 +437,10 @@
 
 .publication__authors strong {
   font-weight: 700;
+}
+
+.publication__author-name {
+  white-space: nowrap;
 }
 
 .publication__meta {
