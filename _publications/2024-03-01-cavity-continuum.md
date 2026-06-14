@@ -23,6 +23,15 @@ figure_image: "/files/papers/figures/2024-photonics-research-cavity-continuum-fi
 figure_thumb: "/files/papers/figures/2024-photonics-research-cavity-continuum-fig2-thumb.jpg"
 figure_label: "Fig. 2"
 figure_alt: "Fig. 2 from Cavity continuum."
+visualizations:
+  - label: "Visualization 1"
+    title: "Cavity continuum visualization"
+    description: "Visualization related to Fig. 3 and Fig. 4."
+    video: "/files/papers/videos/2024-photonics-research-cavity-continuum-visualization-1.mp4"
+    original_video: "/files/papers/videos/original/2024-photonics-research-cavity-continuum-visualization-1.avi"
+    poster: "/files/papers/videos/posters/2024-photonics-research-cavity-continuum-visualization-1.jpg"
+    source_url: "https://doi.org/10.6084/m9.figshare.24117588"
+    license: "CC BY 4.0"
 pdf_source: "https://arxiv.org/pdf/2312.12632"
 citation: "<strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Mark Douvidzon, Lev Deych, and Tal Carmon (2024). &quot;Cavity continuum.&quot; <i>Photonics Research</i>, 12(3), 391. https://doi.org/10.1364/PRJ.505164"
 ---
