@@ -34,3 +34,5 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
   <li class="site-news__item">Jul 27, 2023: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2023-07-27-absorption-induced-transmission-in-plasma-microphotonics"><em>Nature Communications</em></a>.</li>
   <li class="site-news__item">Nov 26, 2018: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2018-11-26-nondestructive-measurement-of-nanofiber-diameters-using-microfiber-tip"><em>Optics Express</em></a>.</li>
 </ul>
+
+<p class="site-last-updated">Last updated: {{ site.time | date: "%Y-%m-%d %H:%M" }}</p>

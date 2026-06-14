@@ -221,6 +221,7 @@ let initPublicationListLayout = () => {
     const meta = item.querySelector(".publication__meta");
     const image = cluster ? cluster.querySelector(".publication__figure-trigger img") : null;
     const figure = cluster ? cluster.querySelector(".publication__figure--list") : null;
+    const citationBadge = meta ? meta.querySelector(".publication__badge--citations") : null;
     const videoCount = item.querySelectorAll(".publication__video-card").length;
 
     if (!authors || !cluster || !image) {
@@ -234,6 +235,11 @@ let initPublicationListLayout = () => {
 
     item.classList.remove("publication__item--layout-ready");
     cluster.style.visibility = "hidden";
+    if (!image.complete || image.naturalWidth === 0) {
+      image.addEventListener("load", scheduleLayout, { once: true });
+      image.addEventListener("error", revealCluster, { once: true });
+      return;
+    }
     image.style.removeProperty("max-height");
     cluster.style.removeProperty("width");
     cluster.style.removeProperty("max-width");
@@ -244,27 +250,67 @@ let initPublicationListLayout = () => {
     const baselineCounts = {
       authors: getLineCount(authors),
       meta: meta ? getLineCount(meta) : 1,
+      citation: citationBadge ? getLineCount(citationBadge) : 1,
     };
     cluster.style.removeProperty("display");
 
     const isSingleColumn = window.matchMedia("(max-width: 520px)").matches;
-    const isLandscapeFigure = figure && figure.classList.contains("publication__figure--orientation-landscape");
+    const isLandscapeFigure = figure && (
+      figure.classList.contains("publication__figure--orientation-landscape") ||
+      figure.classList.contains("publication__figure--orientation-wide")
+    );
     const isPortraitFigure = figure && figure.classList.contains("publication__figure--orientation-portrait");
-    authors.before(cluster);
+    const canUseWideLandscape = () => (
+      (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
+      isLandscapeFigure
+    );
 
     const getCurrentCounts = () => ({
       authors: getLineCount(authors),
       meta: meta ? getLineCount(meta) : 1,
+      citation: citationBadge ? getLineCount(citationBadge) : 1,
     });
     const exceedsBaseline = (counts) => (
       counts.authors > baselineCounts.authors ||
-      counts.meta > baselineCounts.meta
+      counts.meta > baselineCounts.meta ||
+      counts.citation > baselineCounts.citation
     );
+    const resetCandidateStyles = () => {
+      image.style.removeProperty("max-height");
+      cluster.style.removeProperty("width");
+      cluster.style.removeProperty("max-width");
+      item.classList.remove("publication__item--figure-after-authors");
+      item.classList.remove("publication__item--figure-after-meta");
+    };
+    const setPlacement = (placement) => {
+      item.classList.remove("publication__item--figure-after-authors");
+      item.classList.remove("publication__item--figure-after-meta");
+      if (placement === "after-meta" && meta) {
+        item.classList.add("publication__item--figure-after-authors");
+        item.classList.add("publication__item--figure-after-meta");
+        meta.after(cluster);
+      } else if (placement === "after-authors") {
+        item.classList.add("publication__item--figure-after-authors");
+        authors.after(cluster);
+      } else {
+        authors.before(cluster);
+      }
+    };
+    const applyCandidateWidth = (candidate) => {
+      if (candidate.width) {
+        cluster.style.width = candidate.width;
+      }
+      if (candidate.maxWidth) {
+        cluster.style.maxWidth = candidate.maxWidth;
+      }
+    };
+    const getSafeBeforeAuthorsWidth = () => {
+      resetCandidateStyles();
+      setPlacement("before-authors");
+      if (!exceedsBaseline(getCurrentCounts())) {
+        return null;
+      }
 
-    let currentCounts = getCurrentCounts();
-    let shouldPlaceAfterAuthors = isSingleColumn || exceedsBaseline(currentCounts);
-
-    if (shouldPlaceAfterAuthors && !isSingleColumn) {
       const initialClusterWidth = Math.floor(cluster.getBoundingClientRect().width);
       let low = 1;
       let high = initialClusterWidth;
@@ -274,7 +320,7 @@ let initPublicationListLayout = () => {
         const testWidth = Math.floor((low + high) / 2);
         cluster.style.width = `${testWidth}px`;
         cluster.style.maxWidth = `${testWidth}px`;
-        currentCounts = getCurrentCounts();
+        const currentCounts = getCurrentCounts();
 
         if (exceedsBaseline(currentCounts)) {
           high = testWidth - 1;
@@ -284,39 +330,139 @@ let initPublicationListLayout = () => {
         }
       }
 
-      if (bestWidth > 0) {
+      resetCandidateStyles();
+      return bestWidth > 0 ? bestWidth : 0;
+    };
+    const canGrowToLogoForPlacement = (placement) => {
+      const isAfterAuthorsOrMeta = placement === "after-authors" || placement === "after-meta";
+      const canGrowLandscapeToLogo = isAfterAuthorsOrMeta && canUseWideLandscape();
+      const canGrowPortraitToLogo =
+        placement === "before-authors" &&
+        (videoCount > 1 || item.classList.contains("publication__item--text-figure-only")) &&
+        isPortraitFigure;
+      return canGrowLandscapeToLogo || canGrowPortraitToLogo;
+    };
+    const getLogoLimitedImageSize = (placement) => {
+      let imageBox = image.getBoundingClientRect();
+      if (!logoRow) {
+        return {
+          width: imageBox.width,
+          height: imageBox.height,
+        };
+      }
+
+      const logoBox = logoRow.getBoundingClientRect();
+      const availableHeight = Math.floor(logoBox.bottom - imageBox.top - 1);
+      if (canGrowToLogoForPlacement(placement) && availableHeight > imageBox.height + 1) {
+        image.style.maxHeight = `${availableHeight}px`;
+        imageBox = image.getBoundingClientRect();
+      }
+
+      const finalAvailableHeight = Math.floor(logoBox.bottom - imageBox.top - 1);
+      if (finalAvailableHeight <= 0 || imageBox.height <= 0) {
+        return {
+          width: 0,
+          height: 0,
+        };
+      }
+      if (imageBox.height <= finalAvailableHeight) {
+        return {
+          width: imageBox.width,
+          height: imageBox.height,
+        };
+      }
+      const scale = finalAvailableHeight / imageBox.height;
+      return {
+        width: imageBox.width * scale,
+        height: finalAvailableHeight,
+      };
+    };
+    const measureCandidate = (placement, options = {}) => {
+      resetCandidateStyles();
+      setPlacement(placement);
+      if (options.fixedWidth) {
+        cluster.style.width = `${options.fixedWidth}px`;
+        cluster.style.maxWidth = `${options.fixedWidth}px`;
+      } else if ((placement === "after-authors" || placement === "after-meta") && canUseWideLandscape()) {
+        cluster.style.width = "min(100%, 34rem)";
+        cluster.style.maxWidth = "34rem";
+      }
+
+      if (exceedsBaseline(getCurrentCounts())) {
+        if (!((placement === "after-authors" || placement === "after-meta") && canUseWideLandscape())) {
+          return null;
+        }
+
+        let low = 1;
+        let high = Math.floor(cluster.getBoundingClientRect().width);
+        let bestWidth = 0;
+        while (low <= high) {
+          const testWidth = Math.floor((low + high) / 2);
+          cluster.style.width = `${testWidth}px`;
+          cluster.style.maxWidth = `${testWidth}px`;
+
+          if (exceedsBaseline(getCurrentCounts())) {
+            high = testWidth - 1;
+          } else {
+            bestWidth = testWidth;
+            low = testWidth + 1;
+          }
+        }
+
+        if (bestWidth <= 0) {
+          return null;
+        }
         cluster.style.width = `${bestWidth}px`;
         cluster.style.maxWidth = `${bestWidth}px`;
-        currentCounts = getCurrentCounts();
-        shouldPlaceAfterAuthors = exceedsBaseline(currentCounts);
       }
 
-      if (shouldPlaceAfterAuthors) {
-        cluster.style.removeProperty("width");
-        cluster.style.removeProperty("max-width");
+      const size = getLogoLimitedImageSize(placement);
+      if (size.width <= 0 || size.height <= 0) {
+        return null;
       }
+
+      return {
+        placement,
+        width: cluster.style.width,
+        maxWidth: cluster.style.maxWidth,
+        area: size.width * size.height,
+      };
+    };
+    const applyCandidate = (candidate) => {
+      resetCandidateStyles();
+      setPlacement(candidate.placement);
+      applyCandidateWidth(candidate);
+    };
+
+    let selectedCandidate = null;
+    if (isSingleColumn) {
+      selectedCandidate = measureCandidate("after-authors");
+    } else {
+      const beforeWidth = getSafeBeforeAuthorsWidth();
+      const candidates = [];
+      const beforeCandidate = measureCandidate("before-authors", beforeWidth ? { fixedWidth: beforeWidth } : {});
+      const afterAuthorsCandidate = measureCandidate("after-authors");
+      const afterMetaCandidate = meta ? measureCandidate("after-meta") : null;
+
+      [beforeCandidate, afterAuthorsCandidate, afterMetaCandidate].forEach((candidate) => {
+        if (candidate) {
+          candidates.push(candidate);
+        }
+      });
+      selectedCandidate = candidates.reduce((best, candidate) => {
+        if (!best || candidate.area > best.area) {
+          return candidate;
+        }
+        return best;
+      }, null);
     }
 
-    if (shouldPlaceAfterAuthors) {
-      item.classList.add("publication__item--figure-after-authors");
-      authors.after(cluster);
-      currentCounts = getCurrentCounts();
-      if (meta && currentCounts.meta > baselineCounts.meta) {
-        item.classList.add("publication__item--figure-after-meta");
-        meta.after(cluster);
-      }
+    if (!selectedCandidate) {
+      selectedCandidate = { placement: meta ? "after-meta" : "after-authors" };
     }
+    applyCandidate(selectedCandidate);
 
-    if (
-      shouldPlaceAfterAuthors &&
-      !cluster.style.width &&
-      (item.classList.contains("publication__item--text-figure-only") || videoCount <= 1) &&
-      figure &&
-      figure.classList.contains("publication__figure--orientation-landscape")
-    ) {
-      cluster.style.width = "min(100%, 34rem)";
-      cluster.style.maxWidth = "34rem";
-    }
+    const shouldPlaceAfterAuthors = selectedCandidate.placement !== "before-authors";
 
     if (!logoRow) {
       revealCluster();

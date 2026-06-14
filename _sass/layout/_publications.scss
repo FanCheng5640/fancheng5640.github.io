@@ -53,6 +53,7 @@
   max-width: 100%;
   min-height: 11rem;
   padding-top: 1.2rem;
+  border-bottom: 1px solid #d7d7d7;
 }
 
 .scholar-metrics__bar-group {
@@ -61,7 +62,6 @@
   justify-items: center;
   align-items: end;
   min-width: 1.65rem;
-  border-bottom: 1px solid #d7d7d7;
   color: #666;
   font-size: 0.78rem;
 }
@@ -104,7 +104,7 @@
   }
 
   .scholar-metrics__chart {
-    width: 100%;
+    width: max-content;
     min-width: 0;
     overflow-x: auto;
   }
@@ -214,7 +214,7 @@
   font-weight: 700;
 }
 
-.publication-summary__venue-name--priority .publication-summary__venue-title {
+.publication-summary__venue-title {
   border-bottom: 1px solid currentColor;
   padding-bottom: 0.02em;
 }
@@ -245,6 +245,12 @@
   color: inherit;
   font-size: 0.9rem;
   line-height: 1.25;
+}
+
+.publication-summary__paper-year {
+  color: var(--global-text-color-light);
+  font-weight: 600;
+  margin-right: 0.18rem;
 }
 
 @media (max-width: 520px) {

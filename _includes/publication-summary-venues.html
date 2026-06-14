@@ -21,7 +21,8 @@
         {% for venue_post in venue_items %}
           {% assign paper_anchor_base = venue_post.url | default: venue_post.permalink | slugify %}
           {% assign paper_anchor = "publication-" | append: paper_anchor_base %}
-          <li><a href="#{{ paper_anchor }}">{{ venue_post.title }}</a></li>
+          {% assign paper_year = venue_post.date | date: "%Y" %}
+          <li><a href="#{{ paper_anchor }}"><span class="publication-summary__paper-year">({{ paper_year }})</span> {{ venue_post.title }}</a></li>
         {% endfor %}
         </ul>
       </details>
