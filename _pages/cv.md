@@ -33,7 +33,9 @@ Shanxi University
 Taiyuan, China | 09/2010 - 07/2014
 
 ## Awards
-* [Student Excellence Award](https://en-med.tau.ac.il/scholars-gertner-med-2020), The Marian Gertner Institute for Medical Nanosystems, Tel Aviv University, 2025-2026.
+<ul class="cv-awards">
+  <li id="award-student-excellence-gertner" class="cv-awards__item"><a href="https://en-med.tau.ac.il/scholars-gertner-med-2020">Student Excellence Award</a>, The Marian Gertner Institute for Medical Nanosystems, Tel Aviv University, 2025-2026.</li>
+</ul>
 
 ## Service
 * Reviewer, [Optical Materials Express](https://opg.optica.org/ome/).

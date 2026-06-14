@@ -169,6 +169,23 @@
   margin-bottom: 0.25rem;
 }
 
+.archive__item.publication__entry:hover .publication__title,
+.archive__item.publication__entry:focus-within .publication__title {
+  text-decoration: none;
+}
+
+.publication__title-text {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.archive__item.publication__entry:hover .publication__title-text,
+.archive__item.publication__entry:focus-within .publication__title-text {
+  background: #fff7d6;
+  box-shadow: 0 0 0 0.12em #fff7d6, inset 0 -0.18em 0 rgba(255, 194, 10, 0.48);
+}
+
 .publication__item--all-section .publication__title {
   margin: -0.9rem -1rem 0.8rem;
   padding: 0.72rem 1rem;
@@ -292,9 +309,10 @@
 }
 
 .publication__figure-dialog {
-  width: min(92vw, 68rem);
-  max-height: 90vh;
-  padding: 1rem;
+  width: fit-content;
+  max-width: 96vw;
+  max-height: 92vh;
+  padding: 0.45rem;
   border: 0;
   border-radius: 0.25rem;
   background: #fff;
@@ -309,8 +327,8 @@
 .publication__figure-dialog img {
   display: block;
   width: auto;
-  max-width: 100%;
-  max-height: 76vh;
+  max-width: calc(96vw - 0.9rem);
+  max-height: calc(92vh - 0.9rem);
   margin: 0 auto;
 }
 
@@ -330,19 +348,13 @@
   font-size: 1.35rem;
   line-height: 1;
   cursor: pointer;
+  z-index: 1;
 }
 
 .publication__figure-close:hover,
 .publication__figure-close:focus {
   border-color: #2f7300;
   outline: 0.12rem solid rgba(47, 115, 0, 0.28);
-}
-
-.publication__figure-dialog-caption {
-  margin: 0.75rem 2.4rem 0 0;
-  color: #333;
-  font-size: 0.9rem;
-  line-height: 1.35;
 }
 
 .publication__copy-control {

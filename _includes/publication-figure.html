@@ -15,7 +15,6 @@
     <dialog id="{{ figure_dialog_id }}" class="publication__figure-dialog" data-publication-figure-dialog aria-label="Publication image">
       <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close enlarged figure" title="Close">&times;</button>
       <img src="{{ figure_image | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
-      <p class="publication__figure-dialog-caption">{{ publication_item.title }}</p>
     </dialog>
   </figure>
 {% endif %}

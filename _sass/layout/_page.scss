@@ -413,3 +413,19 @@
   border-left: 3px solid #b58a00;
   background: rgba(255, 213, 79, 0.2);
 }
+
+.cv-awards {
+  padding-left: 1.2rem;
+}
+
+.cv-awards__item {
+  margin: 0.25rem 0;
+  padding: 0.16rem 0.45rem;
+}
+
+.cv-awards__item:target {
+  border-left: 0.3rem solid #ffc20a;
+  background: #fff7d6;
+  box-shadow: 0 0 0 0.16rem rgba(255, 194, 10, 0.28);
+  scroll-margin-top: 5.2rem;
+}

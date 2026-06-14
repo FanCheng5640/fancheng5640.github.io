@@ -23,7 +23,7 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
 ## News
 
 <ul class="site-news">
-  <li class="site-news__item site-news__item--key">3 Mar 2026: <strong>Award:</strong> <a href="/cv/#awards">Student Excellence Award from The Marian Gertner Institute for Medical Nanosystems</a>.</li>
+  <li class="site-news__item site-news__item--key">3 Mar 2026: <strong>Award:</strong> <a href="/cv/#award-student-excellence-gertner">Student Excellence Award from The Marian Gertner Institute for Medical Nanosystems</a>.</li>
   <li class="site-news__item">1 Dec 2025: <strong>Co-author paper featured:</strong> <a href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors">The <em>Optica</em> paper</a> was featured in <em>Optics &amp; Photonics News</em>.</li>
   <li class="site-news__item site-news__item--key">22 Sep 2025: <strong>First-author paper:</strong> Published in <a href="/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities"><em>Applied Physics Letters</em></a>.</li>
   <li class="site-news__item">20 Sep 2025: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors"><em>Optica</em></a>.</li>
