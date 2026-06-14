@@ -379,20 +379,20 @@
   float: right;
   display: flex;
   justify-content: flex-end;
-  width: min(42%, 18rem);
-  max-width: 18rem;
+  width: min(46%, 20rem);
+  max-width: 20rem;
   margin: 0 0 0.65rem 1rem;
   text-align: right;
 }
 
 .publication__item--has-visual-media .publication__visual-cluster {
-  width: min(34%, 14rem);
-  max-width: 14rem;
+  width: min(38%, 16rem);
+  max-width: 16rem;
 }
 
 .publication__item--text-figure-only .publication__visual-cluster {
-  width: min(52%, 22rem);
-  max-width: 22rem;
+  width: min(62%, 28rem);
+  max-width: 28rem;
 }
 
 .publication__figure--list {
@@ -465,11 +465,11 @@
 }
 
 .publication__item--has-visual-media .publication__figure--list .publication__figure-trigger img {
-  max-height: 14rem;
+  max-height: 18rem;
 }
 
 .publication__item--text-figure-only .publication__figure--list .publication__figure-trigger img {
-  max-height: 20rem;
+  max-height: 24.5rem;
 }
 
 .publication__figure--single .publication__figure-trigger img {
