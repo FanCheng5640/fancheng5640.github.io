@@ -61,6 +61,7 @@
       {% if author.email %}
         <li class="author__email-copy">
           <button type="button" class="author__email-copy-button" data-copy-email="{{ author.email }}" aria-label="Copy email address: {{ author.email }}" title="Click to copy email">
+            <i class="fas fa-fw fa-envelope icon-pad-right author__email-icon" aria-hidden="true"></i>
             <span class="author__email-copy-text">{{ author.email }}</span>
             <span class="author__email-copy-icon" aria-hidden="true"><i class="fas fa-copy"></i></span>
           </button>

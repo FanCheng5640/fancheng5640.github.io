@@ -7,17 +7,35 @@
   {% assign figure_uid_source = publication_item.url | default: publication_item.permalink | default: publication_item.title %}
   {% assign figure_uid = figure_context | append: "-" | append: figure_uid_source | slugify %}
   {% assign figure_dialog_id = "publication-figure-dialog-" | append: figure_uid %}
+  {% assign has_list_logo = false %}
+  {% if include.journal_logo and figure_context == "list" %}
+    {% assign has_list_logo = true %}
+  {% endif %}
 
-  <figure class="publication__figure publication__figure--{{ figure_context }}">
-    <a class="publication__figure-trigger" href="{{ figure_image | relative_url }}" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ figure_dialog_id }}" title="View larger image">
-      <img src="{{ figure_thumb | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
-    </a>
-    {% if include.journal_mark %}
-      <span class="publication__journal-mark" aria-hidden="true">{{ include.journal_mark }}</span>
-    {% endif %}
-    <dialog id="{{ figure_dialog_id }}" class="publication__figure-dialog" data-publication-figure-dialog aria-label="Publication image">
-      <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close enlarged figure" title="Close">&times;</button>
-      <img src="{{ figure_image | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
-    </dialog>
-  </figure>
+  {% if figure_context == "list" %}
+    <div class="publication__visual-cluster{% if has_list_logo %} publication__visual-cluster--with-logo{% endif %}">
+      {% if has_list_logo %}
+        <img class="publication__journal-logo" src="{{ include.journal_logo | relative_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
+      {% endif %}
+      <figure class="publication__figure publication__figure--{{ figure_context }}">
+        <a class="publication__figure-trigger" href="{{ figure_image | relative_url }}" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ figure_dialog_id }}" title="View larger image">
+          <img src="{{ figure_thumb | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
+        </a>
+        <dialog id="{{ figure_dialog_id }}" class="publication__figure-dialog" data-publication-figure-dialog aria-label="Publication image">
+          <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close enlarged figure" title="Close">&times;</button>
+          <img src="{{ figure_image | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
+        </dialog>
+      </figure>
+    </div>
+  {% else %}
+    <figure class="publication__figure publication__figure--{{ figure_context }}">
+      <a class="publication__figure-trigger" href="{{ figure_image | relative_url }}" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ figure_dialog_id }}" title="View larger image">
+        <img src="{{ figure_thumb | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
+      </a>
+      <dialog id="{{ figure_dialog_id }}" class="publication__figure-dialog" data-publication-figure-dialog aria-label="Publication image">
+        <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close enlarged figure" title="Close">&times;</button>
+        <img src="{{ figure_image | relative_url }}" alt="{{ figure_alt | escape }}" loading="lazy" decoding="async">
+      </dialog>
+    </figure>
+  {% endif %}
 {% endif %}

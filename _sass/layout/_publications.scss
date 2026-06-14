@@ -168,46 +168,6 @@
   transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
-.publication__journal-mark {
-  display: inline-flex;
-  max-width: 100%;
-  margin-top: 0.28rem;
-  padding: 0.14rem 0.42rem;
-  border: 1px solid #c7d9b8;
-  border-radius: 0.18rem;
-  background: #fff;
-  color: #2f7300;
-  font-family: $sans-serif-narrow;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.1;
-  text-align: right;
-  text-transform: none;
-  white-space: nowrap;
-  box-shadow: 0 0.12rem 0.35rem rgba(0, 0, 0, 0.08);
-  pointer-events: none;
-}
-
-.publication__item--venue-applied-physics-letters .publication__journal-mark,
-.publication__item--venue-aip-advances .publication__journal-mark {
-  border-color: #b8d0df;
-  color: #005c91;
-}
-
-.publication__item--venue-optica .publication__journal-mark,
-.publication__item--venue-optics-express .publication__journal-mark,
-.publication__item--venue-photonics-research .publication__journal-mark {
-  border-color: #c7d9b8;
-  color: #2f7300;
-}
-
-.publication__item--venue-nature-communications .publication__journal-mark {
-  border-color: #d2d2d2;
-  color: #222;
-  font-family: Georgia, "Times New Roman", serif;
-}
-
 .publication__item--featured-section {
   padding: 0.9rem 1rem;
   border: 1px solid #f0dfad;
@@ -229,6 +189,12 @@
 .publication__item--featured-section:hover,
 .publication__item--featured-section:focus-within {
   background: #fff8e6;
+}
+
+.publication__item--all-section:hover,
+.publication__item--all-section:focus-within {
+  background: #fffdf2;
+  border-color: #c8c8c8;
 }
 
 .publication__entry {
@@ -277,6 +243,16 @@
   box-shadow: 0 0 0 0.14rem rgba(90, 90, 90, 0.22);
 }
 
+.publication__page-title {
+  position: relative;
+  padding-right: 2.35rem;
+}
+
+.publication__page-title .publication__copy-control {
+  top: 0.1rem;
+  right: 0;
+}
+
 .publication__title-text {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
@@ -287,6 +263,13 @@
   padding: 0.72rem 1rem;
   background: #f1f1f1;
   border-bottom: 1px solid #d3d3d3;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.publication__item--all-section:hover .publication__title,
+.publication__item--all-section:focus-within .publication__title {
+  background: #fff7d6;
+  border-bottom-color: #e8d99c;
 }
 
 .publication__title-star {
@@ -354,11 +337,20 @@
   margin: 0.35rem 0 0.6rem;
 }
 
-.publication__figure--list {
+.publication__visual-cluster {
   float: right;
-  width: min(34%, 10.5rem);
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: clamp(0.45rem, 1.5vw, 0.8rem);
+  max-width: min(50%, 16rem);
   margin: 0 0 0.65rem 1rem;
-  text-align: right;
+  text-align: left;
+}
+
+.publication__figure--list {
+  width: auto;
+  margin: 0;
 }
 
 .publication__figure--single {
@@ -383,7 +375,7 @@
 
 .publication__figure--list .publication__figure-trigger {
   width: auto;
-  max-width: 100%;
+  max-width: min(10.5rem, 100%);
   min-height: 0;
   padding: 0.18rem;
   overflow: hidden;
@@ -420,6 +412,28 @@
 
 .publication__figure--single .publication__figure-trigger img {
   max-height: 18rem;
+}
+
+.publication__journal-logo {
+  display: block;
+  width: auto;
+  max-width: clamp(3.4rem, 9vw, 5.6rem);
+  max-height: 1.6rem;
+  border-radius: 0.12rem;
+  box-shadow: 0 0.1rem 0.28rem rgba(0, 0, 0, 0.14);
+  pointer-events: none;
+}
+
+.publication__item--venue-applied-physics-letters .publication__journal-logo,
+.publication__item--venue-photonics-research .publication__journal-logo,
+.publication__item--venue-optics-express .publication__journal-logo {
+  max-width: clamp(4rem, 10vw, 6.2rem);
+  max-height: 1.35rem;
+}
+
+.publication__item--venue-nature-communications .publication__journal-logo {
+  max-width: clamp(4rem, 10vw, 6.4rem);
+  max-height: 1.45rem;
 }
 
 .publication__figure-dialog {
@@ -472,11 +486,26 @@
 }
 
 .publication__copy-control {
+  position: absolute;
+  top: 0.52rem;
+  right: 0.58rem;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  margin-left: 0.35rem;
+  margin-left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
   vertical-align: middle;
+  z-index: 3;
+}
+
+.publication__title:hover .publication__copy-control,
+.publication__title:focus-within .publication__copy-control,
+.publication__item:hover .publication__copy-control,
+.publication__item:focus-within .publication__copy-control {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .publication__copy-button {
@@ -515,6 +544,18 @@
   scroll-margin-top: 5.2rem;
 }
 
+.publication__item:target:hover,
+.publication__item:target:focus-within {
+  background: #fff1b8;
+  box-shadow: 0 0 0 0.2rem rgba(255, 194, 10, 0.46);
+}
+
+.publication__item--all-section:target:hover .publication__title,
+.publication__item--all-section:target:focus-within .publication__title {
+  background: #ffeaa0;
+  border-bottom-color: #e0c45d;
+}
+
 .page__content h2:target,
 .page__content h3:target,
 .archive h2:target,
@@ -526,11 +567,19 @@
 }
 
 @media (max-width: 520px) {
-  .publication__figure--list {
+  .publication__visual-cluster {
     float: none;
-    width: min(100%, 18rem);
+    grid-template-columns: auto auto;
+    justify-items: start;
+    gap: 0.45rem;
+    max-width: 100%;
     margin: 0.45rem 0 0.6rem;
     text-align: left;
+  }
+
+  .publication__journal-logo {
+    max-width: min(72%, 8rem);
+    max-height: 1.5rem;
   }
 
   .publication__figure--list .publication__figure-trigger img {
@@ -538,7 +587,8 @@
   }
 
   .publication__copy-control {
-    margin-left: 0.2rem;
+    top: 0.42rem;
+    right: 0.45rem;
   }
 }
 

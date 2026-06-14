@@ -11,6 +11,7 @@
 {% assign venue_slug = post.venue | default: "journal" | slugify %}
 {% assign journal_brand = site.data.journal_branding | where: "name", post.venue | first %}
 {% assign journal_mark = journal_brand.mark | default: post.venue %}
+{% assign journal_logo = journal_brand.logo %}
 {% assign publication_metric = site.data.journal_metrics.journals | where: "name", post.venue | first %}
 {% assign publication_citation = nil %}
 {% if post.doi and site.data.google_scholar.publication_citations %}
@@ -34,7 +35,7 @@
       <button class="publication__title-copy-text publication__title-text" type="button" data-copy-text="{{ publication_copy_text }}" data-copy-status-id="{{ publication_copy_status_id }}" title="Copy title" aria-label="Copy publication title">{{ title }}</button>{% include copy-title-button.html text=post.title uid=publication_anchor status_id=publication_copy_status_id %}
     </h2>
 
-    {% include publication-figure.html item=post context="list" journal_mark=journal_mark %}
+    {% include publication-figure.html item=post context="list" journal_logo=journal_logo %}
 
     {% if post.authors and post.authors != "" %}
       <p class="publication__authors">{{ post.authors }}</p>
