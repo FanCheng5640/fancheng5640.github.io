@@ -91,6 +91,31 @@ PDF_FILENAMES = {
     "10.1063/5.0279509": "2025-apl-droplet-evaporation.pdf",
 }
 
+AUTO_METADATA_KEYS = {
+    "title",
+    "collection",
+    "category",
+    "orcid_sync",
+    "source_orcid",
+    "doi",
+    "first_author",
+    "corresponding_author",
+    "featured",
+    "journal_impact_factor",
+    "impact_factor_year",
+    "impact_factor_source",
+    "permalink",
+    "excerpt",
+    "date",
+    "venue",
+    "authors",
+    "originalurl",
+    "link",
+    "paperurl",
+    "pdf_source",
+    "citation",
+}
+
 
 def load_journal_metrics() -> dict:
     if not JOURNAL_METRICS_PATH.exists():
@@ -227,6 +252,8 @@ def download_pdf(pdf_url: str, path: Path) -> bool:
 
 
 def download_first_pdf(candidates: list[str], path: Path) -> str:
+    if path.exists():
+        return ""
     for pdf_url in candidates:
         if download_pdf(pdf_url, path):
             return pdf_url
@@ -265,10 +292,78 @@ def front_matter(metadata: dict) -> str:
     return "\n".join(lines)
 
 
-def publication_record(summary: dict) -> dict | None:
+def split_front_matter(text: str) -> tuple[list[str], str]:
+    match = re.match(r"---\s*\n(.*?)\n---\s*(.*)$", text, flags=re.S)
+    if not match:
+        return [], text
+    return match.group(1).splitlines(), match.group(2)
+
+
+def scalar_front_matter_values(lines: list[str]) -> dict:
+    values = {}
+    for line in lines:
+        match = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*):\s*(.*?)\s*$", line)
+        if not match:
+            continue
+        key, value = match.groups()
+        values[key] = value.strip().strip('"').strip("'")
+    return values
+
+
+def load_existing_publications() -> dict:
+    existing = {}
+    if not OUTPUT_DIR.exists():
+        return existing
+
+    for path in OUTPUT_DIR.glob("*.md"):
+        if not is_generated_publication(path):
+            continue
+        text = path.read_text(encoding="utf-8")
+        front_lines, body = split_front_matter(text)
+        metadata = scalar_front_matter_values(front_lines)
+        doi = metadata.get("doi", "").lower()
+        if doi:
+            existing[doi] = {
+                "path": path,
+                "front_lines": front_lines,
+                "body": body,
+                "metadata": metadata,
+            }
+    return existing
+
+
+def merge_existing_publication(existing: dict | None, metadata: dict, fallback_body: str) -> str:
+    if not existing:
+        return front_matter(metadata) + fallback_body
+
+    seen = set()
+    merged_lines = ["---"]
+    for line in existing["front_lines"]:
+        match = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*):", line)
+        if match and match.group(1) in AUTO_METADATA_KEYS:
+            key = match.group(1)
+            merged_lines.append(f"{key}: {yaml_value(metadata[key])}")
+            seen.add(key)
+        else:
+            merged_lines.append(line)
+
+    for key, value in metadata.items():
+        if key not in seen and key in AUTO_METADATA_KEYS:
+            merged_lines.append(f"{key}: {yaml_value(value)}")
+
+    merged_lines.append("---")
+    body = existing.get("body") or fallback_body
+    if not body.startswith("\n"):
+        body = "\n\n" + body
+    return "\n".join(merged_lines) + body
+
+
+def publication_record(summary: dict, existing_publications: dict) -> dict | None:
     doi = doi_from_summary(summary)
     if not doi:
         return None
+    existing_publication = existing_publications.get(doi.lower())
+    existing_metadata = existing_publication.get("metadata", {}) if existing_publication else {}
     title = summary["title"]["title"]["value"].strip()
     date = date_from_orcid(summary.get("publication-date"))
     journal = text_value(summary.get("journal-title"), "")
@@ -322,6 +417,8 @@ def publication_record(summary: dict) -> dict | None:
     pdf_path = PDF_DIR / pdf_filename
     pdf_candidates = PDF_OVERRIDES.get(doi.lower(), []) + pdf_urls_from_crossref(crossref)
     pdf_source = download_first_pdf(pdf_candidates, pdf_path)
+    if not pdf_source and pdf_path.exists():
+        pdf_source = existing_metadata.get("pdf_source", "")
     has_local_pdf = pdf_path.exists()
     article_url = f"https://doi.org/{doi}"
     permalink = f"/publication/{slug}"
@@ -355,8 +452,10 @@ def publication_record(summary: dict) -> dict | None:
     body = f"\n\nDOI: [{doi}](https://doi.org/{doi})\n"
     return {
         "filename": filename,
+        "path": existing_publication.get("path") if existing_publication else OUTPUT_DIR / filename,
         "metadata": metadata,
         "body": body,
+        "existing": existing_publication,
     }
 
 
@@ -382,16 +481,21 @@ def main() -> int:
     global JOURNAL_METRICS
     JOURNAL_METRICS = load_journal_metrics()
     OUTPUT_DIR.mkdir(exist_ok=True)
+    existing_publications = load_existing_publications()
     records = [
         record
-        for record in (publication_record(summary) for summary in orcid_summaries())
+        for record in (
+            publication_record(summary, existing_publications) for summary in orcid_summaries()
+        )
         if record
     ]
     generated_paths = set()
 
     for record in sorted(records, key=lambda item: item["metadata"]["date"], reverse=True):
-        path = OUTPUT_DIR / record["filename"]
-        text = front_matter(record["metadata"]) + record["body"]
+        path = record["path"]
+        text = merge_existing_publication(
+            record.get("existing"), record["metadata"], record["body"]
+        )
         path.write_text(text, encoding="utf-8")
         generated_paths.add(path)
 

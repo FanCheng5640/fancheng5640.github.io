@@ -1,7 +1,10 @@
 {
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
-  "updated": "2026-06-13",
+  "updated": "2026-06-14",
+  "last_attempted": "2026-06-14",
+  "sync_status": "ok",
+  "last_error": "",
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {

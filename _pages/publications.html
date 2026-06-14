@@ -65,7 +65,10 @@ hide_title: true
         {% endfor %}
       </div>
     </div>
-    <p class="scholar-metrics__source">Source: <a href="{{ scholar.profile_url }}">Google Scholar</a>; last synced {{ scholar.updated }}.</p>
+    <p class="scholar-metrics__source">
+      Source: <a href="{{ scholar.profile_url }}">Google Scholar</a>; last synced {{ scholar.updated }}.
+      {% if scholar.sync_status == "stale" %}Last check {{ scholar.last_attempted }} was blocked, so cached data is shown.{% endif %}
+    </p>
   </section>
 {% endif %}
 

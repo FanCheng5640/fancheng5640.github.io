@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -12,7 +13,8 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 
-PROFILE_URL = "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en"
+DEFAULT_PROFILE_URL = "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en"
+PROFILE_URL = os.environ.get("GOOGLE_SCHOLAR_PROFILE_URL", DEFAULT_PROFILE_URL)
 OUTPUT_PATH = Path("_data/google_scholar.json")
 PUBLICATIONS_DIR = Path("_publications")
 USER_AGENT = "Mozilla/5.0 fancheng5640.github.io citation sync"
@@ -223,6 +225,9 @@ def main() -> int:
         "profile_url": PROFILE_URL,
         "source": "Google Scholar",
         "updated": datetime.now(timezone.utc).date().isoformat(),
+        "last_attempted": datetime.now(timezone.utc).date().isoformat(),
+        "sync_status": "ok",
+        "last_error": "",
         "summary_title": summary_title(yearly_citations),
         "metrics": parse_metrics(page),
         "citations_by_year": yearly_citations,
@@ -237,9 +242,32 @@ def main() -> int:
     return 0
 
 
+def keep_cached_data(exc: Exception) -> int:
+    if not OUTPUT_PATH.exists():
+        print(
+            f"ERROR: Google Scholar sync failed and no cached data exists: {exc}",
+            file=sys.stderr,
+        )
+        return 1
+
+    data = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+    data["last_attempted"] = datetime.now(timezone.utc).date().isoformat()
+    data["sync_status"] = "stale"
+    data["last_error"] = str(exc)[:300]
+    OUTPUT_PATH.write_text(
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    print(
+        "WARNING: Google Scholar sync failed; kept cached data in "
+        f"{OUTPUT_PATH}: {exc}",
+        file=sys.stderr,
+    )
+    return 0
+
+
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
     except Exception as exc:
-        print(f"ERROR: Google Scholar sync failed: {exc}", file=sys.stderr)
-        raise
+        raise SystemExit(keep_cached_data(exc))
