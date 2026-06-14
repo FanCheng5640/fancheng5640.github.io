@@ -15,29 +15,54 @@
         {% assign video_uid_source = item.video | default: item.source_url | append: forloop.index | slugify %}
         {% assign video_dialog_id = "publication-video-dialog-" | append: video_uid_source %}
         <figure class="publication__video-card">
-          <button class="publication__video-trigger" type="button" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ video_dialog_id }}" title="Play {{ item.label | escape }}">
-            {% if item.poster %}
-              <img src="{{ item.poster | relative_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
-            {% endif %}
-            <span class="publication__video-play" aria-hidden="true"><i class="fa fa-play"></i></span>
-          </button>
+          {% if item.video %}
+            <button class="publication__video-trigger" type="button" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ video_dialog_id }}" title="Play {{ item.label | escape }}">
+              {% if item.poster %}
+                <img src="{{ item.poster | relative_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
+              {% endif %}
+              <span class="publication__video-play" aria-hidden="true"><i class="fa fa-play"></i></span>
+            </button>
+          {% elsif item.embed_url %}
+            <button class="publication__video-trigger" type="button" data-publication-figure-open aria-haspopup="dialog" aria-controls="{{ video_dialog_id }}" title="Play {{ item.label | escape }}">
+              {% if item.poster %}
+                <img src="{{ item.poster | relative_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
+              {% endif %}
+              <span class="publication__video-play" aria-hidden="true"><i class="fa fa-play"></i></span>
+            </button>
+          {% elsif item.external_url %}
+            <a class="publication__video-trigger publication__video-trigger--external" href="{{ item.external_url }}" target="_blank" rel="noopener" title="Open {{ item.label | escape }}">
+              {% if item.poster %}
+                <img src="{{ item.poster | relative_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
+              {% endif %}
+              <span class="publication__video-play" aria-hidden="true"><i class="fa fa-external-link-alt"></i></span>
+            </a>
+          {% endif %}
           <figcaption class="publication__video-caption">
             <span class="publication__video-label">{{ item.label }}</span>
             <span class="publication__video-title">{{ item.title }}</span>
+            {% if item.external_url and item.description %}
+              <span class="publication__video-note">{{ item.description }}</span>
+            {% endif %}
           </figcaption>
-          <dialog id="{{ video_dialog_id }}" class="publication__figure-dialog publication__video-dialog" data-publication-figure-dialog aria-label="{{ item.label | escape }}">
-            <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close video" title="Close">&times;</button>
-            <div class="publication__video-dialog-body">
-              <video class="publication__video-player" controls preload="metadata" playsinline{% if item.poster %} poster="{{ item.poster | relative_url }}"{% endif %} data-publication-video>
-                <source src="{{ item.video | relative_url }}" type="video/mp4">
-              </video>
-              <p class="publication__video-description">
-                {{ item.description }}
-                {% if item.source_url %}<a href="{{ item.source_url }}" target="_blank" rel="noopener">Source</a>{% endif %}
-                {% if item.license %}<span>{{ item.license }}</span>{% endif %}
-              </p>
-            </div>
-          </dialog>
+          {% if item.video or item.embed_url %}
+            <dialog id="{{ video_dialog_id }}" class="publication__figure-dialog publication__video-dialog" data-publication-figure-dialog aria-label="{{ item.label | escape }}">
+              <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close video" title="Close">&times;</button>
+              <div class="publication__video-dialog-body">
+                {% if item.video %}
+                  <video class="publication__video-player" controls preload="metadata" playsinline{% if item.poster %} poster="{{ item.poster | relative_url }}"{% endif %} data-publication-video>
+                    <source src="{{ item.video | relative_url }}" type="video/mp4">
+                  </video>
+                {% elsif item.embed_url %}
+                  <iframe class="publication__video-frame" data-publication-video-frame data-src="{{ item.embed_url | escape }}" title="{{ item.title | escape }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                {% endif %}
+                <p class="publication__video-description">
+                  {{ item.description }}
+                  {% if item.source_url %}<a href="{{ item.source_url }}" target="_blank" rel="noopener">Source</a>{% endif %}
+                  {% if item.license %}<span>{{ item.license }}</span>{% endif %}
+                </p>
+              </div>
+            </dialog>
+          {% endif %}
         </figure>
       {% endfor %}
 

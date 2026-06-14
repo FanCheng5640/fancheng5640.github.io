@@ -722,6 +722,14 @@
   cursor: zoom-in;
 }
 
+a.publication__video-trigger {
+  text-decoration: none;
+}
+
+.publication__video-trigger--external {
+  cursor: pointer;
+}
+
 .publication__video-trigger:hover,
 .publication__video-trigger:focus {
   border-color: #2f7300;
@@ -766,6 +774,13 @@
 
 .publication__video-title {
   display: block;
+}
+
+.publication__video-note {
+  display: block;
+  margin-top: 0.08rem;
+  color: var(--global-text-color-light);
+  font-size: 0.78rem;
 }
 
 .publication__video-dialog {
