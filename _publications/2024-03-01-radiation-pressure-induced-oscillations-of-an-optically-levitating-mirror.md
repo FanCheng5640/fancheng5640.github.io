@@ -21,6 +21,7 @@ link: "https://doi.org/10.1063/5.0197109"
 paperurl: "/files/papers/2024-aip-adv-levitating-mirror.pdf"
 figure_image: "/files/papers/figures/2024-aip-adv-levitating-mirror-fig2.png"
 figure_thumb: "/files/papers/figures/2024-aip-adv-levitating-mirror-fig2-thumb.jpg"
+figure_orientation: wide
 figure_label: "Fig. 2"
 figure_alt: "Fig. 2 from Radiation pressure induced oscillations of an optically levitating mirror."
 pdf_source: "https://arxiv.org/pdf/2401.00954"

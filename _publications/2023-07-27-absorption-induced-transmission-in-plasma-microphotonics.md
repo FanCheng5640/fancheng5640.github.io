@@ -21,6 +21,7 @@ link: "https://doi.org/10.1038/s41467-023-40205-0"
 paperurl: "/files/papers/2023-nat-commun-plasma-microphotonics.pdf"
 figure_image: "/files/papers/figures/2023-nat-commun-plasma-microphotonics-fig2.png"
 figure_thumb: "/files/papers/figures/2023-nat-commun-plasma-microphotonics-fig2-thumb.jpg"
+figure_orientation: portrait
 figure_label: "Fig. 2"
 figure_alt: "Fig. 2 from Absorption-induced transmission in plasma microphotonics."
 pdf_source: ""

@@ -386,8 +386,8 @@
 }
 
 .publication__item--has-visual-media .publication__visual-cluster {
-  width: min(38%, 16rem);
-  max-width: 16rem;
+  width: min(42%, 20rem);
+  max-width: 20rem;
 }
 
 .publication__item--text-figure-only .publication__visual-cluster {
@@ -468,8 +468,16 @@
   max-height: 18rem;
 }
 
+.publication__item--has-visual-media .publication__figure--list.publication__figure--orientation-portrait .publication__figure-trigger img {
+  max-height: 23.5rem;
+}
+
 .publication__item--text-figure-only .publication__figure--list .publication__figure-trigger img {
   max-height: 20rem;
+}
+
+.publication__item--text-figure-only .publication__figure--list.publication__figure--orientation-portrait .publication__figure-trigger img {
+  max-height: 15rem;
 }
 
 .publication__figure--single .publication__figure-trigger img {
@@ -710,7 +718,7 @@
 
 .publication__video-gallery {
   margin: 0.55rem 0 0.35rem;
-  max-width: calc(100% - 15.5rem);
+  max-width: calc(100% - 21rem);
 }
 
 .publication__video-gallery-label {
@@ -722,8 +730,8 @@
 
 .publication__video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(8.2rem, 11.2rem));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(7.8rem, 10rem));
+  gap: 0.45rem;
   align-items: start;
 }
 

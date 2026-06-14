@@ -21,6 +21,7 @@ link: "https://doi.org/10.1364/OPTICA.560597"
 paperurl: "/files/papers/2025-optica-photonic-origami.pdf"
 figure_image: "/files/papers/figures/2025-optica-photonic-origami-fig3.png"
 figure_thumb: "/files/papers/figures/2025-optica-photonic-origami-fig3-thumb.jpg"
+figure_orientation: landscape
 figure_label: "Fig. 3"
 figure_alt: "Fig. 3 from Photonic origami of silica on a silicon chip with microresonators and concave mirrors."
 visualizations:

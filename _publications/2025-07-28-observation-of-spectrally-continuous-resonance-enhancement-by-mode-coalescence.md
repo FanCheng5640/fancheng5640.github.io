@@ -21,6 +21,7 @@ link: "https://doi.org/10.1364/OE.561188"
 paperurl: "/files/papers/2025-opt-express-mode-coalescence.pdf"
 figure_image: "/files/papers/figures/2025-opt-express-mode-coalescence-fig2.png"
 figure_thumb: "/files/papers/figures/2025-opt-express-mode-coalescence-fig2-thumb.jpg"
+figure_orientation: landscape
 figure_label: "Fig. 2"
 figure_alt: "Fig. 2 from Observation of spectrally continuous resonance enhancement by mode coalescence."
 visualizations:

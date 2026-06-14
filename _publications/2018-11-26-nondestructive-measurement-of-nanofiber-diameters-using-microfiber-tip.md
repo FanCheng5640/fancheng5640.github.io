@@ -21,6 +21,7 @@ link: "https://doi.org/10.1364/oe.26.031500"
 paperurl: "/files/papers/2018-opt-express-nanofiber-diameter.pdf"
 figure_image: "/files/papers/figures/2018-opt-express-nanofiber-diameter-fig3.png"
 figure_thumb: "/files/papers/figures/2018-opt-express-nanofiber-diameter-fig3-thumb.jpg"
+figure_orientation: wide
 figure_label: "Fig. 3"
 figure_alt: "Fig. 3 from Nondestructive measurement of nanofiber diameters using microfiber tip."
 pdf_source: "https://ioe.sxu.edu.cn/docs//2022-09/6e9509a2918c44f69c8f0de112e1bcc7.pdf"

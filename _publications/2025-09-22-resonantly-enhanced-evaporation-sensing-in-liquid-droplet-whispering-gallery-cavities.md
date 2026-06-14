@@ -21,6 +21,7 @@ link: "https://doi.org/10.1063/5.0279509"
 paperurl: "/files/papers/2025-apl-droplet-evaporation.pdf"
 figure_image: "/files/papers/figures/2025-apl-droplet-evaporation-fig1.png"
 figure_thumb: "/files/papers/figures/2025-apl-droplet-evaporation-fig1-thumb.jpg"
+figure_orientation: portrait
 figure_label: "Fig. 1"
 figure_alt: "Fig. 1 from Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities."
 visualizations:

@@ -21,6 +21,7 @@ link: "https://doi.org/10.1364/PRJ.505164"
 paperurl: "/files/papers/2024-photonics-research-cavity-continuum.pdf"
 figure_image: "/files/papers/figures/2024-photonics-research-cavity-continuum-fig2.png"
 figure_thumb: "/files/papers/figures/2024-photonics-research-cavity-continuum-fig2-thumb.jpg"
+figure_orientation: portrait
 figure_label: "Fig. 2"
 figure_alt: "Fig. 2 from Cavity continuum."
 visualizations:
