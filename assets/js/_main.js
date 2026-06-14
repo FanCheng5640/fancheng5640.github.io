@@ -48,6 +48,26 @@ var toggleTheme = () => {
 };
 
 let initPublicationFigureDialogs = () => {
+  const playPublicationVideo = (video) => {
+    video.muted = true;
+    video.loop = true;
+    const play = () => {
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+    };
+    const retryIfPaused = () => {
+      if (video.paused) {
+        play();
+      }
+    };
+    play();
+    video.addEventListener("canplay", retryIfPaused, { once: true });
+    window.setTimeout(retryIfPaused, 180);
+    window.setTimeout(retryIfPaused, 700);
+  };
+
   const prepareDialogMedia = (dialog) => {
     dialog.querySelectorAll("[data-publication-video-frame]").forEach((frame) => {
       const src = frame.getAttribute("data-src");
@@ -56,7 +76,7 @@ let initPublicationFigureDialogs = () => {
       }
     });
     dialog.querySelectorAll("[data-publication-video]").forEach((video) => {
-      video.play().catch(() => {});
+      playPublicationVideo(video);
     });
   };
 

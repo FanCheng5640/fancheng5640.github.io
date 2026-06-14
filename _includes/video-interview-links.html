@@ -49,7 +49,7 @@
               <button class="publication__figure-close" type="button" data-publication-figure-close aria-label="Close video" title="Close">&times;</button>
               <div class="publication__video-dialog-body">
                 {% if item.video %}
-                  <video class="publication__video-player" controls preload="metadata" playsinline{% if item.poster %} poster="{{ item.poster | relative_url }}"{% endif %} data-publication-video>
+                  <video class="publication__video-player" controls preload="metadata" playsinline muted loop{% if item.poster %} poster="{{ item.poster | relative_url }}"{% endif %} data-publication-video>
                     <source src="{{ item.video | relative_url }}" type="video/mp4">
                   </video>
                 {% elsif item.embed_url %}
