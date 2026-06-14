@@ -48,6 +48,27 @@ var toggleTheme = () => {
 };
 
 let initPublicationFigureDialogs = () => {
+  const prepareDialogMedia = (dialog) => {
+    dialog.querySelectorAll("[data-publication-video-frame]").forEach((frame) => {
+      const src = frame.getAttribute("data-src");
+      if (src && frame.getAttribute("src") !== src) {
+        frame.setAttribute("src", src);
+      }
+    });
+    dialog.querySelectorAll("[data-publication-video]").forEach((video) => {
+      video.play().catch(() => {});
+    });
+  };
+
+  const stopDialogMedia = (dialog) => {
+    dialog.querySelectorAll("[data-publication-video]").forEach((video) => {
+      video.pause();
+    });
+    dialog.querySelectorAll("[data-publication-video-frame]").forEach((frame) => {
+      frame.removeAttribute("src");
+    });
+  };
+
   const triggers = document.querySelectorAll("[data-publication-figure-open]");
   triggers.forEach((trigger) => {
     const dialogId = trigger.getAttribute("aria-controls");
@@ -59,6 +80,7 @@ let initPublicationFigureDialogs = () => {
       event.preventDefault();
       if (!dialog.open) {
         dialog.showModal();
+        prepareDialogMedia(dialog);
       }
     });
   });
@@ -73,6 +95,9 @@ let initPublicationFigureDialogs = () => {
       if (event.target === dialog) {
         dialog.close();
       }
+    });
+    dialog.addEventListener("close", () => {
+      stopDialogMedia(dialog);
     });
   });
 };
@@ -181,7 +206,7 @@ $(document).ready(function () {
   // Enable the sticky footer
   var bumpIt = function () {
     $("body").css("padding-bottom", "0");
-    $("body").css("margin-bottom", $(".page__footer").outerHeight(true));
+    $("body").css("margin-bottom", "0");
   }
   $(window).resize(function () {
     didResize = true;

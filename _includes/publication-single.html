@@ -31,11 +31,14 @@
 <div class="publication__item publication__item--venue-{{ venue_slug }}{% if is_starred %} publication__item--starred{% endif %}{% if include.featured %} publication__item--featured-section{% endif %}{% if include.anchor_prefix %} publication__item--all-section{% endif %}" data-journal-mark="{{ journal_mark | escape }}"{% if include.anchor_prefix %} id="{{ publication_anchor }}"{% endif %}>
   <article class="archive__item publication__entry" itemscope itemtype="http://schema.org/CreativeWork">
     <h2 class="archive__item-title publication__title" itemprop="headline">
-      {% if is_starred %}<i class="fa fa-star publication__title-star" aria-hidden="true"></i><span class="sr-only">Featured work: </span>{% endif %}
-      <button class="publication__title-copy-text publication__title-text" type="button" data-copy-text="{{ publication_copy_text }}" data-copy-status-id="{{ publication_copy_status_id }}" title="Copy title" aria-label="Copy publication title">{{ title }}</button>{% include copy-title-button.html text=post.title uid=publication_anchor status_id=publication_copy_status_id %}
+      <span class="publication__title-line">
+        {% if is_starred %}<i class="fa fa-star publication__title-star" aria-hidden="true"></i><span class="sr-only">Featured work: </span>{% endif %}
+        <button class="publication__title-copy-text publication__title-text" type="button" data-copy-text="{{ publication_copy_text }}" data-copy-status-id="{{ publication_copy_status_id }}" title="Copy title" aria-label="Copy publication title">{{ title }}</button>
+      </span>
+      <span id="{{ publication_copy_status_id }}" class="publication__copy-status publication__copy-status--inline" aria-live="polite"></span>
     </h2>
 
-    {% include publication-figure.html item=post context="list" journal_logo=journal_logo %}
+    {% include publication-figure.html item=post context="list" %}
 
     {% if post.authors and post.authors != "" %}
       <p class="publication__authors">{{ post.authors }}</p>
@@ -66,6 +69,11 @@
       <p class="publication__opn-note">Selected by <i>Optics &amp; Photonics News</i>{% if post.opn_issue %}: <a href="{{ post.opn_url }}" target="_blank" rel="noopener">{{ post.opn_title | default: post.opn_issue }}</a> ({{ post.opn_issue }}){% endif %}.</p>
     {% endif %}
     {% include media-coverage-links.html items=post.media_coverage %}
-    {% include video-interview-links.html items=post.video_interviews %}
+    {% include video-interview-links.html visualizations=post.visualizations items=post.video_interviews %}
+    {% if journal_logo %}
+      <p class="publication__journal-logo-row" aria-label="{{ post.venue | escape }} logo">
+        <img class="publication__journal-logo" src="{{ journal_logo | relative_url }}" alt="" loading="lazy" decoding="async" aria-hidden="true">
+      </p>
+    {% endif %}
   </article>
 </div>

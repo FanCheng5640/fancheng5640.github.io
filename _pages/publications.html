@@ -27,7 +27,12 @@ hide_title: true
   {% endfor %}
 
   <section class="scholar-metrics" aria-labelledby="scholar-metrics-title">
-    <h2 id="scholar-metrics-title">{{ scholar.summary_title }}</h2>
+    <h2 id="scholar-metrics-title" class="scholar-metrics__title">
+      <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener">{{ scholar.summary_title }}</a>
+      <span class="scholar-metrics__sync" title="Last synced {{ scholar.updated }}{% if scholar.sync_status == "stale" %}; last check {{ scholar.last_attempted }} was blocked, so cached data is shown{% endif %}" aria-label="Google Scholar sync status">
+        <i class="fa fa-clock" aria-hidden="true"></i>
+      </span>
+    </h2>
     <div class="scholar-metrics__content">
       <table class="scholar-metrics__table">
         <thead>
@@ -65,10 +70,6 @@ hide_title: true
         {% endfor %}
       </div>
     </div>
-    <p class="scholar-metrics__source">
-      Source: <a href="{{ scholar.profile_url }}">Google Scholar</a>; last synced {{ scholar.updated }}.
-      {% if scholar.sync_status == "stale" %}Last check {{ scholar.last_attempted }} was blocked, so cached data is shown.{% endif %}
-    </p>
   </section>
 {% endif %}
 
