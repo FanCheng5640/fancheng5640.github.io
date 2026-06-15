@@ -254,6 +254,11 @@
 }
 
 .publication-summary .publication-summary__paper-list a {
+  display: inline-grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr);
+  column-gap: 0.34rem;
+  align-items: baseline;
+  max-width: 100%;
   color: inherit;
   font-size: 0.9rem;
   line-height: 1.25;
@@ -262,7 +267,10 @@
 .publication-summary__paper-year {
   color: var(--global-text-color-light);
   font-weight: 600;
-  margin-right: 0.18rem;
+}
+
+.publication-summary__paper-title {
+  min-width: 0;
 }
 
 @media (max-width: 520px) {
