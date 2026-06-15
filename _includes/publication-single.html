@@ -53,7 +53,7 @@
     {% include publication-figure.html item=post context="list" %}
 
     {% if post.authors and post.authors != "" %}
-      <p class="publication__authors">{{ post.authors }}</p>
+      <p class="publication__authors">{% include publication-authors.html authors=post.author_entries fallback=post.authors %}</p>
     {% endif %}
 
     <p class="publication__meta">

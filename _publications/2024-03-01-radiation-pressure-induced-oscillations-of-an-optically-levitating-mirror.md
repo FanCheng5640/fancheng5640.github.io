@@ -16,6 +16,12 @@ excerpt: "AIP Advances, 2024."
 date: "2024-03-01"
 venue: "AIP Advances"
 authors: "Satyam Shekhar Jha, Tal Carmon, <strong><u>Fan Cheng</u></strong>, and Lev Deych"
+author_entries:
+  - name: "Satyam Shekhar Jha"
+  - name: "Tal Carmon"
+  - name: "Fan Cheng"
+  - name: "Lev Deych"
+    corresponding: true
 originalurl: "https://doi.org/10.1063/5.0197109"
 link: "https://doi.org/10.1063/5.0197109"
 paperurl: "/files/papers/2024-aip-adv-levitating-mirror.pdf"

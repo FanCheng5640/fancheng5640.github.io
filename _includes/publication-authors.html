@@ -1,0 +1,36 @@
+{% assign publication_authors = include.authors %}
+{% if publication_authors and publication_authors.size > 0 %}
+  {% assign author_count = publication_authors.size %}
+  {% for author in publication_authors %}
+    {% if forloop.first %}
+    {% elsif forloop.last and author_count == 2 %}
+      and
+    {% elsif forloop.last %}
+      , and
+    {% else %}
+      ,
+    {% endif %}
+    {%- assign author_profile = site.data.author_profiles | where: "name", author.name | first -%}
+    {%- capture author_name_html -%}
+      {%- if author.name == site.author.name or author.name == "Fan Cheng" -%}
+        <strong><u>{{ author.name | escape }}</u></strong>
+      {%- else -%}
+        {{ author.name | escape }}
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- capture author_body -%}
+      {%- if author_profile.google_scholar -%}
+        <a class="publication__author-name publication__author-link" href="{{ author_profile.google_scholar | escape }}" target="_blank" rel="noopener" title="Open {{ author.name | escape }} on Google Scholar">{{ author_name_html | strip }}</a>
+      {%- else -%}
+        <span class="publication__author-name">{{ author_name_html | strip }}</span>
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- if author.corresponding -%}
+      <span class="publication__corresponding-author">{{ author_body | strip }}<sup class="publication__corresponding-marker" title="Corresponding author" aria-label="Corresponding author">*</sup></span>
+    {%- else -%}
+      {{ author_body | strip }}
+    {%- endif -%}
+  {% endfor %}
+{% else %}
+  {{ include.fallback }}
+{% endif %}

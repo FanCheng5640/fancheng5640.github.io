@@ -62,6 +62,16 @@ ROLE_OVERRIDES = {
     # "10.0000/example": {"corresponding_author": True},
 }
 
+CORRESPONDING_AUTHOR_NAMES = {
+    "10.1364/oe.26.031500": {"Pengfei Zhang"},
+    "10.1038/s41467-023-40205-0": {"Tal Carmon"},
+    "10.1364/prj.505164": {"Tal Carmon"},
+    "10.1063/5.0197109": {"Lev Deych"},
+    "10.1364/oe.561188": {"Tal Carmon"},
+    "10.1364/optica.560597": {"Tal Carmon"},
+    "10.1063/5.0279509": {"Tal Carmon"},
+}
+
 PDF_OVERRIDES = {
     "10.1063/5.0279509": [
         "https://einstein.nju.edu.cn/upload/uploadify/20250925/20250922-AppliedPhysicsLetters_202509251317130813.pdf",
@@ -109,6 +119,7 @@ AUTO_METADATA_KEYS = {
     "date",
     "venue",
     "authors",
+    "author_entries",
     "originalurl",
     "link",
     "paperurl",
@@ -219,6 +230,19 @@ def html_author_join(authors: list[str]) -> str:
     return english_author_join(highlighted)
 
 
+def author_entries(authors: list[str], doi: str) -> list[dict[str, object]]:
+    corresponding_names = {
+        name.lower() for name in CORRESPONDING_AUTHOR_NAMES.get(doi.lower(), set())
+    }
+    entries = []
+    for author in authors:
+        entry: dict[str, object] = {"name": author}
+        if author.lower() in corresponding_names:
+            entry["corresponding"] = True
+        entries.append(entry)
+    return entries
+
+
 def pdf_urls_from_crossref(crossref_message: dict) -> list[str]:
     urls = []
     for link in crossref_message.get("link", []):
@@ -281,6 +305,8 @@ def yaml_value(value: object) -> str:
         return "true" if value else "false"
     if isinstance(value, (int, float)):
         return str(value)
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False)
     return json.dumps(str(value), ensure_ascii=False)
 
 
@@ -338,12 +364,18 @@ def merge_existing_publication(existing: dict | None, metadata: dict, fallback_b
 
     seen = set()
     merged_lines = ["---"]
+    skip_replaced_block = False
     for line in existing["front_lines"]:
+        if skip_replaced_block:
+            if re.match(r"^\s+", line) or not line.strip():
+                continue
+            skip_replaced_block = False
         match = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*):", line)
         if match and match.group(1) in AUTO_METADATA_KEYS:
             key = match.group(1)
             merged_lines.append(f"{key}: {yaml_value(metadata[key])}")
             seen.add(key)
+            skip_replaced_block = isinstance(metadata[key], (dict, list))
         else:
             merged_lines.append(line)
 
@@ -442,6 +474,7 @@ def publication_record(summary: dict, existing_publications: dict) -> dict | Non
         "date": date,
         "venue": journal,
         "authors": html_author_join(authors),
+        "author_entries": author_entries(authors, doi),
         "originalurl": article_url,
         "link": article_url,
         "paperurl": f"/files/papers/{pdf_filename}" if has_local_pdf else False,

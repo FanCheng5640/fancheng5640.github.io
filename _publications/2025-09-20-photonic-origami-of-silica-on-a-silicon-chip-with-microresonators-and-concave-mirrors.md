@@ -16,6 +16,12 @@ excerpt: "Optica, 2025."
 date: "2025-09-20"
 venue: "Optica"
 authors: "Manya Malhotra, Ronen Ben-Daniel, <strong><u>Fan Cheng</u></strong>, and Tal Carmon"
+author_entries:
+  - name: "Manya Malhotra"
+  - name: "Ronen Ben-Daniel"
+  - name: "Fan Cheng"
+  - name: "Tal Carmon"
+    corresponding: true
 originalurl: "https://doi.org/10.1364/OPTICA.560597"
 link: "https://doi.org/10.1364/OPTICA.560597"
 paperurl: "/files/papers/2025-optica-photonic-origami.pdf"

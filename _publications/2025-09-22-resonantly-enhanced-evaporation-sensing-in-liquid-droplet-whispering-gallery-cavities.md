@@ -16,6 +16,10 @@ excerpt: "Applied Physics Letters, 2025."
 date: "2025-09-22"
 venue: "Applied Physics Letters"
 authors: "<strong><u>Fan Cheng</u></strong> and Tal Carmon"
+author_entries:
+  - name: "Fan Cheng"
+  - name: "Tal Carmon"
+    corresponding: true
 originalurl: "https://doi.org/10.1063/5.0279509"
 link: "https://doi.org/10.1063/5.0279509"
 paperurl: "/files/papers/2025-apl-droplet-evaporation.pdf"
