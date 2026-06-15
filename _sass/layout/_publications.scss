@@ -462,8 +462,9 @@ p.publication__authors a.publication__author-link {
 
 p.publication__authors a.publication__author-link:hover,
 p.publication__authors a.publication__author-link:focus {
-  background: #fff5d0;
-  border-radius: 2px;
+  background: #fff0a6;
+  border-radius: 3px;
+  box-shadow: 0 0 0 0.12rem rgba(255, 194, 10, 0.38);
   color: var(--global-link-color-hover);
   text-decoration: none;
 }
