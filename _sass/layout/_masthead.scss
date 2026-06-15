@@ -45,6 +45,11 @@
 }
 
 .masthead__menu {
+  @include breakpoint($large) {
+    @include span(10 of 12 last);
+    @include prefix(0.5 of 12);
+    @include suffix(2 of 12);
+  }
 
   ul {
     margin: 0;
@@ -59,15 +64,6 @@
   display: block;
   list-style-type: none;
   white-space: nowrap;
-
-  &--lg {
-    padding-right: 2em;
-    font-weight: 700;
-  }
-}
-
-.masthead__site-title {
-  color: var(--global-text-color);
 }
 
 .masthead__menu-item.selected a {

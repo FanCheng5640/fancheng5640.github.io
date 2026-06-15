@@ -27,10 +27,15 @@ hide_title: true
   {% endfor %}
 
   <section class="scholar-metrics" aria-labelledby="scholar-metrics-title">
+    {% capture scholar_updated_label %}{{ scholar.updated | date: "%b %d, %Y" }}{% endcapture %}
     <h2 id="scholar-metrics-title" class="scholar-metrics__title">
       <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener">{{ scholar.summary_title }}</a>
-      <span class="scholar-metrics__sync" title="Last synced {{ scholar.updated }}{% if scholar.sync_status == "stale" %}; last check {{ scholar.last_attempted }} was blocked, so cached data is shown{% endif %}" aria-label="Google Scholar sync status">
-        <i class="fa fa-clock" aria-hidden="true"></i>
+      <span class="scholar-metrics__sync" title="{% if scholar.sync_status == "stale" %}Google Scholar was unavailable during the latest check; cached data from {{ scholar_updated_label | strip }} is shown. Open Google Scholar for live metrics.{% else %}Citation data updated from Google Scholar on {{ scholar_updated_label | strip }}.{% endif %}" aria-label="Google Scholar sync status">
+        {% if scholar.sync_status == "stale" %}
+          Cached {{ scholar_updated_label | strip }}
+        {% else %}
+          Updated {{ scholar_updated_label | strip }}
+        {% endif %}
       </span>
     </h2>
     <div class="scholar-metrics__content">

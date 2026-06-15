@@ -16,12 +16,7 @@ excerpt: "AIP Advances, 2024."
 date: "2024-03-01"
 venue: "AIP Advances"
 authors: "Satyam Shekhar Jha, Tal Carmon, <strong><u>Fan Cheng</u></strong>, and Lev Deych"
-author_entries:
-  - name: "Satyam Shekhar Jha"
-  - name: "Tal Carmon"
-  - name: "Fan Cheng"
-  - name: "Lev Deych"
-    corresponding: true
+author_entries: [{"name": "Satyam Shekhar Jha"}, {"name": "Tal Carmon"}, {"name": "Fan Cheng"}, {"name": "Lev Deych", "corresponding": true}]
 originalurl: "https://doi.org/10.1063/5.0197109"
 link: "https://doi.org/10.1063/5.0197109"
 paperurl: "/files/papers/2024-aip-adv-levitating-mirror.pdf"
@@ -32,6 +27,8 @@ figure_label: "Fig. 2"
 figure_alt: "Fig. 2 from Radiation pressure induced oscillations of an optically levitating mirror."
 pdf_source: "https://arxiv.org/pdf/2401.00954"
 citation: "Satyam Shekhar Jha, Tal Carmon, <strong><u>Fan Cheng</u></strong>, and Lev Deych (2024). &quot;Radiation pressure induced oscillations of an optically levitating mirror.&quot; <i>AIP Advances</i>, 14(3), 035123. https://doi.org/10.1063/5.0197109"
+work_type: "journal-article"
+crossref_type: "journal-article"
 ---
 
 DOI: [10.1063/5.0197109](https://doi.org/10.1063/5.0197109)

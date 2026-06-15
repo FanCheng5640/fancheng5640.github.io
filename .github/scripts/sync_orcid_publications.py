@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import html
 import json
 import re
@@ -10,6 +11,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime
 from pathlib import Path
 
 
@@ -18,7 +20,11 @@ AUTHOR_NAME = "Fan Cheng"
 OUTPUT_DIR = Path("_publications")
 PDF_DIR = Path("files/papers")
 JOURNAL_METRICS_PATH = Path("_data/journal_metrics.json")
+ABOUT_PAGE_PATH = Path("_pages/about.md")
 USER_AGENT = "fancheng5640.github.io ORCID sync (mailto:fancheng@mail.tau.ac.il)"
+
+ALLOWED_ORCID_WORK_TYPES = {"journal-article"}
+ALLOWED_CROSSREF_TYPES = {"journal-article"}
 
 
 JOURNAL_METRICS = {
@@ -108,6 +114,8 @@ AUTO_METADATA_KEYS = {
     "orcid_sync",
     "source_orcid",
     "doi",
+    "work_type",
+    "crossref_type",
     "first_author",
     "corresponding_author",
     "featured",
@@ -144,6 +152,14 @@ def load_journal_metrics() -> dict:
             "impact_factor_source": journal.get("source", ""),
         }
     return metrics
+
+
+def normalized_work_type(value: object) -> str:
+    return str(value or "").strip().lower()
+
+
+def is_journal_article_type(value: object, allowed_types: set[str]) -> bool:
+    return normalized_work_type(value) in allowed_types
 
 
 def fetch_json(url: str) -> dict:
@@ -390,9 +406,21 @@ def merge_existing_publication(existing: dict | None, metadata: dict, fallback_b
     return "\n".join(merged_lines) + body
 
 
-def publication_record(summary: dict, existing_publications: dict) -> dict | None:
+def publication_record(
+    summary: dict,
+    existing_publications: dict,
+    *,
+    download_pdfs: bool = True,
+) -> dict | None:
     doi = doi_from_summary(summary)
     if not doi:
+        return None
+    work_type = normalized_work_type(summary.get("type"))
+    if not is_journal_article_type(work_type, ALLOWED_ORCID_WORK_TYPES):
+        print(
+            f"Skipping non-journal ORCID work type {work_type or 'unknown'} for {doi}",
+            file=sys.stderr,
+        )
         return None
     existing_publication = existing_publications.get(doi.lower())
     existing_metadata = existing_publication.get("metadata", {}) if existing_publication else {}
@@ -406,6 +434,14 @@ def publication_record(summary: dict, existing_publications: dict) -> dict | Non
     except (urllib.error.URLError, KeyError, TimeoutError) as exc:
         print(f"WARNING: Crossref lookup failed for {doi}: {exc}", file=sys.stderr)
         crossref = {}
+
+    crossref_type = normalized_work_type(crossref.get("type")) if crossref else ""
+    if crossref_type and not is_journal_article_type(crossref_type, ALLOWED_CROSSREF_TYPES):
+        print(
+            f"Skipping non-journal Crossref work type {crossref_type} for {doi}",
+            file=sys.stderr,
+        )
+        return None
 
     authors = author_list(crossref)
     if crossref:
@@ -448,7 +484,7 @@ def publication_record(summary: dict, existing_publications: dict) -> dict | Non
     pdf_filename = PDF_FILENAMES.get(doi.lower(), f"{slug}.pdf")
     pdf_path = PDF_DIR / pdf_filename
     pdf_candidates = PDF_OVERRIDES.get(doi.lower(), []) + pdf_urls_from_crossref(crossref)
-    pdf_source = download_first_pdf(pdf_candidates, pdf_path)
+    pdf_source = download_first_pdf(pdf_candidates, pdf_path) if download_pdfs else ""
     if not pdf_source and pdf_path.exists():
         pdf_source = existing_metadata.get("pdf_source", "")
     has_local_pdf = pdf_path.exists()
@@ -463,6 +499,8 @@ def publication_record(summary: dict, existing_publications: dict) -> dict | Non
         "orcid_sync": True,
         "source_orcid": ORCID_ID,
         "doi": doi,
+        "work_type": work_type,
+        "crossref_type": crossref_type,
         "first_author": first_author,
         "corresponding_author": corresponding_author,
         "featured": featured,
@@ -495,10 +533,27 @@ def publication_record(summary: dict, existing_publications: dict) -> dict | Non
 def orcid_summaries() -> list[dict]:
     data = fetch_json(f"https://pub.orcid.org/v3.0/{ORCID_ID}/works")
     summaries = []
+    skipped_counts: dict[str, int] = {}
     for group in data.get("group", []):
         work_summaries = group.get("work-summary", [])
         if work_summaries:
-            summaries.append(work_summaries[0])
+            summary = work_summaries[0]
+            work_type = normalized_work_type(summary.get("type"))
+            if is_journal_article_type(work_type, ALLOWED_ORCID_WORK_TYPES):
+                summaries.append(summary)
+            else:
+                skipped_counts[work_type or "unknown"] = (
+                    skipped_counts.get(work_type or "unknown", 0) + 1
+                )
+    if skipped_counts:
+        skipped = ", ".join(
+            f"{work_type}: {count}" for work_type, count in sorted(skipped_counts.items())
+        )
+        print(
+            "Skipped ORCID works outside journal articles "
+            f"({skipped}); conference/proceedings outputs are not synced.",
+            file=sys.stderr,
+        )
     return summaries
 
 
@@ -510,15 +565,126 @@ def is_generated_publication(path: Path) -> bool:
     return "orcid_sync: true" in text
 
 
-def main() -> int:
+def publication_anchor(record: dict) -> str:
+    return f"publication-publication-{record['path'].stem}"
+
+
+def publication_news_label(date_value: str) -> str:
+    try:
+        return datetime.strptime(date_value[:10], "%Y-%m-%d").strftime("%b %d, %Y")
+    except ValueError:
+        return date_value[:10]
+
+
+def publication_news_item(record: dict) -> str:
+    metadata = record["metadata"]
+    first_author = bool(metadata.get("first_author", False))
+    css_class = "site-news__item site-news__item--key" if first_author else "site-news__item"
+    role = "First-author paper" if first_author else "Co-author paper"
+    date_label = publication_news_label(str(metadata.get("date", "")))
+    venue = html.escape(str(metadata.get("venue", "")))
+    anchor = publication_anchor(record)
+    return (
+        f'  <li class="{css_class}">{date_label}: <strong>{role}:</strong> '
+        f'Published in <a href="/publications/#{anchor}"><em>{venue}</em></a>.</li>'
+    )
+
+
+def is_synced_publication_news_item(item: str) -> bool:
+    return (
+        'Published in <a href="/publications/#publication-' in item
+        and "<em>" in item
+        and "</em>" in item
+    )
+
+
+def news_sort_key(item: str) -> tuple[datetime, str]:
+    text = re.sub(r"<.*?>", "", item)
+    match = re.search(r"([A-Z][a-z]{2} \d{2}, \d{4}):", text)
+    if not match:
+        return datetime.min, text
+    try:
+        return datetime.strptime(match.group(1), "%b %d, %Y"), text
+    except ValueError:
+        return datetime.min, text
+
+
+def sync_about_news(records: list[dict], *, dry_run: bool = False) -> bool:
+    if not ABOUT_PAGE_PATH.exists():
+        print(f"WARNING: About page not found; news was not updated: {ABOUT_PAGE_PATH}", file=sys.stderr)
+        return False
+
+    text = ABOUT_PAGE_PATH.read_text(encoding="utf-8")
+    match = re.search(
+        r"(?P<prefix>## News\s*\n\s*<ul class=\"site-news\">\s*\n)"
+        r"(?P<body>.*?)"
+        r"(?P<suffix>\s*</ul>)",
+        text,
+        flags=re.S,
+    )
+    if not match:
+        print("WARNING: News list block was not found; news was not updated.", file=sys.stderr)
+        return False
+
+    existing_items = re.findall(r"\s*<li\b.*?</li>", match.group("body"), flags=re.S)
+    kept_items = [
+        item.strip()
+        for item in existing_items
+        if not is_synced_publication_news_item(item)
+    ]
+    publication_items = [
+        publication_news_item(record)
+        for record in records
+        if record.get("metadata", {}).get("venue")
+    ]
+    merged_items = sorted(
+        kept_items + publication_items,
+        key=news_sort_key,
+        reverse=True,
+    )
+    new_block = match.group("prefix") + "\n".join(merged_items) + match.group("suffix")
+    new_text = text[: match.start()] + new_block + text[match.end() :]
+    if new_text == text:
+        return False
+    if dry_run:
+        print(f"Dry run: would update publication news entries in {ABOUT_PAGE_PATH}")
+        return True
+    ABOUT_PAGE_PATH.write_text(new_text, encoding="utf-8")
+    print(f"Updated publication news entries in {ABOUT_PAGE_PATH}")
+    return True
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Fetch and compare scholarly data without writing files.",
+    )
+    parser.add_argument(
+        "--skip-news",
+        action="store_true",
+        help="Do not update publication news entries on the about page.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
     global JOURNAL_METRICS
     JOURNAL_METRICS = load_journal_metrics()
-    OUTPUT_DIR.mkdir(exist_ok=True)
+    if not args.dry_run:
+        OUTPUT_DIR.mkdir(exist_ok=True)
     existing_publications = load_existing_publications()
     records = [
         record
         for record in (
-            publication_record(summary, existing_publications) for summary in orcid_summaries()
+            publication_record(
+                summary,
+                existing_publications,
+                download_pdfs=not args.dry_run,
+            )
+            for summary in orcid_summaries()
         )
         if record
     ]
@@ -529,14 +695,29 @@ def main() -> int:
         text = merge_existing_publication(
             record.get("existing"), record["metadata"], record["body"]
         )
-        path.write_text(text, encoding="utf-8")
+        if args.dry_run:
+            existing_text = path.read_text(encoding="utf-8") if path.exists() else ""
+            if existing_text != text:
+                print(f"Dry run: would write {path}")
+        else:
+            path.write_text(text, encoding="utf-8")
         generated_paths.add(path)
 
     for path in OUTPUT_DIR.glob("*.md"):
         if path not in generated_paths and is_generated_publication(path):
-            path.unlink()
+            if args.dry_run:
+                print(f"Dry run: would remove {path}")
+            else:
+                path.unlink()
 
-    print(f"Synced {len(generated_paths)} ORCID publications into {OUTPUT_DIR}")
+    if not args.skip_news:
+        sync_about_news(
+            sorted(records, key=lambda item: item["metadata"]["date"], reverse=True),
+            dry_run=args.dry_run,
+        )
+
+    action = "Checked" if args.dry_run else "Synced"
+    print(f"{action} {len(generated_paths)} ORCID journal articles for {OUTPUT_DIR}")
     return 0
 
 

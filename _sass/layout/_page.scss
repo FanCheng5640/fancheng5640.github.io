@@ -536,6 +536,8 @@
 }
 
 .cv-education {
+  --cv-education-logo-slot-width: 12.25rem;
+  --cv-education-logo-slot-height: 4.3rem;
   margin-bottom: 1.3rem;
 }
 
@@ -587,15 +589,16 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: max-content;
+  width: var(--cv-education-logo-slot-width);
   max-width: 100%;
+  height: var(--cv-education-logo-slot-height);
   line-height: 0;
 }
 
 .cv-education__logo {
   display: block;
-  width: auto;
-  height: 4.7rem;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   object-position: left center;
 }
@@ -608,15 +611,14 @@
 
   .cv-education__logo-link {
     justify-content: flex-start;
-    width: max-content;
+    width: var(--cv-education-logo-slot-width);
     max-width: 62vw;
+    height: 4.2rem;
   }
 
   .cv-education__logo {
-    width: auto;
-    max-width: 62vw;
-    height: auto;
-    max-height: 4.2rem;
+    width: 100%;
+    height: 100%;
   }
 }
 

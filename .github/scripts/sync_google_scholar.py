@@ -18,6 +18,15 @@ PROFILE_URL = os.environ.get("GOOGLE_SCHOLAR_PROFILE_URL", DEFAULT_PROFILE_URL)
 OUTPUT_PATH = Path("_data/google_scholar.json")
 PUBLICATIONS_DIR = Path("_publications")
 USER_AGENT = "Mozilla/5.0 fancheng5640.github.io citation sync"
+STATUS_OUTPUT_PATH = os.environ.get("GOOGLE_SCHOLAR_STATUS_OUTPUT", "")
+
+
+def write_status(payload: dict) -> None:
+    if not STATUS_OUTPUT_PATH:
+        return
+    path = Path(STATUS_OUTPUT_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def fetch_profile_html() -> str:
@@ -238,30 +247,49 @@ def main() -> int:
     }
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    write_status(
+        {
+            "status": "ok",
+            "used_cache": False,
+            "output_path": OUTPUT_PATH.as_posix(),
+            "updated": data["updated"],
+            "error": "",
+        }
+    )
     print(f"Synced Google Scholar metrics into {OUTPUT_PATH}")
     return 0
 
 
 def keep_cached_data(exc: Exception) -> int:
     if not OUTPUT_PATH.exists():
+        write_status(
+            {
+                "status": "failed",
+                "used_cache": False,
+                "output_path": OUTPUT_PATH.as_posix(),
+                "updated": "",
+                "error": str(exc),
+            }
+        )
         print(
             f"ERROR: Google Scholar sync failed and no cached data exists: {exc}",
             file=sys.stderr,
         )
         return 1
 
-    data = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
-    data["last_attempted"] = datetime.now(timezone.utc).date().isoformat()
-    data["sync_status"] = "stale"
-    data["last_error"] = str(exc)[:300]
-    OUTPUT_PATH.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
     print(
-        "WARNING: Google Scholar sync failed; kept cached data in "
-        f"{OUTPUT_PATH}: {exc}",
+        "WARNING: Google Scholar sync failed; leaving the existing cached data "
+        f"unchanged in {OUTPUT_PATH}: {exc}",
         file=sys.stderr,
+    )
+    write_status(
+        {
+            "status": "cached",
+            "used_cache": True,
+            "output_path": OUTPUT_PATH.as_posix(),
+            "updated": "",
+            "error": str(exc),
+        }
     )
     return 0
 

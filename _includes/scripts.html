@@ -59,6 +59,32 @@
   }, true);
 </script>
 
+<script>
+  (function() {
+    var links = document.querySelectorAll("#main a[href]");
+    links.forEach(function(link) {
+      if (link.closest(".masthead") || link.closest("#theme-toggle")) {
+        return;
+      }
+      if (link.matches("[data-publication-figure-open], [data-publication-video-open]")) {
+        return;
+      }
+
+      var href = link.getAttribute("href");
+      if (!href || href === "#" || href.indexOf("javascript:") === 0) {
+        return;
+      }
+
+      link.setAttribute("target", "_blank");
+      var rel = (link.getAttribute("rel") || "").split(/\s+/).filter(Boolean);
+      if (rel.indexOf("noopener") === -1) {
+        rel.push("noopener");
+      }
+      link.setAttribute("rel", rel.join(" "));
+    });
+  })();
+</script>
+
 {% include analytics.html %}
 
 {% include comments-providers/scripts.html %}

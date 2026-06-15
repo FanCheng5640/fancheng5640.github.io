@@ -16,16 +16,7 @@ excerpt: "Nature Communications, 2023."
 date: "2023-07-27"
 venue: "Nature Communications"
 authors: "Baheej Bathish, Raanan Gad, <strong><u>Fan Cheng</u></strong>, Kristoffer Karlsson, Ramgopal Madugani, Mark Douvidzon, Síle Nic Chormaic, and Tal Carmon"
-author_entries:
-  - name: "Baheej Bathish"
-  - name: "Raanan Gad"
-  - name: "Fan Cheng"
-  - name: "Kristoffer Karlsson"
-  - name: "Ramgopal Madugani"
-  - name: "Mark Douvidzon"
-  - name: "Síle Nic Chormaic"
-  - name: "Tal Carmon"
-    corresponding: true
+author_entries: [{"name": "Baheej Bathish"}, {"name": "Raanan Gad"}, {"name": "Fan Cheng"}, {"name": "Kristoffer Karlsson"}, {"name": "Ramgopal Madugani"}, {"name": "Mark Douvidzon"}, {"name": "Síle Nic Chormaic"}, {"name": "Tal Carmon", "corresponding": true}]
 originalurl: "https://doi.org/10.1038/s41467-023-40205-0"
 link: "https://doi.org/10.1038/s41467-023-40205-0"
 paperurl: "/files/papers/2023-nat-commun-plasma-microphotonics.pdf"
@@ -39,6 +30,8 @@ opn_title: "Plasma Microcavities"
 opn_issue: "Optics & Photonics News, Dec 2023"
 opn_url: "https://www.optica-opn.org/home/articles/volume_34/december_2023/extras/plasma_microcavities/"
 citation: "Baheej Bathish, Raanan Gad, <strong><u>Fan Cheng</u></strong>, Kristoffer Karlsson, Ramgopal Madugani, Mark Douvidzon, Síle Nic Chormaic, and Tal Carmon (2023). &quot;Absorption-induced transmission in plasma microphotonics.&quot; <i>Nature Communications</i>, 14(1), 4535. https://doi.org/10.1038/s41467-023-40205-0"
+work_type: "journal-article"
+crossref_type: "journal-article"
 ---
 
 DOI: [10.1038/s41467-023-40205-0](https://doi.org/10.1038/s41467-023-40205-0)

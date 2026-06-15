@@ -4,6 +4,7 @@
 
 .scholar-metrics__title {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.45rem;
 }
@@ -11,7 +12,9 @@
 .scholar-metrics__sync {
   color: var(--global-text-color-light);
   font-size: 0.72em;
+  font-weight: 600;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .scholar-metrics__content {
@@ -489,7 +492,7 @@ p.publication__authors a.publication__author-link:focus {
   position: static;
   top: auto;
   margin-left: 0.08em;
-  color: #8a5a00;
+  color: #000;
   font-size: 0.78em;
   font-weight: 800;
   line-height: 1;

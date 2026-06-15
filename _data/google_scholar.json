@@ -1,10 +1,10 @@
 {
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
-  "updated": "2026-06-14",
+  "updated": "2026-06-15",
   "last_attempted": "2026-06-15",
-  "sync_status": "stale",
-  "last_error": "HTTP Error 403: Forbidden",
+  "sync_status": "ok",
+  "last_error": "",
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {

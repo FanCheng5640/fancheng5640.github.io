@@ -20,20 +20,52 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Snapshot scholarly data before sync
+        run: python .github/scripts/scholarly_sync_report.py snapshot --output "$RUNNER_TEMP/scholarly-before.json"
+
       - name: Sync publications from ORCID
         run: python .github/scripts/sync_orcid_publications.py
 
       - name: Sync Google Scholar citation metrics
+        env:
+          GOOGLE_SCHOLAR_STATUS_OUTPUT: ${{ runner.temp }}/google-scholar-status.json
         run: python .github/scripts/sync_google_scholar.py
+
+      - name: Generate scholarly update report
+        id: report
+        run: >
+          python .github/scripts/scholarly_sync_report.py report
+          --before "$RUNNER_TEMP/scholarly-before.json"
+          --output "$RUNNER_TEMP/scholarly-report.md"
+          --json-output "$RUNNER_TEMP/scholarly-report.json"
+          --scholar-status "$RUNNER_TEMP/google-scholar-status.json"
+          --append-summary
 
       - name: Commit updated scholarly data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add _data _publications files/papers
+          git add _data _publications files/papers _pages/about.md
           if git diff --cached --quiet; then
             echo "No scholarly data updates."
           else
             git commit -m "Sync scholarly data"
             git push
           fi
+
+      - name: Email scholarly update report
+        if: steps.report.outputs.has_changes == 'true'
+        env:
+          REPORT_EMAIL_TO: ${{ secrets.SCHOLARLY_REPORT_EMAIL_TO }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_SECURITY: ${{ secrets.SMTP_SECURITY }}
+        run: >
+          python .github/scripts/scholarly_sync_report.py email
+          --report "$RUNNER_TEMP/scholarly-report.md"
+          --report-json "$RUNNER_TEMP/scholarly-report.json"
+          --to "$REPORT_EMAIL_TO"
+          --only-if-changed

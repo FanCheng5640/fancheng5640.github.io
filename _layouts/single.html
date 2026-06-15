@@ -35,7 +35,7 @@ layout: default
     <div class="page__inner-wrap">
       {% unless page.header.overlay_color or page.header.overlay_image %}
         <header>
-          {% if page.title %}
+          {% if page.title and page.hide_title != true %}
             <h1 class="page__title{% if page.collection == 'publications' %} publication__page-title{% endif %}" itemprop="headline">
               {% if page.collection == 'publications' %}
                 {% assign page_copy_uid = page.url | slugify %}

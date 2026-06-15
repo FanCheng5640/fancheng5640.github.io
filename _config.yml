@@ -38,6 +38,8 @@ author:
   employer:
     - "School of Electrical Engineering"
     - "Tel Aviv University"
+  employer_links:
+    "Tel Aviv University": "https://en.wikipedia.org/wiki/Tel_Aviv_University"
   uri              : "https://fancheng5640.github.io"
   email            : "fancheng@mail.tau.ac.il" 
 
