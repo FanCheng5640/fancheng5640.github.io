@@ -255,8 +255,8 @@
 
 .publication-summary .publication-summary__paper-list a {
   display: inline-grid;
-  grid-template-columns: 3.2rem minmax(0, 1fr);
-  column-gap: 0.34rem;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 0.18rem;
   align-items: baseline;
   max-width: 100%;
   color: inherit;
@@ -266,6 +266,8 @@
 
 .publication-summary__paper-year {
   color: var(--global-text-color-light);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
   font-weight: 600;
 }
 
