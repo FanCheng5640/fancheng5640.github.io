@@ -13,26 +13,28 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
 
 {% assign research_interests = site.author.research_interests %}
 {% if research_interests and research_interests.items %}
-## {{ research_interests.title }}
-
-{% for interest in research_interests.items %}
-- {{ interest }}
-{% endfor %}
-
-<div class="research-signatures" aria-label="Representative research images">
-  <figure class="research-signatures__item">
-    <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}">
-      <img src="{{ '/files/papers/figures/about-2025-apl-droplet-evaporation-panel-e.png' | relative_url }}" alt="Fig. 1(e) superposition of the whispering-gallery mode and liquid droplet used for evaporation sensing" width="272" height="436" loading="lazy" decoding="async">
-    </a>
-    <figcaption>Fig. 1(e): liquid-droplet WGM evaporation sensing</figcaption>
-  </figure>
-  <figure class="research-signatures__item">
-    <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2024-03-01-cavity-continuum' | relative_url }}">
-      <img src="{{ '/files/papers/figures/about-2024-photonics-research-cavity-continuum-panel-d.png' | relative_url }}" alt="Fig. 2(d) fluorescence image of coupled oil droplets in a cavity-continuum experiment" width="244" height="258" loading="lazy" decoding="async">
-    </a>
-    <figcaption>Fig. 2(d): cavity continuum in coupled droplets</figcaption>
-  </figure>
-</div>
+<section class="research-interests" aria-labelledby="research-interests-title">
+  <div class="research-interests__body">
+    <h2 id="research-interests-title" class="research-interests__title">{{ research_interests.title }}</h2>
+    <ul class="research-interests__list">
+      {% for interest in research_interests.items %}
+      <li>{{ interest }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="research-signatures" aria-label="Representative research images">
+    <figure class="research-signatures__item">
+      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}">
+        <img src="{{ '/files/papers/figures/about-2025-apl-droplet-evaporation-panel-e.png' | relative_url }}" alt="Fig. 1(e) superposition of the whispering-gallery mode and liquid droplet used for evaporation sensing" width="272" height="436" loading="lazy" decoding="async">
+      </a>
+    </figure>
+    <figure class="research-signatures__item">
+      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2024-03-01-cavity-continuum' | relative_url }}">
+        <img src="{{ '/files/papers/figures/about-2024-photonics-research-cavity-continuum-panel-d.png' | relative_url }}" alt="Fig. 2(d) fluorescence image of coupled oil droplets in a cavity-continuum experiment" width="244" height="258" loading="lazy" decoding="async">
+      </a>
+    </figure>
+  </div>
+</section>
 {% endif %}
 
 ## News
