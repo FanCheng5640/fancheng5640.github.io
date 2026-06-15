@@ -25,12 +25,12 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
   </div>
   <div class="research-signatures" aria-label="Representative research images">
     <figure class="research-signatures__item">
-      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}">
+      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}" data-destination="Applied Physics Letters (2025)" title="Open Applied Physics Letters (2025)" aria-label="Open Applied Physics Letters (2025)">
         <img src="{{ '/files/papers/figures/about-2025-apl-droplet-evaporation-panel-e.png' | relative_url }}" alt="Fig. 1(e) superposition of the whispering-gallery mode and liquid droplet used for evaporation sensing" width="264" height="300" loading="lazy" decoding="async">
       </a>
     </figure>
     <figure class="research-signatures__item">
-      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2024-03-01-cavity-continuum' | relative_url }}">
+      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2024-03-01-cavity-continuum' | relative_url }}" data-destination="Photonics Research (2024)" title="Open Photonics Research (2024)" aria-label="Open Photonics Research (2024)">
         <img src="{{ '/files/papers/figures/about-2024-photonics-research-cavity-continuum-panel-d.png' | relative_url }}" alt="Fig. 2(d) fluorescence image of coupled oil droplets in a cavity-continuum experiment" width="244" height="258" loading="lazy" decoding="async">
       </a>
     </figure>

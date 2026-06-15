@@ -71,7 +71,18 @@
       }
 
       var href = link.getAttribute("href");
-      if (!href || href === "#" || href.indexOf("javascript:") === 0) {
+      if (!href || href === "#" || href.indexOf("javascript:") === 0 || href.charAt(0) === "#") {
+        return;
+      }
+
+      var url;
+      try {
+        url = new URL(href, window.location.href);
+      } catch (error) {
+        return;
+      }
+
+      if ((url.protocol !== "http:" && url.protocol !== "https:") || url.origin === window.location.origin) {
         return;
       }
 

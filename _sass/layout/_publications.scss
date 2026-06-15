@@ -892,6 +892,37 @@ p.publication__authors a.publication__author-link:focus {
   font-size: 0.9rem;
 }
 
+.publication__media-coverage-label {
+  font-weight: 600;
+}
+
+.publication__media-coverage-more {
+  display: inline-block;
+  margin-left: 0.35rem;
+}
+
+.publication__media-coverage-more[open] {
+  display: block;
+  margin-top: 0.18rem;
+  margin-left: 0;
+}
+
+.publication__media-coverage-more summary {
+  color: var(--global-link-color);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.publication__media-coverage-more summary:hover,
+.publication__media-coverage-more summary:focus {
+  color: var(--global-link-color-hover);
+}
+
+.publication__media-coverage-more-list {
+  display: block;
+  margin-top: 0.12rem;
+}
+
 .publication__video-gallery {
   margin: 0.55rem 0 0.35rem;
   max-width: calc(100% - 21rem);

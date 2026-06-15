@@ -477,6 +477,40 @@
   text-decoration: none;
 }
 
+.research-signatures__link::after {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  left: 0.45rem;
+  z-index: 2;
+  padding: 0.38rem 0.45rem;
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  content: attr(data-destination);
+  background: #263238;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(0.25rem);
+  transition: opacity 160ms ease, transform 160ms ease;
+  pointer-events: none;
+}
+
+.research-signatures__link:hover::after,
+.research-signatures__link:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.research-signatures__link:focus-visible {
+  border-color: var(--global-link-color-hover);
+  outline: 2px solid var(--global-link-color-hover);
+  outline-offset: 2px;
+}
+
 .research-signatures__link img {
   position: absolute;
   inset: 0.35rem;
