@@ -189,6 +189,9 @@ exclude:
   - .github
   - .jekyll-assets-cache
   - .sass-cache
+  - "*.bat"
+  - "*.ps1"
+  - "*.vbs"
   - assets/js/_main.js
   - assets/js/plugins
   - assets/js/vendor
@@ -209,6 +212,8 @@ exclude:
   - Rakefile
   - README
   - 需求清单.txt
+  - scripts
+  - 本地预览说明.txt
   - tmp
   - vendor
 keep_files:
