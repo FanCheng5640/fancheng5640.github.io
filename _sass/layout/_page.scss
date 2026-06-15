@@ -417,7 +417,7 @@
 .research-interests {
   display: grid;
   grid-template-columns: minmax(max-content, 1fr) minmax(13rem, 18rem);
-  column-gap: 0.75rem;
+  column-gap: 0.4rem;
   align-items: stretch;
   justify-content: start;
   margin: 2em 0 1.25rem;
@@ -440,7 +440,7 @@
 .research-signatures {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem;
+  gap: 0.35rem;
   justify-self: end;
   align-self: stretch;
   width: 100%;

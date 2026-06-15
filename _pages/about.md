@@ -25,7 +25,7 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
   <div class="research-signatures" aria-label="Representative research images">
     <figure class="research-signatures__item">
       <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}">
-        <img src="{{ '/files/papers/figures/about-2025-apl-droplet-evaporation-panel-e.png' | relative_url }}" alt="Fig. 1(e) superposition of the whispering-gallery mode and liquid droplet used for evaporation sensing" width="272" height="436" loading="lazy" decoding="async">
+        <img src="{{ '/files/papers/figures/about-2025-apl-droplet-evaporation-panel-e.png' | relative_url }}" alt="Fig. 1(e) superposition of the whispering-gallery mode and liquid droplet used for evaporation sensing" width="264" height="300" loading="lazy" decoding="async">
       </a>
     </figure>
     <figure class="research-signatures__item">
