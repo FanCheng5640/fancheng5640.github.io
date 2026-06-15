@@ -15,7 +15,7 @@ permalink: "/publication/2024-03-01-radiation-pressure-induced-oscillations-of-a
 excerpt: "AIP Advances, 2024."
 date: "2024-03-01"
 venue: "AIP Advances"
-authors: "Satyam Shekhar Jha, Tal Carmon, <strong><u>Fan Cheng</u></strong>, and <span class='publication__corresponding-author'>Lev Deych<sup class='publication__corresponding-marker' title='Corresponding author' aria-label='Corresponding author'>*</sup></span>"
+authors: "Satyam Shekhar Jha, Tal Carmon, <strong><u>Fan Cheng</u></strong>, and Lev Deych"
 originalurl: "https://doi.org/10.1063/5.0197109"
 link: "https://doi.org/10.1063/5.0197109"
 paperurl: "/files/papers/2024-aip-adv-levitating-mirror.pdf"
