@@ -1,6 +1,26 @@
 fancheng5640.github.io 引用清单
 ==============================
 
+[2026-06-16] Optics & Photonics News logo
+    Usage: _pages/about.md; _includes/news-brand-logo.html; _sass/layout/_page.scss; files/papers/figures/logos/optics-photonics-news-logo.svg
+
+    Method/source: The About page News section uses the official Optics & Photonics News masthead logo for OPN featured-news items.
+
+    Source URLs:
+    - OPN home page: https://www.optica-opn.org/home/
+    - Official masthead SVG: https://opnmedia.blob.core.windows.net/$web/opn/media/images/logos/opn-masthead-one-line_rgb.svg
+
+
+[2026-06-16] Collaborator institution logos
+    Usage: _config.yml; _pages/about.md; _sass/layout/_page.scss; images/logos/cuny-logo.svg; images/logos/technion-logo.svg
+
+    Method/source: Collaborator institution logos are shown on the About page for publication-derived collaborator groups. The institution order is based on doctoral-period-and-later publication counts, excluding Fan Cheng's own degree institutions, advisors, collaborators without personal Google Scholar profiles, and the Nature Communications-only collaborator school logo.
+
+    Source URLs:
+    - CUNY logo: https://commons.wikimedia.org/wiki/Special:Redirect/file/CUNY_New_Logo.svg
+    - Technion logo: https://commons.wikimedia.org/wiki/Special:Redirect/file/Technion_logo.svg
+
+
 [2026-06-13] Google Scholar citation profile data
     使用位置：.github/scripts/sync_google_scholar.py；_data/google_scholar.json；_pages/publications.html
 

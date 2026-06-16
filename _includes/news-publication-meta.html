@@ -1,0 +1,15 @@
+{% assign news_publication = include.publication %}
+{% if news_publication %}
+  {% assign journal_brand = site.data.journal_branding | where: "name", news_publication.venue | first %}
+  {% assign publication_metric = site.data.journal_metrics.journals | where: "name", news_publication.venue | first %}
+  {% assign impact_factor = publication_metric.impact_factor | default: news_publication.journal_impact_factor %}
+  {% assign wide_news_logo_venues = "Applied Physics Letters|Photonics Research|Nature Communications" | split: "|" %}
+  <span class="site-news__publication-meta" aria-label="{{ news_publication.venue | escape }} publication details">
+    {% if journal_brand.logo %}
+      <img class="site-news__journal-logo{% if wide_news_logo_venues contains news_publication.venue %} site-news__journal-logo--wide{% endif %}" src="{{ journal_brand.logo | relative_url }}" alt="{{ news_publication.venue | escape }} logo" loading="lazy" decoding="async">
+    {% endif %}
+    {% if impact_factor %}
+      <span class="site-news__if" title="Journal Impact Factor: {{ site.data.journal_metrics.metadata.metric_year }} JCR data">IF {{ impact_factor }}</span>
+    {% endif %}
+  </span>
+{% endif %}

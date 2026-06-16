@@ -61,6 +61,22 @@
 
 <script>
   (function() {
+    var groups = document.querySelectorAll(".collaborators__group");
+    groups.forEach(function(group) {
+      group.addEventListener("mouseleave", function() {
+        group.open = false;
+      });
+      group.addEventListener("focusout", function(event) {
+        if (!group.contains(event.relatedTarget)) {
+          group.open = false;
+        }
+      });
+    });
+  })();
+</script>
+
+<script>
+  (function() {
     var links = document.querySelectorAll("#main a[href]");
     links.forEach(function(link) {
       if (link.closest(".masthead") || link.closest("#theme-toggle")) {

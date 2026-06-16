@@ -37,22 +37,24 @@ author:
   collaborators:
     title: "Collaborators"
     groups:
-      - institution: "Tel Aviv University"
-        logo: "/images/logos/tel-aviv-university-logo-cv.png"
-        logo_width: 190
-        logo_height: 102
-        people:
-          - name: "Tal Carmon"
-            google_scholar: "https://scholar.google.com/citations?user=tiFit0cAAAAJ&hl=en&inst=2457744612629960019"
-      - institution: "Shanxi University"
-        logo: "/images/logos/shanxi-university-logo-cv.png"
+      - institution: "The City University of New York"
+        paper_count: 3
+        logo: "/images/logos/cuny-logo.svg"
         logo_width: 260
-        logo_height: 88
+        logo_height: 83
         people:
-          - name: "Tiancai Zhang"
-            google_scholar: "https://scholar.google.com/citations?user=DTAaDZAAAAAJ&hl=en&inst=2457744612629960019"
-          - name: "Pengfei Zhang"
-            google_scholar: "https://scholar.google.com/citations?user=Grjz9fgAAAAJ&hl=en&inst=2457744612629960019"
+          - name: "Lev Deych"
+            google_scholar: "https://scholar.google.com/citations?hl=en&user=tydqft0AAAAJ"
+          - name: "Vladimir Shuvayev"
+            google_scholar: "https://scholar.google.com/citations?hl=en&user=u7v1Ch4AAAAJ"
+      - institution: "Technion - Israel Institute of Technology"
+        paper_count: 2
+        logo: "/images/logos/technion-logo.svg"
+        logo_width: 260
+        logo_height: 83
+        people:
+          - name: "Mark Douvidzon"
+            google_scholar: "https://scholar.google.com/citations?hl=en&user=d41x1W8AAAAJ"
   location         : "Tel Aviv, Israel"
   employer:
     - "School of Electrical Engineering"
