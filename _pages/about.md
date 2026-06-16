@@ -38,29 +38,6 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
 </section>
 {% endif %}
 
-{% assign collaborators = site.author.collaborators %}
-{% if collaborators and collaborators.groups %}
-<section class="collaborators" aria-labelledby="collaborators-title">
-  <h2 id="collaborators-title" class="collaborators__title">{{ collaborators.title }}</h2>
-  <div class="collaborators__grid">
-    {% for group in collaborators.groups %}
-    <details class="collaborators__group">
-      <summary class="collaborators__summary" aria-label="Show {{ group.institution }} collaborators" title="{{ group.institution }} collaborators">
-        <span class="collaborators__logo-slot">
-          <img class="collaborators__logo" src="{{ group.logo | relative_url }}" alt="{{ group.institution }} logo" width="{{ group.logo_width }}" height="{{ group.logo_height }}" loading="lazy" decoding="async">
-        </span>
-      </summary>
-      <ul class="collaborators__people">
-        {% for person in group.people %}
-        <li><a href="{{ person.google_scholar }}" target="_blank" rel="noopener" title="Open {{ person.name }} on Google Scholar">{{ person.name }}</a></li>
-        {% endfor %}
-      </ul>
-    </details>
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
-
 {% assign pub_apl_2025 = site.publications | where: "doi", "10.1063/5.0279509" | first %}
 {% assign pub_optica_2025 = site.publications | where: "doi", "10.1364/OPTICA.560597" | first %}
 {% assign pub_oe_2025 = site.publications | where: "doi", "10.1364/OE.561188" | first %}
@@ -73,21 +50,42 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
 
 <ul class="site-news">
 <li class="site-news__item site-news__item--key">Mar 03, 2026: <strong>Award:</strong> <a href="/cv/#award-student-excellence-gertner">Student Excellence Award from The Marian Gertner Institute for Medical Nanosystems</a>.</li>
-<li class="site-news__item">Dec 01, 2025: <strong>Co-author paper featured:</strong> <a href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors">The <em>Optica</em> paper</a> was featured in <em>Optics &amp; Photonics News</em>{% include news-brand-logo.html name="Optics & Photonics News" logo="/files/papers/figures/logos/optics-photonics-news-logo.svg" wide=true %}.</li>
-  <li class="site-news__item site-news__item--key">Sep 22, 2025: <strong>First-author paper:</strong> Published in <a href="/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities"><em>Applied Physics Letters</em></a>{% include news-publication-meta.html publication=pub_apl_2025 %}.</li>
-  <li class="site-news__item">Sep 20, 2025: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors"><em>Optica</em></a>{% include news-publication-meta.html publication=pub_optica_2025 %}.</li>
-  <li class="site-news__item">Jul 28, 2025: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2025-07-28-observation-of-spectrally-continuous-resonance-enhancement-by-mode-coalescence"><em>Optics Express</em></a>{% include news-publication-meta.html publication=pub_oe_2025 %}.</li>
-  <li class="site-news__item site-news__item--key">Mar 01, 2024: <strong>First-author paper:</strong> Published in <a href="/publications/#publication-publication-2024-03-01-cavity-continuum"><em>Photonics Research</em></a>{% include news-publication-meta.html publication=pub_pr_2024 %}.</li>
-  <li class="site-news__item">Mar 01, 2024: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2024-03-01-radiation-pressure-induced-oscillations-of-an-optically-levitating-mirror"><em>AIP Advances</em></a>{% include news-publication-meta.html publication=pub_aip_2024 %}.</li>
-<li class="site-news__item">Dec 01, 2023: <strong>Co-author paper featured:</strong> <a href="/publications/#publication-publication-2023-07-27-absorption-induced-transmission-in-plasma-microphotonics">The <em>Nature Communications</em> paper</a> was featured in <em>Optics &amp; Photonics News</em>{% include news-brand-logo.html name="Optics & Photonics News" logo="/files/papers/figures/logos/optics-photonics-news-logo.svg" wide=true %}.</li>
-  <li class="site-news__item">Jul 27, 2023: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2023-07-27-absorption-induced-transmission-in-plasma-microphotonics"><em>Nature Communications</em></a>{% include news-publication-meta.html publication=pub_nc_2023 %}.</li>
+  <li class="site-news__item site-news__item--key">Sep 22, 2025: <strong>First-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_apl_2025 href="/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities" %}.</li>
+  <li class="site-news__item">Sep 20, 2025: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_optica_2025 href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors" %}; featured in {% include news-brand-logo.html name="Optics & Photonics News" logo="/files/papers/figures/logos/optics-photonics-news-logo.svg" %}.</li>
+  <li class="site-news__item">Jul 28, 2025: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_oe_2025 href="/publications/#publication-publication-2025-07-28-observation-of-spectrally-continuous-resonance-enhancement-by-mode-coalescence" %}.</li>
+  <li class="site-news__item site-news__item--key">Mar 01, 2024: <strong>First-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_pr_2024 href="/publications/#publication-publication-2024-03-01-cavity-continuum" %}.</li>
+  <li class="site-news__item">Mar 01, 2024: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_aip_2024 href="/publications/#publication-publication-2024-03-01-radiation-pressure-induced-oscillations-of-an-optically-levitating-mirror" %}.</li>
+  <li class="site-news__item">Jul 27, 2023: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_nc_2023 href="/publications/#publication-publication-2023-07-27-absorption-induced-transmission-in-plasma-microphotonics" %}; featured in {% include news-brand-logo.html name="Optics & Photonics News" logo="/files/papers/figures/logos/optics-photonics-news-logo.svg" %}.</li>
 </ul>
 
 <details class="site-news__archive">
   <summary>Earlier News</summary>
   <ul class="site-news site-news--older">
-    <li class="site-news__item">Nov 26, 2018: <strong>Co-author paper:</strong> Published in <a href="/publications/#publication-publication-2018-11-26-nondestructive-measurement-of-nanofiber-diameters-using-microfiber-tip"><em>Optics Express</em></a>{% include news-publication-meta.html publication=pub_oe_2018 %}.</li>
+    <li class="site-news__item">Nov 26, 2018: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_oe_2018 href="/publications/#publication-publication-2018-11-26-nondestructive-measurement-of-nanofiber-diameters-using-microfiber-tip" %}.</li>
   </ul>
 </details>
+
+{% assign collaborators = site.author.collaborators %}
+{% if collaborators and collaborators.groups %}
+<section class="collaborators" aria-labelledby="collaborators-title">
+  <h2 id="collaborators-title" class="collaborators__title">{{ collaborators.title }}</h2>
+  <div class="collaborators__grid">
+    {% for group in collaborators.groups %}
+    <details class="collaborators__group">
+      <summary class="collaborators__summary" aria-label="Show {{ group.institution }} collaborators" title="{{ group.institution }} collaborators">
+        <span class="collaborators__logo-slot">
+          <img class="collaborators__logo" src="{{ group.logo | relative_url }}" alt="{{ group.institution }} logo" width="{{ group.logo_width }}" height="{{ group.logo_height }}" loading="eager" fetchpriority="high">
+        </span>
+      </summary>
+      <ul class="collaborators__people">
+        {% for person in group.people %}
+        <li><a href="{{ person.google_scholar }}" target="_blank" rel="noopener" title="Open {{ person.name }} on Google Scholar">{{ person.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
 <p class="site-last-updated">Last updated: {{ site.time | date: "%b %d, %Y" }}</p>

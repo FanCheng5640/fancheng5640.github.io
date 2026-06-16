@@ -1,12 +1,29 @@
 {% assign news_publication = include.publication %}
 {% if news_publication %}
-  {% assign journal_brand = site.data.journal_branding | where: "name", news_publication.venue | first %}
   {% assign publication_metric = site.data.journal_metrics.journals | where: "name", news_publication.venue | first %}
   {% assign impact_factor = publication_metric.impact_factor | default: news_publication.journal_impact_factor %}
-  {% assign wide_news_logo_venues = "Applied Physics Letters|Photonics Research|Nature Communications" | split: "|" %}
+  {% assign venue_slug = news_publication.venue | default: "journal" | slugify %}
+  {% capture news_wordmark %}
+    {% case news_publication.venue %}
+      {% when "Optica" %}<span class="site-news__wordmark-part site-news__wordmark-part--optica-o">O</span><span class="site-news__wordmark-part">PTICA</span>
+      {% when "Optics Express" %}<span class="site-news__wordmark-part site-news__wordmark-part--oe-optics">Optics</span><span class="site-news__wordmark-space"> </span><span class="site-news__wordmark-part site-news__wordmark-part--oe-express">EXPRESS</span>
+      {% when "Photonics Research" %}<span class="site-news__wordmark-part site-news__wordmark-part--pr-photonics">PHOTONICS</span><span class="site-news__wordmark-space"> </span><span class="site-news__wordmark-part site-news__wordmark-part--pr-research">Research</span>
+      {% when "Nature Communications" %}<span class="site-news__wordmark-part">nature communications</span>
+      {% else %}{{ news_publication.venue }}
+    {% endcase %}
+  {% endcapture %}
+  {% assign news_wordmark = news_wordmark | strip %}
   <span class="site-news__publication-meta" aria-label="{{ news_publication.venue | escape }} publication details">
-    {% if journal_brand.logo %}
-      <img class="site-news__journal-logo{% if wide_news_logo_venues contains news_publication.venue %} site-news__journal-logo--wide{% endif %}" src="{{ journal_brand.logo | relative_url }}" alt="{{ news_publication.venue | escape }} logo" loading="lazy" decoding="async">
+    {% if news_publication.venue %}
+      {% if include.href %}
+        <a class="site-news__logo-link site-news__logo-link--journal site-news__logo-link--{{ venue_slug }}" href="{{ include.href | relative_url }}" title="Open {{ news_publication.venue | escape }} publication" aria-label="Open {{ news_publication.venue | escape }} publication">
+          <span class="site-news__wordmark site-news__wordmark--{{ venue_slug }}" aria-hidden="true">{{ news_wordmark }}</span>
+        </a>
+      {% else %}
+        <span class="site-news__logo-link site-news__logo-link--journal site-news__logo-link--{{ venue_slug }}" aria-label="{{ news_publication.venue | escape }} publication">
+          <span class="site-news__wordmark site-news__wordmark--{{ venue_slug }}" aria-hidden="true">{{ news_wordmark }}</span>
+        </span>
+      {% endif %}
     {% endif %}
     {% if impact_factor %}
       <span class="site-news__if" title="Journal Impact Factor: {{ site.data.journal_metrics.metadata.metric_year }} JCR data">IF {{ impact_factor }}</span>
