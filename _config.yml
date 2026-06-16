@@ -29,11 +29,30 @@ author:
   bio:
     - "Ph.D. Candidate"
   research_interests:
-    title: "Research interests (Experimental)"
+    title: "Research Interests (Experimental)"
     items:
       - "Liquid-droplet microcavities"
       - "Optical microresonators"
       - "Whispering-gallery-modes (WGM)"
+  collaborators:
+    title: "Collaborators"
+    groups:
+      - institution: "Tel Aviv University"
+        logo: "/images/logos/tel-aviv-university-logo-cv.png"
+        logo_width: 190
+        logo_height: 102
+        people:
+          - name: "Tal Carmon"
+            google_scholar: "https://scholar.google.com/citations?user=tiFit0cAAAAJ&hl=en&inst=2457744612629960019"
+      - institution: "Shanxi University"
+        logo: "/images/logos/shanxi-university-logo-cv.png"
+        logo_width: 260
+        logo_height: 88
+        people:
+          - name: "Tiancai Zhang"
+            google_scholar: "https://scholar.google.com/citations?user=DTAaDZAAAAAJ&hl=en&inst=2457744612629960019"
+          - name: "Pengfei Zhang"
+            google_scholar: "https://scholar.google.com/citations?user=Grjz9fgAAAAJ&hl=en&inst=2457744612629960019"
   location         : "Tel Aviv, Israel"
   employer:
     - "School of Electrical Engineering"

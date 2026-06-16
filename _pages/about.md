@@ -38,6 +38,30 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
 </section>
 {% endif %}
 
+{% assign collaborators = site.author.collaborators %}
+{% if collaborators and collaborators.groups %}
+<section class="collaborators" aria-labelledby="collaborators-title">
+  <h2 id="collaborators-title" class="collaborators__title">{{ collaborators.title }}</h2>
+  <div class="collaborators__grid">
+    {% for group in collaborators.groups %}
+    <details class="collaborators__group">
+      <summary class="collaborators__summary" aria-label="Show {{ group.institution }} collaborators">
+        <span class="collaborators__logo-slot">
+          <img class="collaborators__logo" src="{{ group.logo | relative_url }}" alt="{{ group.institution }} logo" width="{{ group.logo_width }}" height="{{ group.logo_height }}" loading="lazy" decoding="async">
+        </span>
+        <span class="collaborators__institution">{{ group.institution }}</span>
+      </summary>
+      <ul class="collaborators__people">
+        {% for person in group.people %}
+        <li><a href="{{ person.google_scholar }}" target="_blank" rel="noopener" title="Open {{ person.name }} on Google Scholar">{{ person.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 ## News
 
 <ul class="site-news">
