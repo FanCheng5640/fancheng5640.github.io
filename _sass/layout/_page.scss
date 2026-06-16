@@ -542,7 +542,7 @@
 }
 
 .site-news__wordmark--optica {
-  padding: 0.08em 0.26em 0.11em;
+  padding: 0.08em 0.14em 0.11em 0.26em;
   color: #ffffff;
   background:
     linear-gradient(145deg, rgba(42, 190, 255, 0.34) 16%, transparent 38%),
@@ -551,26 +551,9 @@
     #07090d;
   font-weight: 300;
   letter-spacing: 0.14em;
+  line-height: 1;
   text-transform: uppercase;
-}
-
-.site-news__wordmark-part--optica-o {
-  position: relative;
-  color: transparent;
-}
-
-.site-news__wordmark-part--optica-o::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.78em;
-  height: 0.8em;
-  border: 0.11em solid #ffffff;
-  border-radius: 999px;
-  box-sizing: border-box;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 63%, 20% 63%, 20% 37%, 0 37%);
-  content: "";
-  transform: translate(-50%, -48%);
+  vertical-align: -0.06em;
 }
 
 .site-news__wordmark--optics-express {

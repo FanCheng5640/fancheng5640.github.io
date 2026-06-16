@@ -5,7 +5,7 @@
   {% assign venue_slug = news_publication.venue | default: "journal" | slugify %}
   {% capture news_wordmark %}
     {% case news_publication.venue %}
-      {% when "Optica" %}<span class="site-news__wordmark-part site-news__wordmark-part--optica-o">O</span><span class="site-news__wordmark-part">PTICA</span>
+      {% when "Optica" %}OPTICA
       {% when "Optics Express" %}<span class="site-news__wordmark-part site-news__wordmark-part--oe-optics">Optics</span><span class="site-news__wordmark-space"> </span><span class="site-news__wordmark-part site-news__wordmark-part--oe-express">EXPRESS</span>
       {% when "Photonics Research" %}<span class="site-news__wordmark-part site-news__wordmark-part--pr-photonics">PHOTONICS</span><span class="site-news__wordmark-space"> </span><span class="site-news__wordmark-part site-news__wordmark-part--pr-research">Research</span>
       {% when "Nature Communications" %}<span class="site-news__wordmark-part">nature communications</span>
