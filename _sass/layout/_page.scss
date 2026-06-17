@@ -415,6 +415,97 @@
   background: rgba(255, 213, 79, 0.2);
 }
 
+.site-news__award-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.55rem;
+  row-gap: 0.18rem;
+  width: 100%;
+}
+
+.site-news__award-copy {
+  display: block;
+  min-width: 0;
+}
+
+.gertner-award-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  width: min(100%, 20.5rem);
+  max-width: 100%;
+  min-height: 3.25rem;
+  padding: 0.08rem 0;
+  color: #1f2933;
+  border: 0;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.site-news__item--award .gertner-award-brand,
+.cv-awards__item--gertner .gertner-award-brand {
+  justify-self: end;
+}
+
+.page__content .gertner-award-brand,
+.page__content .gertner-award-brand:hover,
+.page__content .gertner-award-brand:focus {
+  color: #1f2933;
+  text-decoration: none;
+}
+
+.gertner-award-brand:focus-visible {
+  outline: 2px solid var(--global-link-color-hover);
+  outline-offset: 2px;
+}
+
+.gertner-award-brand__mark {
+  display: block;
+  width: 4.7rem;
+  max-width: 4.7rem;
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+  box-shadow: none;
+}
+
+.gertner-award-brand__text {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 15rem;
+  color: #1f2933;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.gertner-award-brand__text span {
+  white-space: nowrap;
+}
+
+.gertner-award-brand--two-line {
+  width: min(100%, 17.2rem);
+  min-height: 2.6rem;
+}
+
+.gertner-award-brand--two-line .gertner-award-brand__mark {
+  width: 3.9rem;
+  max-width: 3.9rem;
+}
+
+.gertner-award-brand--two-line .gertner-award-brand__text {
+  max-width: 12.68rem;
+  font-size: 0.52rem;
+  line-height: 1.12;
+}
+
 .site-news__publication-meta {
   --site-news-logo-height: 0.92em;
   display: inline-flex;
@@ -542,7 +633,7 @@
 }
 
 .site-news__wordmark--optica {
-  padding: 0.08em 0.14em 0.11em 0.26em;
+  padding: 0.105em 0.14em 0.085em 0.26em;
   color: #ffffff;
   background:
     linear-gradient(145deg, rgba(42, 190, 255, 0.34) 16%, transparent 38%),
@@ -553,7 +644,7 @@
   letter-spacing: 0.14em;
   line-height: 1;
   text-transform: uppercase;
-  vertical-align: -0.06em;
+  vertical-align: -0.04em;
 }
 
 .site-news__wordmark--optics-express {
@@ -928,6 +1019,57 @@
   background: #e7edf3;
 }
 
+@media (max-width: 1100px) {
+  .site-news__award-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-news__item--award .gertner-award-brand {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-news__award-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-news__item--award .gertner-award-brand,
+  .cv-awards__item--gertner .gertner-award-brand {
+    justify-self: start;
+  }
+
+  .gertner-award-brand {
+    width: min(100%, 18.6rem);
+    min-height: 3rem;
+  }
+
+  .gertner-award-brand__mark {
+    width: 4.35rem;
+    max-width: 4.35rem;
+  }
+
+  .gertner-award-brand__text {
+    max-width: 14rem;
+    font-size: 0.58rem;
+  }
+
+  .gertner-award-brand--two-line {
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  .gertner-award-brand--two-line .gertner-award-brand__mark {
+    width: 4rem;
+    max-width: 4rem;
+  }
+
+  .gertner-award-brand--two-line .gertner-award-brand__text {
+    max-width: 14.8rem;
+    font-size: 0.5rem;
+  }
+}
+
 @media (max-width: 420px) {
   .collaborators__group {
     flex-basis: auto;
@@ -941,7 +1083,7 @@
 }
 
 .cv-education {
-  --cv-education-logo-slot-width: 14.5rem;
+  --cv-education-logo-slot-width: 12.5rem;
   --cv-education-logo-slot-height: 4.3rem;
   margin-bottom: 1.3rem;
 }
@@ -1017,14 +1159,14 @@
 
   .cv-education__logo-link {
     justify-content: flex-start;
-    width: min(var(--cv-education-logo-slot-width), 62vw);
-    max-width: 62vw;
+    width: min(var(--cv-education-logo-slot-width), 54vw);
+    max-width: 54vw;
     height: auto;
   }
 
   .cv-education__logo {
     width: 100%;
-    max-width: min(var(--cv-education-logo-slot-width), 62vw);
+    max-width: min(var(--cv-education-logo-slot-width), 54vw);
   }
 }
 
@@ -1035,6 +1177,31 @@
 .cv-awards__item {
   margin: 0.25rem 0;
   padding: 0.16rem 0.45rem;
+}
+
+.cv-awards__award-layout {
+  display: inline;
+  width: auto;
+  max-width: 100%;
+}
+
+.cv-awards__copy {
+  display: inline;
+  min-width: 0;
+}
+
+.cv-awards__item--gertner .gertner-award-brand {
+  display: inline-flex;
+  justify-self: auto;
+  margin-left: 0.55rem;
+  vertical-align: middle;
+}
+
+@media (max-width: 620px) {
+  .cv-awards__item--gertner .gertner-award-brand {
+    margin-top: 0.18rem;
+    margin-left: 0;
+  }
 }
 
 .cv-awards__item:target {

@@ -1,0 +1,9 @@
+{%- assign brand_href = include.href | default: "/cv/#award-student-excellence-gertner" -%}
+{%- if brand_href contains "://" -%}
+  {%- assign brand_url = brand_href -%}
+{%- else -%}
+  {%- assign brand_url = brand_href | relative_url -%}
+{%- endif -%}
+{%- assign brand_title = include.title | default: "Open Marian Gertner Institute award details" -%}
+{%- assign brand_variant = include.variant | default: "default" -%}
+<a class="gertner-award-brand{% if brand_variant == 'two-line' %} gertner-award-brand--two-line{% endif %}" href="{{ brand_url }}" title="{{ brand_title | escape }}" aria-label="{{ brand_title | escape }}"{% if include.external %} target="_blank" rel="noopener"{% endif %}><img class="gertner-award-brand__mark" src="{{ '/images/logos/marian-gertner-institute-logo.png' | relative_url }}" alt="" width="212" height="68" loading="lazy" decoding="async" aria-hidden="true"><span class="gertner-award-brand__text" aria-hidden="true">{% if brand_variant == "two-line" %}<span>Marian Gertner Institute, Tel Aviv University</span><span>Faculty of Engineering and Faculty of Medicine</span>{% else %}<span>Marian Gertner Institute</span><span>Faculty of Engineering and Faculty of Medicine</span><span>Tel Aviv University</span>{% endif %}</span></a>

@@ -1,15 +1,7 @@
-{% assign publication_authors = include.authors %}
-{% if publication_authors and publication_authors.size > 0 %}
-  {% assign author_count = publication_authors.size %}
-  {% for author in publication_authors %}
-    {% if forloop.first %}
-    {% elsif forloop.last and author_count == 2 %}
-      and
-    {% elsif forloop.last %}
-      , and
-    {% else %}
-      ,
-    {% endif %}
+{%- assign publication_authors = include.authors -%}
+{%- if publication_authors and publication_authors.size > 0 -%}
+  {%- assign author_count = publication_authors.size -%}
+  {%- for author in publication_authors -%}
     {%- assign author_profile = site.data.author_profiles | where: "name", author.name | first -%}
     {%- capture author_name_html -%}
       {%- if author.name == site.author.name or author.name == "Fan Cheng" -%}
@@ -30,7 +22,18 @@
     {%- else -%}
       {{ author_body | strip }}
     {%- endif -%}
-  {% endfor %}
-{% else %}
+    {%- assign author_separator = "" -%}
+    {%- unless forloop.last -%}
+      {%- if forloop.rindex == 2 and author_count == 2 -%}
+        {%- assign author_separator = " and " -%}
+      {%- elsif forloop.rindex == 2 -%}
+        {%- assign author_separator = ", and " -%}
+      {%- else -%}
+        {%- assign author_separator = ", " -%}
+      {%- endif -%}
+    {%- endunless -%}
+    {{- author_separator -}}
+  {%- endfor -%}
+{%- else -%}
   {{ include.fallback }}
-{% endif %}
+{%- endif -%}

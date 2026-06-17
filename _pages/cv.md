@@ -17,7 +17,8 @@ Education
   <section class="cv-education__item">
     <div class="cv-education__body">
       <h3>Ph.D. Candidate in Optics</h3>
-      <p>School of Electrical Engineering, Tel Aviv University<br>
+      <p>School of Electrical Engineering<br>
+      Tel Aviv University<br>
       Tel Aviv, Israel | 03/2021 - Present<br>
       Optics (optical microresonators)<br>
       Supervisor: <span class="cv-advisor"><a href="https://scholar.google.com/citations?user=tiFit0cAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Open Prof. Tal Carmon's Google Scholar profile">Prof. Tal Carmon</a> (<a href="https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/" title="Open Prof. Tal Carmon's lab website">Lab</a>)</span></p>
@@ -59,7 +60,7 @@ Education
 
 ## Awards
 <ul class="cv-awards">
-  <li id="award-student-excellence-gertner" class="cv-awards__item"><a href="https://en-med.tau.ac.il/scholars-gertner-med-2020">Student Excellence Award</a>, The Marian Gertner Institute for Medical Nanosystems, Tel Aviv University, 2025-2026.</li>
+  <li id="award-student-excellence-gertner" class="cv-awards__item cv-awards__item--gertner"><span class="cv-awards__award-layout"><span class="cv-awards__copy"><a href="https://en-med.tau.ac.il/scholars-gertner-med-2020">Student Excellence Award</a>, <span class="text-nowrap">The Marian Gertner Institute</span> for <span class="text-nowrap">Medical Nanosystems</span>, <span class="text-nowrap">Tel Aviv University</span>, 2025-2026.</span> {% include gertner-award-brand.html href="https://en-med.tau.ac.il/scholars-gertner-med-2020" title="Open Marian Gertner Institute Scholars page" external=true %}</span></li>
 </ul>
 
 ## Service
