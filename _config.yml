@@ -39,9 +39,9 @@ author:
     groups:
       - institution: "The City University of New York"
         paper_count: 3
-        logo: "/images/logos/cuny-logo.svg"
-        logo_width: 260
-        logo_height: 83
+        logo: "/images/logos/cuny-full-logo.png"
+        logo_width: 12899
+        logo_height: 5350
         people:
           - name: "Lev Deych"
             google_scholar: "https://scholar.google.com/citations?hl=en&user=tydqft0AAAAJ"
@@ -49,9 +49,9 @@ author:
             google_scholar: "https://scholar.google.com/citations?hl=en&user=u7v1Ch4AAAAJ"
       - institution: "Technion - Israel Institute of Technology"
         paper_count: 2
-        logo: "/images/logos/technion-logo.svg"
-        logo_width: 260
-        logo_height: 83
+        logo: "/images/logos/technion-full-logo.png"
+        logo_width: 1134
+        logo_height: 458
         people:
           - name: "Mark Douvidzon"
             google_scholar: "https://scholar.google.com/citations?hl=en&user=d41x1W8AAAAJ"

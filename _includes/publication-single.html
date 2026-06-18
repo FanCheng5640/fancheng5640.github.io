@@ -57,7 +57,7 @@
     {% endif %}
 
     <p class="publication__meta">
-      {% if post.venue %}<i class="publication__venue">{{ post.venue }}</i>{% endif %}{% if post.date %}{% if post.venue %}, {% endif %}{{ post.date | default: "1900-01-01" | date: "%m/%Y" }}{% endif %}
+      {% if post.venue %}<i class="publication__venue">{{ post.venue }}</i>{% endif %}{% if post.date %}{% if post.venue %}, {% endif %}{{ post.date | default: "1900-01-01" | date: "%Y-%m" }}{% endif %}
       {% if publication_metric %}
         <span class="publication__badge"{% if impact_badge_title %} title="{{ impact_badge_title | escape }}"{% endif %}>IF {{ publication_metric.impact_factor }}</span>
       {% elsif post.journal_impact_factor and post.journal_impact_factor != 0 %}

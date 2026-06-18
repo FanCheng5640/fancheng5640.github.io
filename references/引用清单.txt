@@ -21,14 +21,16 @@ fancheng5640.github.io 引用清单
     - Official masthead SVG: https://opnmedia.blob.core.windows.net/$web/opn/media/images/logos/opn-masthead-one-line_rgb.svg
 
 
-[2026-06-16] Collaborator institution logos
-    Usage: _config.yml; _pages/about.md; _sass/layout/_page.scss; images/logos/cuny-logo.svg; images/logos/technion-logo.svg
+[2026-06-18] Collaborator institution full-name logos
+    Usage: _config.yml; _pages/about.md; _sass/layout/_page.scss; images/logos/cuny-full-logo.png; images/logos/technion-full-logo.png
 
-    Method/source: Collaborator institution logos are shown on the About page for publication-derived collaborator groups. The institution order is based on doctoral-period-and-later publication counts, excluding Fan Cheng's own degree institutions, advisors, collaborators without personal Google Scholar profiles, and the Nature Communications-only collaborator school logo.
+    Method/source: Collaborator institution logos are shown on the About page for publication-derived collaborator groups. The displayed assets use official full-name logo lockups, so visitors can identify the schools without relying only on an icon or acronym. The institution order is based on doctoral-period-and-later publication counts, excluding Fan Cheng's own degree institutions, advisors, collaborators without personal Google Scholar profiles, and the Nature Communications-only collaborator school logo.
 
     Source URLs:
-    - CUNY logo: https://commons.wikimedia.org/wiki/Special:Redirect/file/CUNY_New_Logo.svg
-    - Technion logo: https://commons.wikimedia.org/wiki/Special:Redirect/file/Technion_logo.svg
+    - CUNY official logo guidelines: https://www.cuny.edu/about/administration/offices/communications-marketing/university-identity/logo/
+    - CUNY official logo + university name package: https://www.cuny.edu/wp-content/uploads/sites/4/page-assets/about/administration/offices/communications-marketing/university-identity/CUNY_Name.zip
+    - Technion official brand logo page: https://marketing.technion.ac.il/plugging-in/download-technion/
+    - Technion official English horizontal package: https://marketing.technion.ac.il/wp-content/uploads/eng-ho.zip
 
 
 [2026-06-13] Google Scholar citation profile data
