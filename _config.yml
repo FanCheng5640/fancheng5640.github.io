@@ -37,6 +37,9 @@ author:
   collaborators:
     title: "Collaborators"
     groups:
+      # Add Tel Aviv University only when a future paper includes TAU collaborators
+      # outside Prof. Tal Carmon's group. Do not list Carmon-group people or alumni
+      # such as Tal Carmon, Ronen Ben-Daniel, Manya Malhotra, Nitzan Shani, or Fan Cheng.
       - institution: "The City University of New York"
         paper_count: 3
         logo: "/images/logos/cuny-full-logo.png"

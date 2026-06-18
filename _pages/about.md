@@ -79,7 +79,9 @@ Ph.D. Candidate, School of Electrical Engineering, Tel Aviv University, Israel.
       </summary>
       <ul class="collaborators__people">
         {% for person in group.people %}
-        <li><a href="{{ person.google_scholar }}" target="_blank" rel="noopener" title="Open {{ person.name }} on Google Scholar">{{ person.name }}</a></li>
+        {% assign person_url = person.url | default: person.google_scholar %}
+        {% assign person_profile_label = person.profile_label | default: "Google Scholar" %}
+        <li><a href="{{ person_url }}" target="_blank" rel="noopener" title="Open {{ person.name }} on {{ person_profile_label | escape }}">{{ person.name }}</a></li>
         {% endfor %}
       </ul>
     </details>

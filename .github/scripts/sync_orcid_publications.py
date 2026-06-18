@@ -22,6 +22,7 @@ PDF_DIR = Path("files/papers")
 JOURNAL_METRICS_PATH = Path("_data/journal_metrics.json")
 ABOUT_PAGE_PATH = Path("_pages/about.md")
 USER_AGENT = "fancheng5640.github.io ORCID sync (mailto:fancheng@mail.tau.ac.il)"
+RECENT_NEWS_YEAR_WINDOW = 5
 
 ALLOWED_ORCID_WORK_TYPES = {"journal-article"}
 ALLOWED_CROSSREF_TYPES = {"journal-article"}
@@ -105,6 +106,27 @@ PDF_FILENAMES = {
     "10.1364/oe.561188": "2025-opt-express-mode-coalescence.pdf",
     "10.1364/optica.560597": "2025-optica-photonic-origami.pdf",
     "10.1063/5.0279509": "2025-apl-droplet-evaporation.pdf",
+}
+
+NEWS_PUBLICATION_VARIABLES = {
+    "10.1063/5.0279509": "pub_apl_2025",
+    "10.1364/optica.560597": "pub_optica_2025",
+    "10.1364/oe.561188": "pub_oe_2025",
+    "10.1364/prj.505164": "pub_pr_2024",
+    "10.1063/5.0197109": "pub_aip_2024",
+    "10.1038/s41467-023-40205-0": "pub_nc_2023",
+    "10.1364/oe.26.031500": "pub_oe_2018",
+}
+
+NEWS_FEATURED_MEDIA = {
+    "10.1364/optica.560597": {
+        "name": "Optics & Photonics News",
+        "logo": "/files/papers/figures/logos/optics-photonics-news-logo.svg",
+    },
+    "10.1038/s41467-023-40205-0": {
+        "name": "Optics & Photonics News",
+        "logo": "/files/papers/figures/logos/optics-photonics-news-logo.svg",
+    },
 }
 
 AUTO_METADATA_KEYS = {
@@ -571,9 +593,47 @@ def publication_anchor(record: dict) -> str:
 
 def publication_news_label(date_value: str) -> str:
     try:
-        return datetime.strptime(date_value[:10], "%Y-%m-%d").strftime("%b %d, %Y")
+        return datetime.strptime(date_value[:10], "%Y-%m-%d").strftime("%Y-%m")
     except ValueError:
-        return date_value[:10]
+        return date_value[:7]
+
+
+def is_recent_news_record(record: dict, *, current_year: int | None = None) -> bool:
+    date_value = str(record.get("metadata", {}).get("date", ""))
+    try:
+        year = int(date_value[:4])
+    except ValueError:
+        return False
+    if current_year is None:
+        current_year = datetime.now().year
+    return year >= current_year - RECENT_NEWS_YEAR_WINDOW
+
+
+def publication_news_publication_meta(record: dict, anchor: str) -> str:
+    metadata = record["metadata"]
+    doi = str(metadata.get("doi", "")).lower()
+    variable = NEWS_PUBLICATION_VARIABLES.get(doi)
+    if variable:
+        return (
+            "{% include news-publication-meta.html "
+            f'publication={variable} href="/publications/#{anchor}" %}}'
+        )
+    venue = html.escape(str(metadata.get("venue", "")))
+    return f'<a href="/publications/#{anchor}"><em>{venue}</em></a>'
+
+
+def liquid_string_value(value: str) -> str:
+    return str(value).replace("\\", "\\\\").replace('"', '\\"')
+
+
+def publication_news_featured_suffix(record: dict) -> str:
+    doi = str(record.get("metadata", {}).get("doi", "")).lower()
+    media = NEWS_FEATURED_MEDIA.get(doi)
+    if not media:
+        return ""
+    name = liquid_string_value(media["name"])
+    logo = liquid_string_value(media["logo"])
+    return f'; featured in {{% include news-brand-logo.html name="{name}" logo="{logo}" %}}'
 
 
 def publication_news_item(record: dict) -> str:
@@ -582,24 +642,27 @@ def publication_news_item(record: dict) -> str:
     css_class = "site-news__item site-news__item--key" if first_author else "site-news__item"
     role = "First-author paper" if first_author else "Co-author paper"
     date_label = publication_news_label(str(metadata.get("date", "")))
-    venue = html.escape(str(metadata.get("venue", "")))
     anchor = publication_anchor(record)
+    publication_meta = publication_news_publication_meta(record, anchor)
+    featured_suffix = publication_news_featured_suffix(record)
     return (
         f'  <li class="{css_class}">{date_label}: <strong>{role}:</strong> '
-        f'Published in <a href="/publications/#{anchor}"><em>{venue}</em></a>.</li>'
+        f"Published in {publication_meta}{featured_suffix}.</li>"
     )
 
 
 def is_synced_publication_news_item(item: str) -> bool:
-    return (
-        'Published in <a href="/publications/#publication-' in item
-        and "<em>" in item
-        and "</em>" in item
-    )
+    return 'href="/publications/#publication-publication-' in item
 
 
 def news_sort_key(item: str) -> tuple[datetime, str]:
     text = re.sub(r"<.*?>", "", item)
+    month_match = re.search(r"(\d{4})-(\d{2}):", text)
+    if month_match:
+        try:
+            return datetime(int(month_match.group(1)), int(month_match.group(2)), 1), text
+        except ValueError:
+            return datetime.min, text
     match = re.search(r"([A-Z][a-z]{2} \d{2}, \d{4}):", text)
     if not match:
         return datetime.min, text
@@ -628,14 +691,14 @@ def sync_about_news(records: list[dict], *, dry_run: bool = False) -> bool:
 
     existing_items = re.findall(r"\s*<li\b.*?</li>", match.group("body"), flags=re.S)
     kept_items = [
-        item.strip()
+        "  " + item.strip()
         for item in existing_items
         if not is_synced_publication_news_item(item)
     ]
     publication_items = [
         publication_news_item(record)
         for record in records
-        if record.get("metadata", {}).get("venue")
+        if record.get("metadata", {}).get("venue") and is_recent_news_record(record)
     ]
     merged_items = sorted(
         kept_items + publication_items,
