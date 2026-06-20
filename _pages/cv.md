@@ -60,8 +60,8 @@ Education
 
 ## Awards
 <ul class="cv-awards">
-  <li id="award-student-excellence-gertner" class="cv-awards__item cv-awards__item--gertner"><span class="cv-awards__award-layout"><span class="cv-awards__copy"><time datetime="2026-03">2026-03</time>: <a href="https://en-med.tau.ac.il/scholars-gertner-med-2020">Student Excellence Award</a>, <span class="text-nowrap">The Marian Gertner Institute</span> for <span class="text-nowrap">Medical Nanosystems</span>, <span class="text-nowrap">Tel Aviv University</span>, 2025-2026.</span> {% include gertner-award-brand.html href="https://en-med.tau.ac.il/scholars-gertner-med-2020" title="Open Marian Gertner Institute Scholars page" external=true %}</span></li>
+  <li id="award-student-excellence-gertner" class="cv-awards__item cv-awards__item--gertner"><span class="cv-awards__award-layout"><span class="cv-awards__copy"><span class="text-nowrap"><time datetime="2026-03">2026-03</time>:</span> <a href="https://en-med.tau.ac.il/scholars-gertner-med-2020">Student Excellence Award</a>, <span class="text-nowrap">The Marian Gertner Institute</span> for <span class="text-nowrap">Medical Nanosystems</span>, <span class="text-nowrap">Tel Aviv University</span> <span class="text-nowrap cv-awards__period">(2025-2026)</span>.</span> {% include gertner-award-brand.html href="https://en-med.tau.ac.il/scholars-gertner-med-2020" title="Open Marian Gertner Institute Scholars page" external=true %}</span></li>
 </ul>
 
 ## Service
-* Reviewer, [Optical Materials Express](https://opg.optica.org/ome/).
+* Reviewer, <a href="https://opg.optica.org/ome/"><span class="text-nowrap">Optical Materials Express</span></a> <span class="text-nowrap">(1 review)</span>.
