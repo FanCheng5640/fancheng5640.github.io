@@ -7,6 +7,9 @@
   {% assign figure_orientation = publication_item.figure_orientation | default: "auto" | slugify %}
   {% assign figure_uid_source = publication_item.url | default: publication_item.permalink | default: publication_item.title %}
   {% assign figure_uid = figure_context | append: "-" | append: figure_uid_source | slugify %}
+  {% if include.scope %}
+    {% assign figure_uid = include.scope | append: "-" | append: figure_uid | slugify %}
+  {% endif %}
   {% assign figure_dialog_id = "publication-figure-dialog-" | append: figure_uid %}
 
   {% if figure_context == "list" %}

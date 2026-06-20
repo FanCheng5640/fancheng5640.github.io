@@ -13,7 +13,7 @@ title                    : "Fan Cheng"
 title_separator          : "-"
 name                     : &name "Fan Cheng"
 description              : &description "PhD Candidate in Optics, Tel Aviv University"   # Update this with a general description of your site, this is the default if not overridden by a page
-url                      : https://fancheng5640.github.io # The base hostname & protocol for your site e.g. "https://[your GitHub username].github.io",
+url                      : https://fancheng.org # The base hostname & protocol for your site e.g. "https://[your GitHub username].github.io",
                                                            # or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "FanCheng5640/fancheng5640.github.io"
@@ -64,7 +64,7 @@ author:
     - "Tel Aviv University"
   employer_links:
     "Tel Aviv University": "https://en.wikipedia.org/wiki/Tel_Aviv_University"
-  uri              : "https://fancheng5640.github.io"
+  uri              : "https://fancheng.org"
   email            : "fancheng@mail.tau.ac.il" 
 
   # Academic websites

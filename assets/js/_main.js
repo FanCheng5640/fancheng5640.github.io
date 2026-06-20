@@ -89,6 +89,16 @@ let initPublicationFigureDialogs = () => {
     });
   };
 
+  const isBackdropClick = (dialog, event) => {
+    const rect = dialog.getBoundingClientRect();
+    return (
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+    );
+  };
+
   const triggers = document.querySelectorAll("[data-publication-figure-open]");
   triggers.forEach((trigger) => {
     const dialogId = trigger.getAttribute("aria-controls");
@@ -107,14 +117,19 @@ let initPublicationFigureDialogs = () => {
 
   const dialogs = document.querySelectorAll("[data-publication-figure-dialog]");
   dialogs.forEach((dialog) => {
+    let startedOnBackdrop = false;
     const closeButton = dialog.querySelector("[data-publication-figure-close]");
     if (closeButton) {
       closeButton.addEventListener("click", () => dialog.close());
     }
+    dialog.addEventListener("pointerdown", (event) => {
+      startedOnBackdrop = event.target === dialog && isBackdropClick(dialog, event);
+    });
     dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) {
+      if (startedOnBackdrop || (event.target === dialog && isBackdropClick(dialog, event))) {
         dialog.close();
       }
+      startedOnBackdrop = false;
     });
     dialog.addEventListener("close", () => {
       stopDialogMedia(dialog);
