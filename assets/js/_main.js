@@ -162,7 +162,78 @@ let copyTextToClipboard = (text) => {
 
 let initCopyButtons = () => {
   const buttons = document.querySelectorAll("[data-copy-text]");
+  if (buttons.length === 0) {
+    return;
+  }
+
+  const tooltip = document.createElement("div");
+  tooltip.className = "publication-copy-tooltip";
+  tooltip.setAttribute("role", "tooltip");
+  tooltip.setAttribute("aria-hidden", "true");
+  document.body.appendChild(tooltip);
+
+  const pointerGap = 18;
+  const viewportMargin = 8;
+  const pointerPad = 6;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const overlapsPointer = (box, pointer) => (
+    pointer &&
+    pointer.x >= box.left - pointerPad &&
+    pointer.x <= box.left + box.width + pointerPad &&
+    pointer.y >= box.top - pointerPad &&
+    pointer.y <= box.top + box.height + pointerPad
+  );
+
+  const placeTooltip = (anchor, pointer) => {
+    const tipRect = tooltip.getBoundingClientRect();
+    const anchorRect = anchor.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const baseX = pointer ? pointer.x : anchorRect.left + Math.min(anchorRect.width / 2, 160);
+    const baseY = pointer ? pointer.y : anchorRect.bottom;
+    const candidates = [
+      { left: baseX + pointerGap, top: baseY + pointerGap },
+      { left: baseX + pointerGap, top: baseY - tipRect.height - pointerGap },
+      { left: baseX - tipRect.width - pointerGap, top: baseY + pointerGap },
+      { left: baseX - tipRect.width - pointerGap, top: baseY - tipRect.height - pointerGap },
+    ].map((candidate) => ({
+      left: clamp(candidate.left, viewportMargin, viewportWidth - tipRect.width - viewportMargin),
+      top: clamp(candidate.top, viewportMargin, viewportHeight - tipRect.height - viewportMargin),
+      width: tipRect.width,
+      height: tipRect.height,
+    }));
+    const selected = candidates.find((candidate) => !overlapsPointer(candidate, pointer)) || candidates[0];
+    tooltip.style.left = `${selected.left}px`;
+    tooltip.style.top = `${selected.top}px`;
+  };
+
+  const showTooltip = (button, event) => {
+    const label = button.getAttribute("data-copy-tooltip") || button.getAttribute("aria-label") || "";
+    if (!label) {
+      return;
+    }
+    tooltip.textContent = label;
+    tooltip.classList.add("is-visible");
+    tooltip.setAttribute("aria-hidden", "false");
+    const pointer = event && typeof event.clientX === "number" && typeof event.clientY === "number"
+      ? { x: event.clientX, y: event.clientY }
+      : null;
+    placeTooltip(button, pointer);
+  };
+
+  const hideTooltip = () => {
+    tooltip.classList.remove("is-visible");
+    tooltip.setAttribute("aria-hidden", "true");
+  };
+
   buttons.forEach((button) => {
+    button.addEventListener("mouseenter", (event) => showTooltip(button, event));
+    button.addEventListener("mousemove", (event) => showTooltip(button, event));
+    button.addEventListener("mouseleave", hideTooltip);
+    button.addEventListener("focus", () => showTooltip(button, null));
+    button.addEventListener("blur", hideTooltip);
     button.addEventListener("click", () => {
       const text = button.getAttribute("data-copy-text") || "";
       const statusId = button.getAttribute("data-copy-status-id");

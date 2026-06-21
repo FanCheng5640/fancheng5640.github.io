@@ -404,6 +404,7 @@
 
 .publication__title-copy-text {
   display: block;
+  position: relative;
   flex: 1 1 auto;
   min-width: 0;
   margin: 0;
@@ -414,7 +415,7 @@
   font: inherit;
   line-height: inherit;
   text-align: left;
-  cursor: copy;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%232d3748' d='M8 7.5A2.5 2.5 0 0 1 10.5 5h7A2.5 2.5 0 0 1 20 7.5v7A2.5 2.5 0 0 1 17.5 17h-7A2.5 2.5 0 0 1 8 14.5v-7Zm2.5-.5A.5.5 0 0 0 10 7.5v7a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5h-7Z'/%3E%3Cpath fill='%232d3748' d='M4 10.5A2.5 2.5 0 0 1 6.5 8H7v2h-.5a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V17h2v.5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 4 17.5v-7Z'/%3E%3C/svg%3E") 4 4, pointer;
 }
 
 .publication__title-copy-text:hover,
@@ -428,6 +429,28 @@
   box-shadow: 0 0 0 0.14rem rgba(90, 90, 90, 0.22);
 }
 
+.publication__title-copy-label {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.publication__title-copy-icon {
+  display: inline-block;
+  margin-left: 0.34rem;
+  color: #555;
+  font-size: 0.86em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-0.03em);
+  transition: opacity 120ms ease;
+}
+
+.publication__title-copy-text:hover .publication__title-copy-icon,
+.publication__title-copy-text:focus .publication__title-copy-icon {
+  opacity: 0.9;
+}
+
 .publication__page-title {
   position: relative;
 }
@@ -435,6 +458,26 @@
 .publication__title-text {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+.publication-copy-tooltip {
+  position: fixed;
+  z-index: 10000;
+  max-width: min(16rem, calc(100vw - 1rem));
+  padding: 0.26rem 0.45rem;
+  border-radius: 0.22rem;
+  background: #313436;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 80ms ease;
+}
+
+.publication-copy-tooltip.is-visible {
+  opacity: 1;
 }
 
 .publication__title-line {
