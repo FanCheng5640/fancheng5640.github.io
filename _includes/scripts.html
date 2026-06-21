@@ -61,33 +61,6 @@
 
 <script>
   (function() {
-    var groups = document.querySelectorAll(".collaborators__group");
-    groups.forEach(function(group) {
-      var closeTimer = null;
-      var scheduleClose = function() {
-        window.clearTimeout(closeTimer);
-        closeTimer = window.setTimeout(function() {
-          group.open = false;
-        }, 180);
-      };
-      var keepOpen = function() {
-        window.clearTimeout(closeTimer);
-      };
-      group.addEventListener("mouseenter", keepOpen);
-      group.addEventListener("mouseleave", function() {
-        scheduleClose();
-      });
-      group.addEventListener("focusout", function(event) {
-        if (!group.contains(event.relatedTarget)) {
-          scheduleClose();
-        }
-      });
-    });
-  })();
-</script>
-
-<script>
-  (function() {
     var links = document.querySelectorAll("#main a[href]");
     links.forEach(function(link) {
       if (link.closest(".masthead") || link.closest("#theme-toggle")) {

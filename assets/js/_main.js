@@ -547,6 +547,73 @@ let initPublicationListLayout = () => {
   });
 };
 
+let initDismissibleDetails = () => {
+  const detailsList = Array.from(document.querySelectorAll(
+    ".publication-summary__venue-details, .collaborators__group"
+  ));
+  if (detailsList.length === 0) {
+    return;
+  }
+
+  const closeDetails = (details, returnFocus) => {
+    if (!details.open) {
+      return;
+    }
+    details.open = false;
+    if (returnFocus) {
+      const summary = details.querySelector("summary");
+      if (summary) {
+        summary.focus();
+      }
+    }
+  };
+
+  const closeAllDetails = (exceptDetails) => {
+    detailsList.forEach((details) => {
+      if (details !== exceptDetails) {
+        closeDetails(details, false);
+      }
+    });
+  };
+
+  detailsList.forEach((details) => {
+    details.addEventListener("toggle", () => {
+      if (details.open) {
+        closeAllDetails(details);
+      }
+    });
+
+    details.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeDetails(details, true);
+      }
+    });
+
+    details.addEventListener("focusout", () => {
+      window.setTimeout(() => {
+        if (details.open && !details.contains(document.activeElement)) {
+          closeDetails(details, false);
+        }
+      }, 0);
+    });
+
+    details.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        closeDetails(details, false);
+      });
+    });
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    detailsList.forEach((details) => {
+      if (details.open && !details.contains(event.target)) {
+        closeDetails(details, false);
+      }
+    });
+  });
+};
+
 let initPublicationAuthorNameWrap = () => {
   const authorBlocks = document.querySelectorAll(".publication__authors");
   authorBlocks.forEach((block) => {
@@ -727,6 +794,7 @@ $(document).ready(function () {
   initCopyButtons();
   initPublicationAuthorNameWrap();
   initPublicationListLayout();
+  initDismissibleDetails();
   initCvEducationLayout();
 
   // Follow menu drop down
