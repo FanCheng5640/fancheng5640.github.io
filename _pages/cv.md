@@ -64,4 +64,4 @@ Education
 </ul>
 
 ## Service
-* Reviewer, <a href="https://opg.optica.org/ome/"><span class="text-nowrap">Optical Materials Express</span></a> <span class="text-nowrap">(1 review)</span>.
+* Reviewer, <a href="https://opg.optica.org/ome/"><span class="text-nowrap">Optical Materials Express</span></a> <span class="text-nowrap">(1)</span>.
