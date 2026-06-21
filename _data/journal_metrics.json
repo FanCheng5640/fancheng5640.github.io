@@ -1,41 +1,42 @@
 {
   "metadata": {
-    "metric_year": 2024,
-    "release": "2025 Journal Citation Reports release",
-    "release_note_url": "https://journalcitationreports.zendesk.com/hc/en-gb/articles/36310787349521-2025",
+    "metric_year": 2025,
+    "release": "2026 Journal Citation Reports release",
+    "release_note_url": "https://clarivate.com/news/clarivate-releases-journal-citation-reports-2026/",
     "api_note_url": "https://developer.clarivate.com/apis/wos-journal",
-    "updated": "2026-06-13"
+    "updated": "2026-06-21",
+    "freshness_policy": "After the annual mid-June Clarivate JCR release, keep this file on the latest released metric year. CI runs scripts/check_journal_metrics_freshness.py to fail stale data."
   },
   "journals": [
     {
       "name": "Nature Communications",
-      "impact_factor": 15.7,
-      "source": "https://www.nature.com/ncomms/journal-impact"
+      "impact_factor": 18.1,
+      "source": "https://wos-journal.info/journalid/11621"
     },
     {
       "name": "Optica",
-      "impact_factor": 8.5,
-      "source": "https://opg.optica.org/optica/journal/optica/about.cfm"
+      "impact_factor": 8.8,
+      "source": "https://wos-journal.info/journalid/15214"
     },
     {
       "name": "Photonics Research",
-      "impact_factor": 7.2,
-      "source": "https://opg.optica.org/prj/"
+      "impact_factor": 7.1,
+      "source": "https://wos-journal.info/journalid/2608"
     },
     {
       "name": "Applied Physics Letters",
-      "impact_factor": 3.6,
-      "source": "https://pubs.aip.org/aip/apl/pages/about"
+      "impact_factor": 3.8,
+      "source": "https://wos-journal.info/journalid/14441"
     },
     {
       "name": "Optics Express",
-      "impact_factor": 3.3,
-      "source": "https://opg.optica.org/oe/about"
+      "impact_factor": 3.4,
+      "source": "https://wos-journal.info/journalid/14662"
     },
     {
       "name": "AIP Advances",
-      "impact_factor": 1.4,
-      "source": "https://pubs.aip.org/aip/adv/pages/about"
+      "impact_factor": 1.7,
+      "source": "https://wos-journal.info/journalid/20191"
     }
   ]
 }

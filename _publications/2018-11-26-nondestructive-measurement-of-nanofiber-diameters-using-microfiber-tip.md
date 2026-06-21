@@ -8,9 +8,9 @@ doi: "10.1364/oe.26.031500"
 first_author: false
 corresponding_author: false
 featured: false
-journal_impact_factor: 3.3
-impact_factor_year: 2024
-impact_factor_source: "https://opg.optica.org/oe/about"
+journal_impact_factor: 3.4
+impact_factor_year: 2025
+impact_factor_source: "https://wos-journal.info/journalid/14662"
 permalink: "/publication/2018-11-26-nondestructive-measurement-of-nanofiber-diameters-using-microfiber-tip"
 excerpt: "Optics Express, 2018."
 date: "2018-11-26"

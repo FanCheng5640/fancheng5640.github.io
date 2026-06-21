@@ -8,9 +8,9 @@ doi: "10.1038/s41467-023-40205-0"
 first_author: false
 corresponding_author: false
 featured: false
-journal_impact_factor: 15.7
-impact_factor_year: 2024
-impact_factor_source: "https://www.nature.com/ncomms/journal-impact"
+journal_impact_factor: 18.1
+impact_factor_year: 2025
+impact_factor_source: "https://wos-journal.info/journalid/11621"
 permalink: "/publication/2023-07-27-absorption-induced-transmission-in-plasma-microphotonics"
 excerpt: "Nature Communications, 2023."
 date: "2023-07-27"

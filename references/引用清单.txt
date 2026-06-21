@@ -45,13 +45,21 @@ fancheng5640.github.io 引用清单
     官方说明URL：https://scholar.google.com/intl/en/scholar/citations.html
 
 
-[2026-06-13] Journal Citation Reports / Journal Impact Factor data
-    使用位置：_data/journal_metrics.json；.github/scripts/sync_orcid_publications.py；_pages/publications.html；_includes/publication-single.html
+[2026-06-21] Journal Citation Reports / Journal Impact Factor data
+    Usage: _data/journal_metrics.json; _publications/*.md; .github/scripts/sync_orcid_publications.py; scripts/check_journal_metrics_freshness.py; .github/workflows/sync_orcid_publications.yml; _pages/publications.html; _includes/publication-single.html; _includes/news-publication-meta.html
 
-    方法/来源：影响因子集中记录在 _data/journal_metrics.json；页面只统一显示数据年份，不在每篇论文后重复年份。
+    Method/source: Journal Impact Factor values are centrally recorded in _data/journal_metrics.json and mirrored into publication front matter for sorting and fallback display. The current public data uses the 2026 Journal Citation Reports release, which reports 2025 JCR data. A CI freshness check fails after the annual JCR release window if the metric year remains stale, and it verifies that publication front matter matches the central data file.
 
-    官方说明：Clarivate 2025 Journal Citation Reports release provides 2024 data；Web of Science Journals API can provide JCR journal-level metadata including Journal Impact Factor but requires API key/subscription.
+    2025 JCR values used:
+    - Nature Communications: IF 18.1, source https://wos-journal.info/journalid/11621, screenshot references/jcr_2026_sources/nature_communications_wos_jif_2025.png
+    - Optica: IF 8.8, source https://wos-journal.info/journalid/15214, screenshot references/jcr_2026_sources/optica_wos_jif_2025.png
+    - Photonics Research: IF 7.1, source https://wos-journal.info/journalid/2608, screenshot references/jcr_2026_sources/photonics_research_wos_jif_2025.png
+    - Applied Physics Letters: IF 3.8, source https://wos-journal.info/journalid/14441, screenshot references/jcr_2026_sources/applied_physics_letters_wos_jif_2025.png
+    - Optics Express: IF 3.4, source https://wos-journal.info/journalid/14662, screenshot references/jcr_2026_sources/optics_express_wos_jif_2025.png
+    - AIP Advances: IF 1.7, source https://wos-journal.info/journalid/20191, screenshot references/jcr_2026_sources/aip_advances_wos_jif_2025.png
 
-    JCR release URL：https://journalcitationreports.zendesk.com/hc/en-gb/articles/36310787349521-2025
+    JCR release source:
+    - Clarivate 2026 Journal Citation Reports release: https://clarivate.com/news/clarivate-releases-journal-citation-reports-2026/, screenshot references/jcr_2026_sources/clarivate_jcr_2026_release.png
 
-    API URL：https://developer.clarivate.com/apis/wos-journal
+    API note: Web of Science Journals API can provide JCR journal-level metadata including Journal Impact Factor but requires API key/subscription.
+    API URL: https://developer.clarivate.com/apis/wos-journal

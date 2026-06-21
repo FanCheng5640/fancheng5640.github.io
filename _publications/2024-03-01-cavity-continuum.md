@@ -8,9 +8,9 @@ doi: "10.1364/PRJ.505164"
 first_author: true
 corresponding_author: false
 featured: true
-journal_impact_factor: 7.2
-impact_factor_year: 2024
-impact_factor_source: "https://opg.optica.org/prj/"
+journal_impact_factor: 7.1
+impact_factor_year: 2025
+impact_factor_source: "https://wos-journal.info/journalid/2608"
 permalink: "/publication/2024-03-01-cavity-continuum"
 excerpt: "Photonics Research, 2024."
 date: "2024-03-01"

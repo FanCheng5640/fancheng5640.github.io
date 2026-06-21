@@ -31,6 +31,9 @@ jobs:
           GOOGLE_SCHOLAR_STATUS_OUTPUT: ${{ runner.temp }}/google-scholar-status.json
         run: python .github/scripts/sync_google_scholar.py
 
+      - name: Validate Journal Impact Factor freshness
+        run: python scripts/check_journal_metrics_freshness.py
+
       - name: Generate scholarly update report
         id: report
         run: >

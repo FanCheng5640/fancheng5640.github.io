@@ -8,9 +8,9 @@ doi: "10.1063/5.0197109"
 first_author: false
 corresponding_author: false
 featured: false
-journal_impact_factor: 1.4
-impact_factor_year: 2024
-impact_factor_source: "https://pubs.aip.org/aip/adv/pages/about"
+journal_impact_factor: 1.7
+impact_factor_year: 2025
+impact_factor_source: "https://wos-journal.info/journalid/20191"
 permalink: "/publication/2024-03-01-radiation-pressure-induced-oscillations-of-an-optically-levitating-mirror"
 excerpt: "AIP Advances, 2024."
 date: "2024-03-01"

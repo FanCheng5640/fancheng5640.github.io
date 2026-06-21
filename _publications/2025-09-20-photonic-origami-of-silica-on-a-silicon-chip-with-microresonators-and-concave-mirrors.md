@@ -8,9 +8,9 @@ doi: "10.1364/OPTICA.560597"
 first_author: false
 corresponding_author: false
 featured: false
-journal_impact_factor: 8.5
-impact_factor_year: 2024
-impact_factor_source: "https://opg.optica.org/optica/journal/optica/about.cfm"
+journal_impact_factor: 8.8
+impact_factor_year: 2025
+impact_factor_source: "https://wos-journal.info/journalid/15214"
 permalink: "/publication/2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors"
 excerpt: "Optica, 2025."
 date: "2025-09-20"

@@ -8,9 +8,9 @@ doi: "10.1063/5.0279509"
 first_author: true
 corresponding_author: false
 featured: true
-journal_impact_factor: 3.6
-impact_factor_year: 2024
-impact_factor_source: "https://pubs.aip.org/aip/apl/pages/about"
+journal_impact_factor: 3.8
+impact_factor_year: 2025
+impact_factor_source: "https://wos-journal.info/journalid/14441"
 permalink: "/publication/2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities"
 excerpt: "Applied Physics Letters, 2025."
 date: "2025-09-22"

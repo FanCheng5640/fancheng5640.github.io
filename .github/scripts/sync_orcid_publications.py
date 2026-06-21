@@ -30,34 +30,34 @@ ALLOWED_CROSSREF_TYPES = {"journal-article"}
 
 JOURNAL_METRICS = {
     "Nature Communications": {
-        "impact_factor": 15.7,
-        "impact_factor_year": 2024,
-        "impact_factor_source": "https://www.nature.com/ncomms/journal-impact",
+        "impact_factor": 18.1,
+        "impact_factor_year": 2025,
+        "impact_factor_source": "https://wos-journal.info/journalid/11621",
     },
     "Optica": {
-        "impact_factor": 8.5,
-        "impact_factor_year": 2024,
-        "impact_factor_source": "https://opg.optica.org/optica/journal/optica/about.cfm",
+        "impact_factor": 8.8,
+        "impact_factor_year": 2025,
+        "impact_factor_source": "https://wos-journal.info/journalid/15214",
     },
     "Photonics Research": {
-        "impact_factor": 7.2,
-        "impact_factor_year": 2024,
-        "impact_factor_source": "https://opg.optica.org/prj/",
+        "impact_factor": 7.1,
+        "impact_factor_year": 2025,
+        "impact_factor_source": "https://wos-journal.info/journalid/2608",
     },
     "Applied Physics Letters": {
-        "impact_factor": 3.6,
-        "impact_factor_year": 2024,
-        "impact_factor_source": "https://pubs.aip.org/aip/apl/pages/about",
+        "impact_factor": 3.8,
+        "impact_factor_year": 2025,
+        "impact_factor_source": "https://wos-journal.info/journalid/14441",
     },
     "Optics Express": {
-        "impact_factor": 3.3,
-        "impact_factor_year": 2024,
-        "impact_factor_source": "https://opg.optica.org/oe/about",
+        "impact_factor": 3.4,
+        "impact_factor_year": 2025,
+        "impact_factor_source": "https://wos-journal.info/journalid/14662",
     },
     "AIP Advances": {
-        "impact_factor": 1.4,
-        "impact_factor_year": 2024,
-        "impact_factor_source": "https://pubs.aip.org/aip/adv/pages/about",
+        "impact_factor": 1.7,
+        "impact_factor_year": 2025,
+        "impact_factor_source": "https://wos-journal.info/journalid/20191",
     },
 }
 
@@ -626,14 +626,18 @@ def liquid_string_value(value: str) -> str:
     return str(value).replace("\\", "\\\\").replace('"', '\\"')
 
 
-def publication_news_featured_suffix(record: dict) -> str:
+def publication_news_featured_suffix(record: dict, anchor: str) -> str:
     doi = str(record.get("metadata", {}).get("doi", "")).lower()
     media = NEWS_FEATURED_MEDIA.get(doi)
     if not media:
         return ""
     name = liquid_string_value(media["name"])
     logo = liquid_string_value(media["logo"])
-    return f'; featured in {{% include news-brand-logo.html name="{name}" logo="{logo}" %}}'
+    href = liquid_string_value(media.get("href") or f"/publications/#{anchor}")
+    return (
+        f'; featured in {{% include news-brand-logo.html name="{name}" '
+        f'logo="{logo}" href="{href}" %}}'
+    )
 
 
 def publication_news_item(record: dict) -> str:
@@ -644,7 +648,7 @@ def publication_news_item(record: dict) -> str:
     date_label = publication_news_label(str(metadata.get("date", "")))
     anchor = publication_anchor(record)
     publication_meta = publication_news_publication_meta(record, anchor)
-    featured_suffix = publication_news_featured_suffix(record)
+    featured_suffix = publication_news_featured_suffix(record, anchor)
     return (
         f'  <li class="{css_class}">{date_label}: <strong>{role}:</strong> '
         f"Published in {publication_meta}{featured_suffix}.</li>"
