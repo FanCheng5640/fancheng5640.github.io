@@ -172,44 +172,106 @@ let initCopyButtons = () => {
   tooltip.setAttribute("aria-hidden", "true");
   document.body.appendChild(tooltip);
 
-  const pointerGap = 18;
+  const hoverDelayMs = 520;
+  const pointerGap = 10;
   const viewportMargin = 8;
   const pointerPad = 6;
+  const cursorBox = {
+    width: 32,
+    height: 32,
+    hotspotX: 2,
+    hotspotY: 2,
+  };
+  let hoverTimer = null;
+  let activeTooltipButton = null;
+  let lastPointer = null;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-  const overlapsPointer = (box, pointer) => (
-    pointer &&
-    pointer.x >= box.left - pointerPad &&
-    pointer.x <= box.left + box.width + pointerPad &&
-    pointer.y >= box.top - pointerPad &&
-    pointer.y <= box.top + box.height + pointerPad
+  const pointerSafeRect = (pointer) => {
+    if (!pointer) {
+      return null;
+    }
+    return {
+      left: pointer.x - cursorBox.hotspotX - pointerPad,
+      top: pointer.y - cursorBox.hotspotY - pointerPad,
+      width: cursorBox.width + pointerPad * 2,
+      height: cursorBox.height + pointerPad * 2,
+    };
+  };
+
+  const boxesIntersect = (a, b) => (
+    a &&
+    b &&
+    a.left < b.left + b.width &&
+    a.left + a.width > b.left &&
+    a.top < b.top + b.height &&
+    a.top + a.height > b.top
   );
+
+  const overlapsPointer = (box, pointer) => boxesIntersect(box, pointerSafeRect(pointer));
+
+  const pointerFromEvent = (event) => (
+    event && typeof event.clientX === "number" && typeof event.clientY === "number"
+      ? { x: event.clientX, y: event.clientY }
+      : null
+  );
+
+  const clearHoverTimer = () => {
+    if (hoverTimer) {
+      window.clearTimeout(hoverTimer);
+      hoverTimer = null;
+    }
+  };
 
   const placeTooltip = (anchor, pointer) => {
     const tipRect = tooltip.getBoundingClientRect();
     const anchorRect = anchor.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    const baseX = pointer ? pointer.x : anchorRect.left + Math.min(anchorRect.width / 2, 160);
-    const baseY = pointer ? pointer.y : anchorRect.bottom;
-    const candidates = [
-      { left: baseX + pointerGap, top: baseY + pointerGap },
-      { left: baseX + pointerGap, top: baseY - tipRect.height - pointerGap },
-      { left: baseX - tipRect.width - pointerGap, top: baseY + pointerGap },
-      { left: baseX - tipRect.width - pointerGap, top: baseY - tipRect.height - pointerGap },
-    ].map((candidate) => ({
+    const fitBox = (candidate) => ({
       left: clamp(candidate.left, viewportMargin, viewportWidth - tipRect.width - viewportMargin),
       top: clamp(candidate.top, viewportMargin, viewportHeight - tipRect.height - viewportMargin),
       width: tipRect.width,
       height: tipRect.height,
-    }));
+    });
+    const safeRect = pointerSafeRect(pointer);
+    const baseX = safeRect ? safeRect.left : anchorRect.left + Math.min(anchorRect.width / 2, 160);
+    const baseY = safeRect ? safeRect.top : anchorRect.bottom;
+    const baseRight = safeRect ? safeRect.left + safeRect.width : baseX;
+    const baseBottom = safeRect ? safeRect.top + safeRect.height : baseY;
+    const rawCandidates = safeRect
+      ? [
+        { left: baseRight + pointerGap, top: baseBottom + pointerGap },
+        { left: baseRight + pointerGap, top: baseY - tipRect.height - pointerGap },
+        { left: baseX - tipRect.width - pointerGap, top: baseBottom + pointerGap },
+        { left: baseX - tipRect.width - pointerGap, top: baseY - tipRect.height - pointerGap },
+      ]
+      : [
+        { left: baseX + pointerGap, top: baseY + pointerGap },
+        { left: baseX + pointerGap, top: baseY - tipRect.height - pointerGap },
+        { left: baseX - tipRect.width - pointerGap, top: baseY + pointerGap },
+        { left: baseX - tipRect.width - pointerGap, top: baseY - tipRect.height - pointerGap },
+      ];
+    const candidates = rawCandidates.flatMap((candidate) => {
+      const fitted = fitBox(candidate);
+      if (!safeRect || !boxesIntersect(fitted, safeRect)) {
+        return [fitted];
+      }
+      return [
+        fitted,
+        fitBox({ left: safeRect.left - tipRect.width - pointerGap, top: fitted.top }),
+        fitBox({ left: safeRect.left + safeRect.width + pointerGap, top: fitted.top }),
+        fitBox({ left: fitted.left, top: safeRect.top - tipRect.height - pointerGap }),
+        fitBox({ left: fitted.left, top: safeRect.top + safeRect.height + pointerGap }),
+      ];
+    });
     const selected = candidates.find((candidate) => !overlapsPointer(candidate, pointer)) || candidates[0];
     tooltip.style.left = `${selected.left}px`;
     tooltip.style.top = `${selected.top}px`;
   };
 
-  const showTooltip = (button, event) => {
+  const showTooltip = (button, pointer) => {
     const label = button.getAttribute("data-copy-tooltip") || button.getAttribute("aria-label") || "";
     if (!label) {
       return;
@@ -217,20 +279,42 @@ let initCopyButtons = () => {
     tooltip.textContent = label;
     tooltip.classList.add("is-visible");
     tooltip.setAttribute("aria-hidden", "false");
-    const pointer = event && typeof event.clientX === "number" && typeof event.clientY === "number"
-      ? { x: event.clientX, y: event.clientY }
-      : null;
     placeTooltip(button, pointer);
   };
 
+  const scheduleTooltip = (button, event) => {
+    activeTooltipButton = button;
+    lastPointer = pointerFromEvent(event);
+    clearHoverTimer();
+    hoverTimer = window.setTimeout(() => {
+      hoverTimer = null;
+      if (activeTooltipButton === button) {
+        showTooltip(button, lastPointer);
+      }
+    }, hoverDelayMs);
+  };
+
+  const moveTooltip = (button, event) => {
+    lastPointer = pointerFromEvent(event);
+    if (activeTooltipButton !== button) {
+      activeTooltipButton = button;
+    }
+    if (tooltip.classList.contains("is-visible")) {
+      showTooltip(button, lastPointer);
+    }
+  };
+
   const hideTooltip = () => {
+    clearHoverTimer();
+    activeTooltipButton = null;
+    lastPointer = null;
     tooltip.classList.remove("is-visible");
     tooltip.setAttribute("aria-hidden", "true");
   };
 
   buttons.forEach((button) => {
-    button.addEventListener("mouseenter", (event) => showTooltip(button, event));
-    button.addEventListener("mousemove", (event) => showTooltip(button, event));
+    button.addEventListener("mouseenter", (event) => scheduleTooltip(button, event));
+    button.addEventListener("mousemove", (event) => moveTooltip(button, event));
     button.addEventListener("mouseleave", hideTooltip);
     button.addEventListener("focus", () => showTooltip(button, null));
     button.addEventListener("blur", hideTooltip);
