@@ -2,6 +2,8 @@
 {% if news_publication %}
   {% assign publication_metric = site.data.journal_metrics.journals | where: "name", news_publication.venue | first %}
   {% assign impact_factor = publication_metric.impact_factor | default: news_publication.journal_impact_factor %}
+  {% assign impact_meta = site.data.journal_metrics.metadata %}
+  {% capture impact_title %}Journal Impact Factor: {{ impact_meta.metric_year }} JCR data{% if impact_meta.release_label %}, released in the {{ impact_meta.release_label }}{% endif %}{% endcapture %}
   {% assign venue_slug = news_publication.venue | default: "journal" | slugify %}
   {% capture news_wordmark %}
     {% case news_publication.venue %}
@@ -26,7 +28,7 @@
       {% endif %}
     {% endif %}
     {% if impact_factor %}
-      <span class="site-news__if" title="Journal Impact Factor: {{ site.data.journal_metrics.metadata.metric_year }} JCR data">IF {{ impact_factor }}</span>
+      <span class="site-news__if" title="{{ impact_title | strip | escape }}">IF {{ impact_factor }}</span>
     {% endif %}
   </span>
 {% endif %}

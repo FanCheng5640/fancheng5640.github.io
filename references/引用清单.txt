@@ -48,7 +48,7 @@ fancheng5640.github.io 引用清单
 [2026-06-21] Journal Citation Reports / Journal Impact Factor data
     Usage: _data/journal_metrics.json; _publications/*.md; .github/scripts/sync_orcid_publications.py; scripts/check_journal_metrics_freshness.py; .github/workflows/sync_orcid_publications.yml; _pages/publications.html; _includes/publication-single.html; _includes/news-publication-meta.html
 
-    Method/source: Journal Impact Factor values are centrally recorded in _data/journal_metrics.json and mirrored into publication front matter for sorting and fallback display. The current public data uses the 2026 Journal Citation Reports release, which reports 2025 JCR data. A CI freshness check fails after the annual JCR release window if the metric year remains stale, and it verifies that publication front matter matches the central data file.
+    Method/source: Journal Impact Factor values are centrally recorded in _data/journal_metrics.json and mirrored into publication front matter for sorting and fallback display. The professional public label is "2025 JCR data"; source notes may add that these values were released in the 2026 Journal Citation Reports. A CI freshness check fails after the annual JCR release window if the metric year remains stale, and it verifies that publication front matter matches the central data file.
 
     2025 JCR values used:
     - Nature Communications: IF 18.1, source https://wos-journal.info/journalid/11621, screenshot references/jcr_2026_sources/nature_communications_wos_jif_2025.png

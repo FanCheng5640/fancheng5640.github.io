@@ -1,8 +1,9 @@
 """Validate Journal Impact Factor data freshness and consistency.
 
 The site displays Journal Impact Factor values from ``_data/journal_metrics.json``.
-This check keeps the public data and publication front matter aligned, and it
-fails after the annual JCR release window if the metric year is stale.
+This check keeps the public data, release wording, and publication front matter
+aligned, and it fails after the annual JCR release window if the metric year is
+stale.
 """
 
 from __future__ import annotations
@@ -76,6 +77,17 @@ def validate() -> list[str]:
 
     if not str(metadata.get("release_note_url", "")).startswith("https://"):
         errors.append("metadata.release_note_url must be an https URL.")
+
+    release_label = str(metadata.get("release_label", "")).strip()
+    expected_release_year = str(metric_year + 1)
+    if (
+        expected_release_year not in release_label
+        or "Journal Citation Reports" not in release_label
+    ):
+        errors.append(
+            "metadata.release_label must name the release version, e.g. "
+            f"'{expected_release_year} Journal Citation Reports'."
+        )
 
     for name, journal in journals.items():
         if as_float(journal.get("impact_factor")) <= 0:

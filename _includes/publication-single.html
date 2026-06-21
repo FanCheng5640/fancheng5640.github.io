@@ -16,7 +16,11 @@
 {% assign impact_meta = site.data.journal_metrics.metadata %}
 {% assign impact_badge_title = nil %}
 {% if impact_meta %}
-  {% assign impact_badge_title = "Journal Impact Factor (JIF): " | append: impact_meta.metric_year | append: " JCR data." %}
+  {% assign impact_badge_title = "Journal Impact Factor (JIF): " | append: impact_meta.metric_year | append: " JCR data" %}
+  {% if impact_meta.release_label %}
+    {% assign impact_badge_title = impact_badge_title | append: ", released in the " | append: impact_meta.release_label %}
+  {% endif %}
+  {% assign impact_badge_title = impact_badge_title | append: "." %}
 {% endif %}
 {% assign publication_citation = nil %}
 {% if post.doi and site.data.google_scholar.publication_citations %}
