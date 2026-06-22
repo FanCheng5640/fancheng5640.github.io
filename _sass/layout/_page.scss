@@ -1201,17 +1201,34 @@
   min-width: 0;
 }
 
+.cv-awards__item--gertner .cv-awards__award-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.65rem;
+  width: 100%;
+}
+
+.cv-awards__item--gertner .cv-awards__copy {
+  display: block;
+}
+
 .cv-awards__item--gertner .gertner-award-brand {
   display: inline-flex;
-  justify-self: auto;
-  margin-left: 0.55rem;
-  vertical-align: middle;
+  justify-self: end;
+  margin-left: 0;
 }
 
 @media (max-width: 620px) {
+  .cv-awards__item--gertner .cv-awards__award-layout {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.18rem;
+  }
+
   .cv-awards__item--gertner .gertner-award-brand {
     margin-top: 0.18rem;
     margin-left: 0;
+    justify-self: start;
   }
 }
 

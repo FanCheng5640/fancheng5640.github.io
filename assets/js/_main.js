@@ -173,12 +173,13 @@ let initCopyButtons = () => {
   document.body.appendChild(tooltip);
 
   const hoverDelayMs = 520;
-  const pointerGap = 10;
+  const pointerGap = 6;
   const viewportMargin = 8;
-  const pointerPad = 6;
+  const pointerPad = 4;
+  const hoverMoveTolerance = 3;
   const cursorBox = {
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
     hotspotX: 2,
     hotspotY: 2,
   };
@@ -217,6 +218,12 @@ let initCopyButtons = () => {
       : null
   );
 
+  const pointerDistance = (a, b) => (
+    a && b
+      ? Math.hypot(a.x - b.x, a.y - b.y)
+      : 0
+  );
+
   const clearHoverTimer = () => {
     if (hoverTimer) {
       window.clearTimeout(hoverTimer);
@@ -236,16 +243,16 @@ let initCopyButtons = () => {
       height: tipRect.height,
     });
     const safeRect = pointerSafeRect(pointer);
-    const baseX = safeRect ? safeRect.left : anchorRect.left + Math.min(anchorRect.width / 2, 160);
-    const baseY = safeRect ? safeRect.top : anchorRect.bottom;
+    const baseX = safeRect ? safeRect.left + safeRect.width / 2 : anchorRect.left + Math.min(anchorRect.width / 2, 160);
+    const baseY = safeRect ? safeRect.top + safeRect.height / 2 : anchorRect.bottom;
     const baseRight = safeRect ? safeRect.left + safeRect.width : baseX;
     const baseBottom = safeRect ? safeRect.top + safeRect.height : baseY;
     const rawCandidates = safeRect
       ? [
-        { left: baseRight + pointerGap, top: baseBottom + pointerGap },
-        { left: baseRight + pointerGap, top: baseY - tipRect.height - pointerGap },
-        { left: baseX - tipRect.width - pointerGap, top: baseBottom + pointerGap },
-        { left: baseX - tipRect.width - pointerGap, top: baseY - tipRect.height - pointerGap },
+        { left: baseX - tipRect.width / 2, top: baseBottom + pointerGap },
+        { left: baseX - tipRect.width / 2, top: safeRect.top - tipRect.height - pointerGap },
+        { left: baseRight + pointerGap, top: baseY - tipRect.height / 2 },
+        { left: safeRect.left - tipRect.width - pointerGap, top: baseY - tipRect.height / 2 },
       ]
       : [
         { left: baseX + pointerGap, top: baseY + pointerGap },
@@ -282,9 +289,7 @@ let initCopyButtons = () => {
     placeTooltip(button, pointer);
   };
 
-  const scheduleTooltip = (button, event) => {
-    activeTooltipButton = button;
-    lastPointer = pointerFromEvent(event);
+  const startHoverTimer = (button) => {
     clearHoverTimer();
     hoverTimer = window.setTimeout(() => {
       hoverTimer = null;
@@ -294,11 +299,26 @@ let initCopyButtons = () => {
     }, hoverDelayMs);
   };
 
-  const moveTooltip = (button, event) => {
+  const scheduleTooltip = (button, event) => {
+    activeTooltipButton = button;
     lastPointer = pointerFromEvent(event);
+    startHoverTimer(button);
+  };
+
+  const moveTooltip = (button, event) => {
+    const pointer = pointerFromEvent(event);
     if (activeTooltipButton !== button) {
       activeTooltipButton = button;
+      lastPointer = pointer;
+      startHoverTimer(button);
+      return;
     }
+    if (hoverTimer && pointerDistance(pointer, lastPointer) > hoverMoveTolerance) {
+      lastPointer = pointer;
+      startHoverTimer(button);
+      return;
+    }
+    lastPointer = pointer;
     if (tooltip.classList.contains("is-visible")) {
       showTooltip(button, lastPointer);
     }
