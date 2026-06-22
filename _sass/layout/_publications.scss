@@ -415,7 +415,7 @@
   font: inherit;
   line-height: inherit;
   text-align: left;
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath fill='%23fff' stroke='%232d3748' stroke-width='1.7' stroke-linejoin='round' d='M5 3v25l6.2-6.2 4.3 9.7 3.7-1.6-4.4-9.5H24L5 3z'/%3E%3Crect x='24.5' y='24.5' width='10.5' height='10.5' rx='1.8' fill='%23fff' stroke='%232d3748' stroke-width='1.5'/%3E%3Crect x='28.5' y='20.5' width='9.5' height='9.5' rx='1.8' fill='%23fff' stroke='%232d3748' stroke-width='1.5'/%3E%3C/svg%3E") 2 2, pointer;
+  cursor: copy;
 }
 
 .publication__title-copy-text:hover,
@@ -432,23 +432,6 @@
 .publication__title-copy-label {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-}
-
-.publication__title-copy-icon {
-  display: inline-block;
-  margin-left: 0.34rem;
-  color: #555;
-  font-size: 0.86em;
-  line-height: 1;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-0.03em);
-  transition: opacity 120ms ease;
-}
-
-.publication__title-copy-text:hover .publication__title-copy-icon,
-.publication__title-copy-text:focus .publication__title-copy-icon {
-  opacity: 0.9;
 }
 
 .publication__page-title {

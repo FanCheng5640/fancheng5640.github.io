@@ -161,16 +161,20 @@ let copyTextToClipboard = (text) => {
 };
 
 let initCopyButtons = () => {
-  const buttons = document.querySelectorAll("[data-copy-text]");
+  const buttons = Array.from(document.querySelectorAll("[data-copy-text]"));
   if (buttons.length === 0) {
     return;
   }
 
-  const tooltip = document.createElement("div");
-  tooltip.className = "publication-copy-tooltip";
-  tooltip.setAttribute("role", "tooltip");
-  tooltip.setAttribute("aria-hidden", "true");
-  document.body.appendChild(tooltip);
+  const tooltipButtons = buttons.filter((button) => button.hasAttribute("data-copy-tooltip"));
+  let tooltip = null;
+  if (tooltipButtons.length > 0) {
+    tooltip = document.createElement("div");
+    tooltip.className = "publication-copy-tooltip";
+    tooltip.setAttribute("role", "tooltip");
+    tooltip.setAttribute("aria-hidden", "true");
+    document.body.appendChild(tooltip);
+  }
 
   const hoverDelayMs = 520;
   const pointerGap = 6;
@@ -232,6 +236,9 @@ let initCopyButtons = () => {
   };
 
   const placeTooltip = (anchor, pointer) => {
+    if (!tooltip) {
+      return;
+    }
     const tipRect = tooltip.getBoundingClientRect();
     const anchorRect = anchor.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
@@ -279,7 +286,10 @@ let initCopyButtons = () => {
   };
 
   const showTooltip = (button, pointer) => {
-    const label = button.getAttribute("data-copy-tooltip") || button.getAttribute("aria-label") || "";
+    if (!tooltip) {
+      return;
+    }
+    const label = button.getAttribute("data-copy-tooltip") || "";
     if (!label) {
       return;
     }
@@ -319,7 +329,7 @@ let initCopyButtons = () => {
       return;
     }
     lastPointer = pointer;
-    if (tooltip.classList.contains("is-visible")) {
+    if (tooltip && tooltip.classList.contains("is-visible")) {
       showTooltip(button, lastPointer);
     }
   };
@@ -328,16 +338,21 @@ let initCopyButtons = () => {
     clearHoverTimer();
     activeTooltipButton = null;
     lastPointer = null;
-    tooltip.classList.remove("is-visible");
-    tooltip.setAttribute("aria-hidden", "true");
+    if (tooltip) {
+      tooltip.classList.remove("is-visible");
+      tooltip.setAttribute("aria-hidden", "true");
+    }
   };
 
-  buttons.forEach((button) => {
+  tooltipButtons.forEach((button) => {
     button.addEventListener("mouseenter", (event) => scheduleTooltip(button, event));
     button.addEventListener("mousemove", (event) => moveTooltip(button, event));
     button.addEventListener("mouseleave", hideTooltip);
     button.addEventListener("focus", () => showTooltip(button, null));
     button.addEventListener("blur", hideTooltip);
+  });
+
+  buttons.forEach((button) => {
     button.addEventListener("click", () => {
       const text = button.getAttribute("data-copy-text") || "";
       const statusId = button.getAttribute("data-copy-status-id");
