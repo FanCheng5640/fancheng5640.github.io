@@ -6,7 +6,7 @@
   {% assign copy_status_id = "publication-copy-status-" | append: copy_uid %}
 {% endif %}
 <span class="publication__copy-control">
-  <button class="publication__copy-button" type="button" data-copy-text="{{ copy_text }}" data-copy-status-id="{{ copy_status_id }}" title="Copy title" aria-label="Copy publication title">
+  <button class="publication__copy-button" type="button" data-copy-text="{{ copy_text }}" data-copy-status-id="{{ copy_status_id }}" data-copy-tooltip="Copy title" aria-label="Copy publication title">
     <i class="fa fa-copy" aria-hidden="true"></i>
   </button>
   <span id="{{ copy_status_id }}" class="publication__copy-status" aria-live="polite"></span>
