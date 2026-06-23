@@ -1089,8 +1089,16 @@
 
 .site-last-updated {
   margin-top: 1.2rem;
+  margin-bottom: 0.25rem;
   color: var(--global-text-color-light);
   font-size: 0.85rem;
+}
+
+.site-privacy-notice {
+  margin-top: 0;
+  color: var(--global-text-color-light);
+  font-size: 0.72rem;
+  line-height: 1.35;
 }
 
 .cv-education {
