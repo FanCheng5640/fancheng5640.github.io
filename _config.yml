@@ -193,13 +193,12 @@ social:
 
 
 # Private analytics
-# Keep disabled until a personal analytics property exists.
-# GA4 setup: provider "google-analytics-4", tracking_id "G-..."
 # Analytics snippets render only in JEKYLL_ENV=production, so local preview is not counted.
 analytics:
-  provider               :  "false" # false (default), "google", "google-universal", "google-analytics-4", "custom"
+  provider: "google-analytics-4"
   google:
-    tracking_id          :
+    tracking_id: "G-2FVDFRRNLP"
+    anonymize_ip: true
 
 
 # Reading Files
