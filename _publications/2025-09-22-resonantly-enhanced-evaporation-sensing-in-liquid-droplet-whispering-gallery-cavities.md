@@ -5,9 +5,9 @@ category: "manuscripts"
 orcid_sync: true
 source_orcid: "0000-0003-3088-2983"
 doi: "10.1063/5.0279509"
-first_author: false
+first_author: true
 corresponding_author: false
-featured: false
+featured: true
 journal_impact_factor: 3.8
 impact_factor_year: 2025
 impact_factor_source: "https://wos-journal.info/journalid/14441"
@@ -15,8 +15,8 @@ permalink: "/publication/2025-09-22-resonantly-enhanced-evaporation-sensing-in-l
 excerpt: "Applied Physics Letters, 2025."
 date: "2025-09-22"
 venue: "Applied Physics Letters"
-authors: ""
-author_entries: []
+authors: "<strong><u>Fan Cheng</u></strong> and Tal Carmon"
+author_entries: [{"name": "Fan Cheng"}, {"name": "Tal Carmon", "corresponding": true}]
 originalurl: "https://doi.org/10.1063/5.0279509"
 link: "https://doi.org/10.1063/5.0279509"
 paperurl: "/files/papers/2025-apl-droplet-evaporation.pdf"
@@ -35,9 +35,9 @@ visualizations:
     source_url: "https://doi.org/10.1063/5.0279509"
     license: "CC BY 4.0"
 pdf_source: "https://einstein.nju.edu.cn/upload/uploadify/20250925/20250922-AppliedPhysicsLetters_202509251317130813.pdf"
-citation: "(2025). &quot;Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities.&quot; <i>Applied Physics Letters</i>. https://doi.org/10.1063/5.0279509"
+citation: "<strong><u>Fan Cheng</u></strong> and Tal Carmon (2025). &quot;Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities.&quot; <i>Applied Physics Letters</i>, 127(12), 121101. https://doi.org/10.1063/5.0279509"
 work_type: "journal-article"
-crossref_type: ""
+crossref_type: "journal-article"
 ---
 
 DOI: [10.1063/5.0279509](https://doi.org/10.1063/5.0279509)

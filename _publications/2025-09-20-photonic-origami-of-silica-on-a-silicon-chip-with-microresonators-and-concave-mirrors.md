@@ -15,8 +15,8 @@ permalink: "/publication/2025-09-20-photonic-origami-of-silica-on-a-silicon-chip
 excerpt: "Optica, 2025."
 date: "2025-09-20"
 venue: "Optica"
-authors: ""
-author_entries: []
+authors: "Manya Malhotra, Ronen Ben-Daniel, <strong><u>Fan Cheng</u></strong>, and Tal Carmon"
+author_entries: [{"name": "Manya Malhotra"}, {"name": "Ronen Ben-Daniel"}, {"name": "Fan Cheng"}, {"name": "Tal Carmon", "corresponding": true}]
 originalurl: "https://doi.org/10.1364/OPTICA.560597"
 link: "https://doi.org/10.1364/OPTICA.560597"
 paperurl: "/files/papers/2025-optica-photonic-origami.pdf"
@@ -102,9 +102,9 @@ video_interviews:
     url: "https://www.youtube.com/watch?v=zf4Bcoq7c7c"
     embed_url: "https://www.youtube-nocookie.com/embed/zf4Bcoq7c7c"
     poster: "/files/papers/videos/posters/2025-optica-photonic-origami-interview-youtube.jpg"
-citation: "(2025). &quot;Photonic origami of silica on a silicon chip with microresonators and concave mirrors.&quot; <i>Optica</i>. https://doi.org/10.1364/OPTICA.560597"
+citation: "Manya Malhotra, Ronen Ben-Daniel, <strong><u>Fan Cheng</u></strong>, and Tal Carmon (2025). &quot;Photonic origami of silica on a silicon chip with microresonators and concave mirrors.&quot; <i>Optica</i>, 12(9), 1338. https://doi.org/10.1364/OPTICA.560597"
 work_type: "journal-article"
-crossref_type: ""
+crossref_type: "journal-article"
 ---
 
 DOI: [10.1364/OPTICA.560597](https://doi.org/10.1364/OPTICA.560597)

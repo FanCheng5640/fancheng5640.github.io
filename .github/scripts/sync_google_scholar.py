@@ -277,6 +277,11 @@ def keep_cached_data(exc: Exception) -> int:
         )
         return 1
 
+    data = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+    data["last_attempted"] = datetime.now(timezone.utc).date().isoformat()
+    data["sync_status"] = "stale"
+    data["last_error"] = str(exc)
+    OUTPUT_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(
         "WARNING: Google Scholar sync failed; leaving the existing cached data "
         f"unchanged in {OUTPUT_PATH}: {exc}",
@@ -287,7 +292,7 @@ def keep_cached_data(exc: Exception) -> int:
             "status": "cached",
             "used_cache": True,
             "output_path": OUTPUT_PATH.as_posix(),
-            "updated": "",
+            "updated": data.get("updated", ""),
             "error": str(exc),
         }
     )

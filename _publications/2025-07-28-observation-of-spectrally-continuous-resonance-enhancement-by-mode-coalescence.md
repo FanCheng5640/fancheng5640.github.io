@@ -15,8 +15,8 @@ permalink: "/publication/2025-07-28-observation-of-spectrally-continuous-resonan
 excerpt: "Optics Express, 2025."
 date: "2025-07-28"
 venue: "Optics Express"
-authors: ""
-author_entries: []
+authors: "Nitzan Shani, Amit Kumar Shakya, <strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Lev Deych, and Tal Carmon"
+author_entries: [{"name": "Nitzan Shani"}, {"name": "Amit Kumar Shakya"}, {"name": "Fan Cheng"}, {"name": "Vladimir Shuvayev"}, {"name": "Lev Deych"}, {"name": "Tal Carmon", "corresponding": true}]
 originalurl: "https://doi.org/10.1364/OE.561188"
 link: "https://doi.org/10.1364/OE.561188"
 paperurl: "/files/papers/2025-opt-express-mode-coalescence.pdf"
@@ -35,9 +35,9 @@ visualizations:
     source_url: "https://doi.org/10.6084/m9.figshare.28539344"
     license: "CC BY 4.0"
 pdf_source: ""
-citation: "(2025). &quot;Observation of spectrally continuous resonance enhancement by mode coalescence.&quot; <i>Optics Express</i>. https://doi.org/10.1364/OE.561188"
+citation: "Nitzan Shani, Amit Kumar Shakya, <strong><u>Fan Cheng</u></strong>, Vladimir Shuvayev, Lev Deych, and Tal Carmon (2025). &quot;Observation of spectrally continuous resonance enhancement by mode coalescence.&quot; <i>Optics Express</i>, 33(15), 31722. https://doi.org/10.1364/OE.561188"
 work_type: "journal-article"
-crossref_type: ""
+crossref_type: "journal-article"
 ---
 
 DOI: [10.1364/OE.561188](https://doi.org/10.1364/OE.561188)

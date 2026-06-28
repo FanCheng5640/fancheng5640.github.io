@@ -374,6 +374,26 @@ def scalar_front_matter_values(lines: list[str]) -> dict:
     return values
 
 
+def existing_bool(metadata: dict, key: str, default: bool = False) -> bool:
+    value = str(metadata.get(key, "")).strip().lower()
+    if value in {"true", "yes", "1"}:
+        return True
+    if value in {"false", "no", "0"}:
+        return False
+    return default
+
+
+def existing_json_list(metadata: dict, key: str) -> list:
+    value = str(metadata.get(key, "")).strip()
+    if not value:
+        return []
+    try:
+        parsed = json.loads(value)
+    except json.JSONDecodeError:
+        return []
+    return parsed if isinstance(parsed, list) else []
+
+
 def load_existing_publications() -> dict:
     existing = {}
     if not OUTPUT_DIR.exists():
@@ -499,6 +519,40 @@ def publication_record(
     citation = citation.replace(
         AUTHOR_NAME, f"<strong><u>{html.escape(AUTHOR_NAME)}</u></strong>"
     )
+    authors_html = html_author_join(authors)
+    author_entry_list = author_entries(authors, doi)
+
+    if not authors:
+        existing_authors = existing_metadata.get("authors", "")
+        existing_author_entries = existing_json_list(existing_metadata, "author_entries")
+        if existing_authors:
+            print(
+                "WARNING: Crossref returned no authors for "
+                f"{doi}; preserving existing author metadata.",
+                file=sys.stderr,
+            )
+            authors_html = existing_authors
+            author_entry_list = existing_author_entries
+            first_author = existing_bool(existing_metadata, "first_author", first_author)
+            if "corresponding_author" not in overrides:
+                corresponding_author = existing_bool(
+                    existing_metadata,
+                    "corresponding_author",
+                    corresponding_author,
+                )
+            if "featured" in overrides:
+                featured = bool(overrides["featured"])
+            else:
+                featured = existing_bool(existing_metadata, "featured", first_author)
+            if not crossref_type:
+                crossref_type = existing_metadata.get("crossref_type", crossref_type)
+            if existing_metadata.get("citation"):
+                citation = existing_metadata["citation"]
+        else:
+            print(
+                f"WARNING: No author metadata available for {doi}; leaving authors empty.",
+                file=sys.stderr,
+            )
 
     date_slug = date
     slug = f"{date_slug}-{slugify(title)}"
@@ -533,8 +587,8 @@ def publication_record(
         "excerpt": excerpt,
         "date": date,
         "venue": journal,
-        "authors": html_author_join(authors),
-        "author_entries": author_entries(authors, doi),
+        "authors": authors_html,
+        "author_entries": author_entry_list,
         "originalurl": article_url,
         "link": article_url,
         "paperurl": f"/files/papers/{pdf_filename}" if has_local_pdf else False,
@@ -550,6 +604,24 @@ def publication_record(
         "body": body,
         "existing": existing_publication,
     }
+
+
+def validate_publication_records(records: list[dict]) -> None:
+    problems = []
+    for record in records:
+        metadata = record["metadata"]
+        title = metadata.get("title", record.get("path", "unknown publication"))
+        doi = metadata.get("doi", "")
+        if not metadata.get("authors"):
+            problems.append(f"{title} ({doi}) has an empty authors field")
+        if not metadata.get("author_entries"):
+            problems.append(f"{title} ({doi}) has an empty author_entries field")
+    if problems:
+        detail = "\n- ".join(problems)
+        raise RuntimeError(
+            "Refusing to sync publications with missing author metadata:\n"
+            f"- {detail}"
+        )
 
 
 def orcid_summaries() -> list[dict]:
@@ -755,6 +827,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         if record
     ]
+    validate_publication_records(records)
     generated_paths = set()
 
     for record in sorted(records, key=lambda item: item["metadata"]["date"], reverse=True):
