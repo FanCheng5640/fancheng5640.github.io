@@ -1,0 +1,61 @@
+name: Weekly media coverage reminder
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Publication lookback window in days"
+        required: false
+        default: "365"
+  schedule:
+    - cron: "42 5 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    env:
+      REMINDER_DAYS: ${{ github.event.inputs.days || '365' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate media coverage candidate reminder
+        id: reminder
+        run: >
+          python .github/scripts/media_coverage_reminder.py
+          --output "$RUNNER_TEMP/media-coverage-reminder.md"
+          --json-output "$RUNNER_TEMP/media-coverage-reminder.json"
+          --days "$REMINDER_DAYS"
+          --append-summary
+
+      - name: Upload media coverage reminder artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: media-coverage-reminder
+          path: |
+            ${{ runner.temp }}/media-coverage-reminder.md
+            ${{ runner.temp }}/media-coverage-reminder.json
+
+      - name: Email media coverage candidate reminder
+        if: steps.reminder.outputs.has_candidates == 'true'
+        env:
+          REPORT_EMAIL_TO: ${{ secrets.SCHOLARLY_REPORT_EMAIL_TO }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_SECURITY: ${{ secrets.SMTP_SECURITY }}
+        run: >
+          python .github/scripts/scholarly_sync_report.py email
+          --report "$RUNNER_TEMP/media-coverage-reminder.md"
+          --to "$REPORT_EMAIL_TO"
+          --subject "Weekly media coverage candidate reminder"
