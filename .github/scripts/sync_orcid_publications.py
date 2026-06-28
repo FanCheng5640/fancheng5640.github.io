@@ -157,6 +157,46 @@ AUTO_METADATA_KEYS = {
     "citation",
 }
 
+BOOLEAN_METADATA_KEYS = {
+    "orcid_sync",
+    "first_author",
+    "corresponding_author",
+    "featured",
+}
+
+JSON_LIST_METADATA_KEYS = {
+    "author_entries",
+}
+
+# Existing publication markdown files are the reviewed source of truth for
+# stable bibliographic identity. Daily sync may add new DOIs and update volatile
+# metrics, but it must not rewrite old papers just because an external metadata
+# provider is temporarily incomplete or changes formatting.
+FROZEN_EXISTING_METADATA_KEYS = {
+    "title",
+    "collection",
+    "category",
+    "orcid_sync",
+    "source_orcid",
+    "doi",
+    "work_type",
+    "crossref_type",
+    "first_author",
+    "corresponding_author",
+    "featured",
+    "permalink",
+    "excerpt",
+    "date",
+    "venue",
+    "authors",
+    "author_entries",
+    "originalurl",
+    "link",
+    "paperurl",
+    "pdf_source",
+    "citation",
+}
+
 
 def load_journal_metrics() -> dict:
     if not JOURNAL_METRICS_PATH.exists():
@@ -394,6 +434,39 @@ def existing_json_list(metadata: dict, key: str) -> list:
     return parsed if isinstance(parsed, list) else []
 
 
+def has_usable_existing_value(metadata: dict, key: str) -> bool:
+    value = metadata.get(key)
+    if value is None:
+        return False
+    text = str(value).strip()
+    if not text:
+        return False
+    if key in BOOLEAN_METADATA_KEYS:
+        return text.lower() in {"true", "false", "yes", "no", "1", "0"}
+    if key in JSON_LIST_METADATA_KEYS:
+        return bool(existing_json_list(metadata, key))
+    if text.lower() == "false" or text in {"[]", "{}"}:
+        return False
+    return True
+
+
+def existing_metadata_value(metadata: dict, key: str, default: object) -> object:
+    if key in BOOLEAN_METADATA_KEYS:
+        return existing_bool(metadata, key, bool(default))
+    if key in JSON_LIST_METADATA_KEYS:
+        return existing_json_list(metadata, key)
+    return metadata.get(key, default)
+
+
+def preserve_reviewed_existing_metadata(existing_metadata: dict, metadata: dict) -> dict:
+    if not existing_metadata:
+        return metadata
+    for key in FROZEN_EXISTING_METADATA_KEYS:
+        if has_usable_existing_value(existing_metadata, key):
+            metadata[key] = existing_metadata_value(existing_metadata, key, metadata.get(key))
+    return metadata
+
+
 def load_existing_publications() -> dict:
     existing = {}
     if not OUTPUT_DIR.exists():
@@ -595,6 +668,7 @@ def publication_record(
         "pdf_source": pdf_source if has_local_pdf else "",
         "citation": citation,
     }
+    metadata = preserve_reviewed_existing_metadata(existing_metadata, metadata)
 
     body = f"\n\nDOI: [{doi}](https://doi.org/{doi})\n"
     return {
