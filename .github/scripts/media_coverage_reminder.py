@@ -178,14 +178,17 @@ def build_report(
         f"- Generated: {generated_at}",
         f"- Review window: publications from the last {lookback_days} days",
         f"- Candidate publications: {len(candidates)}",
+        "- Email recipient: GitHub Actions secret SCHOLARLY_REPORT_EMAIL_TO. "
+        "GitHub hides the real address, so it is not stored in this repository.",
         "- Policy: this report only creates manual-review search links; it does "
         "not edit the website or add media coverage automatically.",
         "",
         "## When To Check",
         "",
-        "- Normal cadence: once per week, during the first year after publication.",
-        "- Extra checks: run the workflow manually after a press release, conference "
-        "talk, institution news post, or a known article pickup.",
+        "- Normal cadence: once per week during the first 90 days after publication.",
+        "- After 90 days: do not keep weekly checks by default; run the workflow "
+        "manually after a press release, conference talk, institution news post, "
+        "award, or known article pickup.",
         "- Website rule: add an item only after checking that the source is real, "
         "substantive, directly about the paper, and not just a duplicated low-value "
         "aggregation page.",
@@ -246,7 +249,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", required=True)
     parser.add_argument("--json-output", default="")
-    parser.add_argument("--days", type=int, default=365)
+    parser.add_argument("--days", type=int, default=90)
     parser.add_argument("--today", default="")
     parser.add_argument("--append-summary", action="store_true")
     return parser.parse_args(argv)
