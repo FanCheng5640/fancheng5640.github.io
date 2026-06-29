@@ -28,16 +28,10 @@ hide_title: true
 
   <section class="scholar-metrics" aria-labelledby="scholar-metrics-title">
     {% assign scholar_updated_label = scholar.updated | date: "%b %d, %Y" %}
-    {% if scholar.sync_status == "stale" %}
-      {% capture scholar_sync_title %}Google Scholar was unavailable during the latest check; cached data from {{ scholar_updated_label }} is shown. Open Google Scholar for live metrics.{% endcapture %}
-    {% else %}
-      {% capture scholar_sync_title %}Citation data updated from Google Scholar on {{ scholar_updated_label }}.{% endcapture %}
-    {% endif %}
+    {% capture scholar_sync_title %}Citation data from Google Scholar. Last updated on {{ scholar_updated_label }}.{% endcapture %}
     <h2 id="scholar-metrics-title" class="scholar-metrics__title">
       <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener" title="{{ scholar_sync_title | strip }}">{{ scholar.summary_title }}</a>
-      {% if scholar.sync_status == "stale" %}
-        <span class="scholar-metrics__sync" title="{{ scholar_sync_title | strip }}" aria-label="Google Scholar sync status">Cached data</span>
-      {% endif %}
+      <span class="scholar-metrics__updated" title="{{ scholar_sync_title | strip }}">Updated {{ scholar_updated_label }}</span>
     </h2>
     <div class="scholar-metrics__content">
       <table class="scholar-metrics__table">

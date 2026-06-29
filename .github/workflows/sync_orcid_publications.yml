@@ -29,6 +29,7 @@ jobs:
       - name: Sync Google Scholar citation metrics
         env:
           GOOGLE_SCHOLAR_STATUS_OUTPUT: ${{ runner.temp }}/google-scholar-status.json
+          GOOGLE_SCHOLAR_WRITE_STALE_ON_FAILURE: "0"
         run: python .github/scripts/sync_google_scholar.py
 
       - name: Validate Journal Impact Factor freshness

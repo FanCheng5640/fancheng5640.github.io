@@ -7,6 +7,8 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,8 +19,25 @@ DEFAULT_PROFILE_URL = "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl
 PROFILE_URL = os.environ.get("GOOGLE_SCHOLAR_PROFILE_URL", DEFAULT_PROFILE_URL)
 OUTPUT_PATH = Path("_data/google_scholar.json")
 PUBLICATIONS_DIR = Path("_publications")
-USER_AGENT = "Mozilla/5.0 fancheng5640.github.io citation sync"
+USER_AGENT = os.environ.get(
+    "GOOGLE_SCHOLAR_USER_AGENT",
+    (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+    ),
+)
+FETCH_RETRIES = max(1, int(os.environ.get("GOOGLE_SCHOLAR_FETCH_RETRIES", "3")))
+RETRY_DELAY_SECONDS = max(0.0, float(os.environ.get("GOOGLE_SCHOLAR_RETRY_DELAY_SECONDS", "4")))
 STATUS_OUTPUT_PATH = os.environ.get("GOOGLE_SCHOLAR_STATUS_OUTPUT", "")
+WRITE_STALE_ON_FAILURE = os.environ.get(
+    "GOOGLE_SCHOLAR_WRITE_STALE_ON_FAILURE", ""
+).strip().lower() in {"1", "true", "yes"}
+FETCH_HEADERS = {
+    "User-Agent": USER_AGENT,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+}
 
 
 def write_status(payload: dict) -> None:
@@ -30,12 +49,24 @@ def write_status(payload: dict) -> None:
 
 
 def fetch_profile_html() -> str:
-    request = urllib.request.Request(
-        PROFILE_URL,
-        headers={"User-Agent": USER_AGENT},
-    )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", errors="replace")
+    last_error: Exception | None = None
+    retryable_statuses = {403, 429, 500, 502, 503, 504}
+    for attempt in range(1, FETCH_RETRIES + 1):
+        request = urllib.request.Request(PROFILE_URL, headers=FETCH_HEADERS)
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                return response.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as exc:
+            last_error = exc
+            if exc.code not in retryable_statuses or attempt == FETCH_RETRIES:
+                raise
+        except urllib.error.URLError as exc:
+            last_error = exc
+            if attempt == FETCH_RETRIES:
+                raise
+        if RETRY_DELAY_SECONDS:
+            time.sleep(RETRY_DELAY_SECONDS)
+    raise RuntimeError(f"Google Scholar fetch failed: {last_error}")
 
 
 def parse_metrics(page: str) -> dict:
@@ -278,24 +309,35 @@ def keep_cached_data(exc: Exception) -> int:
         return 1
 
     data = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
-    data["last_attempted"] = datetime.now(timezone.utc).date().isoformat()
-    data["sync_status"] = "stale"
-    data["last_error"] = str(exc)
-    OUTPUT_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    attempted = datetime.now(timezone.utc).date().isoformat()
+    status_payload = {
+        "status": "cached",
+        "used_cache": True,
+        "output_path": OUTPUT_PATH.as_posix(),
+        "updated": data.get("updated", ""),
+        "last_attempted": attempted,
+        "error": str(exc),
+        "committed_stale_status": WRITE_STALE_ON_FAILURE,
+    }
+
+    if WRITE_STALE_ON_FAILURE:
+        data["last_attempted"] = attempted
+        data["sync_status"] = "stale"
+        data["last_error"] = str(exc)
+        OUTPUT_PATH.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        cache_message = "wrote stale status into the cached data file"
+    else:
+        cache_message = (
+            "left the cached data file unchanged; the failure is reported through "
+            "the workflow status file"
+        )
+
     print(
-        "WARNING: Google Scholar sync failed; leaving the existing cached data "
-        f"unchanged in {OUTPUT_PATH}: {exc}",
+        "WARNING: Google Scholar sync failed; "
+        f"{cache_message} in {OUTPUT_PATH}: {exc}",
         file=sys.stderr,
     )
-    write_status(
-        {
-            "status": "cached",
-            "used_cache": True,
-            "output_path": OUTPUT_PATH.as_posix(),
-            "updated": data.get("updated", ""),
-            "error": str(exc),
-        }
-    )
+    write_status(status_payload)
     return 0
 
 

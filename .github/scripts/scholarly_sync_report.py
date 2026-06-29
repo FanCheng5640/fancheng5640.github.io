@@ -340,6 +340,13 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
     news_changed = before.get("news", {}).get("hash") != after.get("news", {}).get("hash")
     figures = figure_lines(before_pubs, after_pubs)
     scholar = scholar_metric_lines(before.get("google_scholar", {}), after.get("google_scholar", {}))
+    scholar_sync_alert = bool(
+        scholar_status
+        and (
+            scholar_status.get("used_cache")
+            or scholar_status.get("status") == "failed"
+        )
+    )
 
     has_changes = any(
         [
@@ -350,6 +357,7 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
             news_changed,
             figures,
             scholar,
+            scholar_sync_alert,
         ]
     )
 
@@ -358,7 +366,7 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         "",
         f"- Captured before: {before.get('captured_at', '')}",
         f"- Captured after: {after.get('captured_at', '')}",
-        f"- Changes detected: {'yes' if has_changes else 'no'}",
+        f"- Changes or alerts detected: {'yes' if has_changes else 'no'}",
         "",
         "## Publications",
     ]
@@ -403,6 +411,10 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         used_cache = scholar_status.get("used_cache", False)
         if used_cache:
             lines.append(f"- Latest Google Scholar attempt used cached data: {scholar_status.get('error', '')}")
+            if scholar_status.get("committed_stale_status") is False:
+                lines.append(
+                    "- Cached data file was left unchanged to avoid publishing a stale-status-only website update."
+                )
         else:
             lines.append(f"- Latest Google Scholar attempt status: {status or 'unknown'}")
     lines.extend(scholar or ["- Google Scholar metrics changed: no"])
@@ -417,6 +429,7 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         "statistics_changed": bool(stats),
         "figures_changed": bool(figures),
         "google_scholar_changed": bool(scholar),
+        "google_scholar_sync_alert": scholar_sync_alert,
         "scholar_status": scholar_status or {},
     }
     return report, metadata
