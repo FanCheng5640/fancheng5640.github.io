@@ -28,10 +28,9 @@ hide_title: true
 
   <section class="scholar-metrics" aria-labelledby="scholar-metrics-title">
     {% assign scholar_updated_label = scholar.updated | date: "%b %d, %Y" %}
-    {% capture scholar_sync_title %}Citation data from Google Scholar. Last updated on {{ scholar_updated_label }}.{% endcapture %}
+    {% capture scholar_sync_title %}Updated {{ scholar_updated_label }}{% endcapture %}
     <h2 id="scholar-metrics-title" class="scholar-metrics__title">
       <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener" title="{{ scholar_sync_title | strip }}">{{ scholar.summary_title }}</a>
-      <span class="scholar-metrics__updated" title="{{ scholar_sync_title | strip }}">Updated {{ scholar_updated_label }}</span>
     </h2>
     <div class="scholar-metrics__content">
       <table class="scholar-metrics__table">

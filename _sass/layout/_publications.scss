@@ -9,14 +9,6 @@
   gap: 0.45rem;
 }
 
-.scholar-metrics__updated {
-  color: var(--global-text-color-light);
-  font-size: 0.72em;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-}
-
 .scholar-metrics__content {
   display: grid;
   grid-template-columns: 8.2rem minmax(16rem, 1fr);
