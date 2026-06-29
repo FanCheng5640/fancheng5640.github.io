@@ -14,12 +14,13 @@
 {% assign journal_logo = journal_brand.logo %}
 {% assign publication_metric = site.data.journal_metrics.journals | where: "name", post.venue | first %}
 {% assign impact_meta = site.data.journal_metrics.metadata %}
+{% assign impact_release_label = impact_meta.release_label | replace: "Journal Citation Reports", "JCR" %}
 {% assign impact_badge_title = nil %}
 {% if impact_meta %}
   {% if impact_meta.release_label %}
-    {% assign impact_badge_title = "Journal Impact Factor (JIF): " | append: impact_meta.release_label | append: "." %}
+    {% assign impact_badge_title = impact_meta.metric_year | append: " JIF, " | append: impact_release_label %}
   {% else %}
-    {% assign impact_badge_title = "Journal Impact Factor (JIF)." %}
+    {% assign impact_badge_title = "Journal Impact Factor" %}
   {% endif %}
 {% endif %}
 {% assign publication_citation = nil %}

@@ -3,7 +3,8 @@
   {% assign publication_metric = site.data.journal_metrics.journals | where: "name", news_publication.venue | first %}
   {% assign impact_factor = publication_metric.impact_factor | default: news_publication.journal_impact_factor %}
   {% assign impact_meta = site.data.journal_metrics.metadata %}
-  {% capture impact_title %}Journal Impact Factor{% if impact_meta.release_label %}: {{ impact_meta.release_label }}{% endif %}{% endcapture %}
+  {% assign impact_release_label = impact_meta.release_label | replace: "Journal Citation Reports", "JCR" %}
+  {% capture impact_title %}{% if impact_meta.metric_year %}{{ impact_meta.metric_year }} JIF{% else %}Journal Impact Factor{% endif %}{% if impact_release_label %}, {{ impact_release_label }}{% endif %}{% endcapture %}
   {% assign venue_slug = news_publication.venue | default: "journal" | slugify %}
   {% capture news_wordmark %}
     {% case news_publication.venue %}
@@ -18,7 +19,7 @@
   <span class="site-news__publication-meta" aria-label="{{ news_publication.venue | escape }} publication details">
     {% if news_publication.venue %}
       {% if include.href %}
-        <a class="site-news__logo-link site-news__logo-link--journal site-news__logo-link--{{ venue_slug }}" href="{{ include.href | relative_url }}" title="Open {{ news_publication.venue | escape }} publication" aria-label="Open {{ news_publication.venue | escape }} publication">
+        <a class="site-news__logo-link site-news__logo-link--journal site-news__logo-link--{{ venue_slug }}" href="{{ include.href | relative_url }}" title="{{ news_publication.venue | escape }}" aria-label="Open {{ news_publication.venue | escape }} publication">
           <span class="site-news__wordmark site-news__wordmark--{{ venue_slug }}" aria-hidden="true">{{ news_wordmark }}</span>
         </a>
       {% else %}

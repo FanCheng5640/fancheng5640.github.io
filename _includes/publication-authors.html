@@ -12,7 +12,7 @@
     {%- endcapture -%}
     {%- capture author_body -%}
       {%- if author_profile.google_scholar -%}
-        <a class="publication__author-name publication__author-link" href="{{ author_profile.google_scholar | escape }}" target="_blank" rel="noopener" title="Open {{ author.name | escape }} on Google Scholar">{{ author_name_html | strip }}</a>
+        <a class="publication__author-name publication__author-link" href="{{ author_profile.google_scholar | escape }}" target="_blank" rel="noopener" title="Google Scholar">{{ author_name_html | strip }}</a>
       {%- else -%}
         <span class="publication__author-name">{{ author_name_html | strip }}</span>
       {%- endif -%}

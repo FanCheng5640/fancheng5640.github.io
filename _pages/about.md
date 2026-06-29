@@ -25,12 +25,12 @@ Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University
   </div>
   <div class="research-signatures" aria-label="Representative research images">
     <figure class="research-signatures__item">
-      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}" data-destination="Applied Physics Letters (2025)" title="Open Applied Physics Letters (2025)" aria-label="Open Applied Physics Letters (2025)">
+      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities' | relative_url }}" data-destination="Applied Physics Letters (2025)" title="Applied Physics Letters" aria-label="Open Applied Physics Letters (2025)">
         <img src="{{ '/files/papers/figures/about-2025-apl-droplet-evaporation-panel-e.png' | relative_url }}" alt="Fig. 1(e) superposition of the whispering-gallery mode and liquid droplet used for evaporation sensing" width="264" height="300" loading="lazy" decoding="async">
       </a>
     </figure>
     <figure class="research-signatures__item">
-      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2024-03-01-cavity-continuum' | relative_url }}" data-destination="Photonics Research (2024)" title="Open Photonics Research (2024)" aria-label="Open Photonics Research (2024)">
+      <a class="research-signatures__link" href="{{ '/publications/#publication-publication-2024-03-01-cavity-continuum' | relative_url }}" data-destination="Photonics Research (2024)" title="Photonics Research" aria-label="Open Photonics Research (2024)">
         <img src="{{ '/files/papers/figures/about-2024-photonics-research-cavity-continuum-panel-d.png' | relative_url }}" alt="Fig. 2(d) fluorescence image of coupled oil droplets in a cavity-continuum experiment" width="244" height="258" loading="lazy" decoding="async">
       </a>
     </figure>
@@ -49,7 +49,7 @@ Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University
 ## News
 
 <ul class="site-news">
-  <li class="site-news__item site-news__item--key site-news__item--award"><span class="site-news__award-layout"><span class="site-news__award-copy">2026-03: <strong>Award:</strong> <a href="/cv/#award-student-excellence-gertner">Student Excellence Award from <span class="text-nowrap">The Marian Gertner Institute</span> for <span class="text-nowrap">Medical Nanosystems</span></a>.</span> {% include gertner-award-brand.html href="/cv/#award-student-excellence-gertner" title="Open Student Excellence Award details in CV" variant="two-line" %}</span></li>
+  <li class="site-news__item site-news__item--key site-news__item--award"><span class="site-news__award-layout"><span class="site-news__award-copy">2026-03: <strong>Award:</strong> <a href="/cv/#award-student-excellence-gertner">Student Excellence Award from <span class="text-nowrap">The Marian Gertner Institute</span> for <span class="text-nowrap">Medical Nanosystems</span></a>.</span> {% include gertner-award-brand.html href="/cv/#award-student-excellence-gertner" title="Award details" variant="two-line" %}</span></li>
   <li class="site-news__item site-news__item--key">2025-09: <strong>First-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_apl_2025 href="/publications/#publication-publication-2025-09-22-resonantly-enhanced-evaporation-sensing-in-liquid-droplet-whispering-gallery-cavities" %}.</li>
   <li class="site-news__item">2025-09: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_optica_2025 href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors" %}; featured in {% include news-brand-logo.html name="Optics & Photonics News" logo="/files/papers/figures/logos/optics-photonics-news-logo.svg" href="/publications/#publication-publication-2025-09-20-photonic-origami-of-silica-on-a-silicon-chip-with-microresonators-and-concave-mirrors" %}.</li>
   <li class="site-news__item">2025-07: <strong>Co-author paper:</strong> Published in {% include news-publication-meta.html publication=pub_oe_2025 href="/publications/#publication-publication-2025-07-28-observation-of-spectrally-continuous-resonance-enhancement-by-mode-coalescence" %}.</li>
@@ -72,7 +72,7 @@ Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University
   <div class="collaborators__grid">
     {% for group in collaborators.groups %}
     <details class="collaborators__group">
-      <summary class="collaborators__summary" aria-label="Show {{ group.institution }} collaborators" title="{{ group.institution }} collaborators">
+      <summary class="collaborators__summary" aria-label="Show {{ group.institution }} collaborators" title="Collaborators">
         <span class="collaborators__logo-slot">
           <img class="collaborators__logo" src="{{ group.logo | relative_url }}" alt="{{ group.institution }} logo" width="{{ group.logo_width }}" height="{{ group.logo_height }}" loading="eager" fetchpriority="high">
         </span>
@@ -81,7 +81,7 @@ Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University
         {% for person in group.people %}
         {% assign person_url = person.url | default: person.google_scholar %}
         {% assign person_profile_label = person.profile_label | default: "Google Scholar" %}
-        <li><a href="{{ person_url }}" target="_blank" rel="noopener" title="Open {{ person.name }} on {{ person_profile_label | escape }}">{{ person.name }}</a></li>
+        <li><a href="{{ person_url }}" target="_blank" rel="noopener" title="{{ person_profile_label | escape }}">{{ person.name }}</a></li>
         {% endfor %}
       </ul>
     </details>
