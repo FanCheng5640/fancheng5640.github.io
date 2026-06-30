@@ -536,11 +536,14 @@ p.publication__authors a.publication__author-link:focus {
 }
 
 .publication__corresponding-marker {
-  display: inline;
-  position: static;
-  top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0.72em;
+  min-height: 0.9em;
   margin-left: 0.08em;
   color: #000;
+  cursor: help;
   font-size: 0.78em;
   font-weight: 800;
   line-height: 1;

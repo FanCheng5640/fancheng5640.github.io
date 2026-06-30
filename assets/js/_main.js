@@ -186,6 +186,7 @@ let initSafeHoverTooltips = (items) => {
   let hoverTimer = null;
   let activeItem = null;
   let lastPointer = null;
+  const itemByElement = new WeakMap();
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -223,6 +224,24 @@ let initSafeHoverTooltips = (items) => {
       ? Math.hypot(a.x - b.x, a.y - b.y)
       : 0
   );
+
+  const itemFromEvent = (event) => {
+    const target = event.target && event.target.closest
+      ? event.target.closest("[data-copy-tooltip], [data-site-tooltip]")
+      : null;
+    if (!target) {
+      return null;
+    }
+    let item = itemByElement.get(target);
+    if (!item) {
+      item = {
+        element: target,
+        getLabel: (node) => node.getAttribute("data-copy-tooltip") || node.getAttribute("data-site-tooltip") || "",
+      };
+      itemByElement.set(target, item);
+    }
+    return item;
+  };
 
   const clearHoverTimer = () => {
     if (hoverTimer) {
@@ -333,12 +352,49 @@ let initSafeHoverTooltips = (items) => {
   };
 
   tooltipItems.forEach((item) => {
-    item.element.addEventListener("mouseenter", (event) => scheduleTooltip(item, event));
-    item.element.addEventListener("mousemove", (event) => moveTooltip(item, event));
-    item.element.addEventListener("mouseleave", hideTooltip);
-    item.element.addEventListener("focus", () => showTooltip(item, null));
-    item.element.addEventListener("blur", hideTooltip);
+    itemByElement.set(item.element, item);
   });
+
+  document.addEventListener("mouseover", (event) => {
+    const item = itemFromEvent(event);
+    if (item && activeItem !== item) {
+      scheduleTooltip(item, event);
+    }
+  }, true);
+  document.addEventListener("mousemove", (event) => {
+    const item = itemFromEvent(event);
+    if (item) {
+      moveTooltip(item, event);
+    }
+  }, true);
+  document.addEventListener("mouseout", (event) => {
+    if (!activeItem) {
+      return;
+    }
+    const fromTarget = event.target && event.target.closest
+      ? event.target.closest("[data-copy-tooltip], [data-site-tooltip]")
+      : null;
+    if (fromTarget !== activeItem.element) {
+      return;
+    }
+    const nextTarget = event.relatedTarget;
+    if (!nextTarget || !activeItem.element.contains(nextTarget)) {
+      hideTooltip();
+    }
+  }, true);
+  document.addEventListener("focusin", (event) => {
+    const item = itemFromEvent(event);
+    if (item) {
+      activeItem = item;
+      showTooltip(item, null);
+    }
+  }, true);
+  document.addEventListener("focusout", (event) => {
+    const item = itemFromEvent(event);
+    if (item && activeItem === item) {
+      hideTooltip();
+    }
+  }, true);
 
   window.addEventListener("scroll", hideTooltip, { passive: true });
   window.addEventListener("resize", hideTooltip);
