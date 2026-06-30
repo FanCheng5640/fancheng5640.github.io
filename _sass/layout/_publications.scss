@@ -435,7 +435,7 @@
   -webkit-box-decoration-break: clone;
 }
 
-.publication-copy-tooltip {
+.site-hover-tooltip {
   position: fixed;
   z-index: 10000;
   max-width: min(16rem, calc(100vw - 1rem));
@@ -451,7 +451,7 @@
   transition: opacity 80ms ease;
 }
 
-.publication-copy-tooltip.is-visible {
+.site-hover-tooltip.is-visible {
   opacity: 1;
 }
 
