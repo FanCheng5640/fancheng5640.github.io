@@ -1,4 +1,8 @@
 {%- assign brand_href = include.href | default: "/cv/#award-student-excellence-gertner" -%}
+{%- assign brand_link = true -%}
+{%- if include.link == false -%}
+  {%- assign brand_link = false -%}
+{%- endif -%}
 {%- if brand_href contains "://" -%}
   {%- assign brand_url = brand_href -%}
 {%- else -%}
@@ -6,4 +10,9 @@
 {%- endif -%}
 {%- assign brand_title = include.title | default: "Award details" -%}
 {%- assign brand_variant = include.variant | default: "default" -%}
-<a class="gertner-award-brand{% if brand_variant == 'two-line' %} gertner-award-brand--two-line{% endif %}" href="{{ brand_url }}" title="{{ brand_title | escape }}" aria-label="{{ brand_title | escape }}"{% if include.external %} target="_blank" rel="noopener"{% endif %}><img class="gertner-award-brand__mark" src="{{ '/images/logos/marian-gertner-institute-logo.png' | relative_url }}" alt="" width="212" height="68" loading="lazy" decoding="async" aria-hidden="true"><span class="gertner-award-brand__text" aria-hidden="true">{% if brand_variant == "two-line" %}<span>Marian Gertner Institute, Tel Aviv University</span><span>Faculty of Engineering and Faculty of Medicine</span>{% else %}<span>Marian Gertner Institute</span><span>Faculty of Engineering and Faculty of Medicine</span><span>Tel Aviv University</span>{% endif %}</span></a>
+{%- capture brand_inner -%}<img class="gertner-award-brand__mark" src="{{ '/images/logos/marian-gertner-institute-logo.png' | relative_url }}" alt="" width="212" height="68" loading="lazy" decoding="async" aria-hidden="true"><span class="gertner-award-brand__text" aria-hidden="true">{% if brand_variant == "two-line" %}<span>Marian Gertner Institute, Tel Aviv University</span><span>Faculty of Engineering and Faculty of Medicine</span>{% else %}<span>Marian Gertner Institute</span><span>Faculty of Engineering and Faculty of Medicine</span><span>Tel Aviv University</span>{% endif %}</span>{%- endcapture -%}
+{%- if brand_link -%}
+<a class="gertner-award-brand{% if brand_variant == 'two-line' %} gertner-award-brand--two-line{% endif %}" href="{{ brand_url }}" title="{{ brand_title | escape }}" aria-label="{{ brand_title | escape }}"{% if include.external %} target="_blank" rel="noopener"{% endif %}>{{ brand_inner | strip }}</a>
+{%- else -%}
+<span class="gertner-award-brand{% if brand_variant == 'two-line' %} gertner-award-brand--two-line{% endif %}" aria-label="{{ brand_title | escape }}">{{ brand_inner | strip }}</span>
+{%- endif -%}
