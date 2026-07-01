@@ -62,8 +62,15 @@ function Invoke-Capture {
         [string]$FilePath,
         [string[]]$Arguments
     )
-    $output = & $FilePath @Arguments 2>&1
-    $exitCode = $LASTEXITCODE
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        $output = & $FilePath @Arguments 2>&1
+        $exitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
     foreach ($line in @($output)) {
         if ($null -ne $line -and "$line".Trim().Length -gt 0) {
             Write-RunLog "INFO" "$FilePath $($Arguments -join ' '): $line"
