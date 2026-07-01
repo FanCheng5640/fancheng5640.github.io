@@ -1,6 +1,18 @@
 fancheng5640.github.io 引用清单
 ==============================
 
+[2026-07-01] SerpApi Google Scholar Author API optional sync path
+    Usage: .github/scripts/sync_google_scholar.py; .github/workflows/sync_orcid_publications.yml; .github/scripts/scholarly_sync_report.py
+
+    Method/source: GitHub Actions direct access to Google Scholar can be blocked, so the Scholar sync script now supports an optional SerpApi Google Scholar Author API path when the repository secret SERPAPI_API_KEY is configured. The public website still labels the data source as Google Scholar; the sync_provider field records which fetch path produced the cached data.
+
+    Source URL: https://serpapi.com/google-scholar-author-api
+
+    Relevant API fields used: engine=google_scholar_author, author_id, api_key, articles, cited_by.table, cited_by.graph.
+
+    BibTeX: N/A. API documentation, no formal BibTeX entry provided.
+
+
 [2026-06-17] Marian Gertner Institute logo
     Usage: _pages/about.md; _pages/cv.md; _includes/gertner-award-brand.html; _sass/layout/_page.scss; images/logos/marian-gertner-institute-logo.png
 

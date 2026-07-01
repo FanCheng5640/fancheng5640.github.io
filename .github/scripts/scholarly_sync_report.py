@@ -201,6 +201,7 @@ def load_google_scholar() -> dict:
         "last_attempted": data.get("last_attempted", ""),
         "sync_status": data.get("sync_status", ""),
         "last_error": data.get("last_error", ""),
+        "sync_provider": data.get("sync_provider", ""),
         "metrics": data.get("metrics", {}),
         "citations_by_year": data.get("citations_by_year", []),
         "publication_citations": publication_citations,
@@ -408,15 +409,20 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
     lines.extend(["", "## Google Scholar Metrics"])
     if scholar_status:
         status = scholar_status.get("status", "")
+        provider = scholar_status.get("provider", "")
+        provider_label = f" ({provider})" if provider else ""
         used_cache = scholar_status.get("used_cache", False)
         if used_cache:
-            lines.append(f"- Latest Google Scholar attempt used cached data: {scholar_status.get('error', '')}")
+            lines.append(
+                f"- Latest Google Scholar attempt used cached data{provider_label}: "
+                f"{scholar_status.get('error', '')}"
+            )
             if scholar_status.get("committed_stale_status") is False:
                 lines.append(
                     "- Cached data file was left unchanged to avoid publishing a stale-status-only website update."
                 )
         else:
-            lines.append(f"- Latest Google Scholar attempt status: {status or 'unknown'}")
+            lines.append(f"- Latest Google Scholar attempt status: {status or 'unknown'}{provider_label}")
     lines.extend(scholar or ["- Google Scholar metrics changed: no"])
 
     report = "\n".join(lines).rstrip() + "\n"
@@ -441,6 +447,10 @@ def write_github_output(metadata: dict) -> None:
         return
     with Path(output_path).open("a", encoding="utf-8") as handle:
         handle.write(f"has_changes={'true' if metadata.get('has_changes') else 'false'}\n")
+        handle.write(
+            "google_scholar_sync_alert="
+            f"{'true' if metadata.get('google_scholar_sync_alert') else 'false'}\n"
+        )
 
 
 def append_summary(text: str) -> None:

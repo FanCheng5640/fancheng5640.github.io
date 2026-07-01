@@ -1,15 +1,16 @@
 {
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
-  "updated": "2026-06-29",
-  "last_attempted": "2026-06-29",
+  "sync_provider": "google_scholar_html",
+  "updated": "2026-07-01",
+  "last_attempted": "2026-07-01",
   "sync_status": "ok",
   "last_error": "",
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {
-      "all": 46,
-      "recent": 42
+      "all": 47,
+      "recent": 43
     },
     "h_index": {
       "all": 4,
@@ -43,15 +44,15 @@
     },
     {
       "year": 2024,
-      "citations": 12
+      "citations": 13
     },
     {
       "year": 2025,
-      "citations": 19
+      "citations": 18
     },
     {
       "year": 2026,
-      "citations": 9
+      "citations": 10
     }
   ],
   "publication_citations": [
@@ -103,9 +104,9 @@
     {
       "doi": "10.1364/OPTICA.560597",
       "title": "Photonic origami of silica on a silicon chip with microresonators and concave mirrors",
-      "citation_count": 0,
+      "citation_count": 1,
       "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:_FxGoFyzp5QC",
-      "citations_url": "",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12222385816937743077",
       "matched_by": "normalized_title",
       "source_title": "Photonic origami of silica on a silicon chip with microresonators and concave mirrors"
     },

@@ -28,6 +28,7 @@ jobs:
 
       - name: Sync Google Scholar citation metrics
         env:
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
           GOOGLE_SCHOLAR_STATUS_OUTPUT: ${{ runner.temp }}/google-scholar-status.json
           GOOGLE_SCHOLAR_WRITE_STALE_ON_FAILURE: "0"
         run: python .github/scripts/sync_google_scholar.py
@@ -73,3 +74,10 @@ jobs:
           --report-json "$RUNNER_TEMP/scholarly-report.json"
           --to "$REPORT_EMAIL_TO"
           --only-if-changed
+
+      - name: Require fresh Google Scholar metrics
+        if: steps.report.outputs.google_scholar_sync_alert == 'true'
+        run: |
+          echo "Google Scholar citation metrics were not refreshed. Public cached metrics were left unchanged."
+          echo "Configure SERPAPI_API_KEY for stable scheduled Google Scholar updates, or check the report above for the direct-fetch error."
+          exit 1

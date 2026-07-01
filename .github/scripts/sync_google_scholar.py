@@ -12,11 +12,16 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urlencode, urljoin, urlparse
 
 
-DEFAULT_PROFILE_URL = "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en"
+DEFAULT_AUTHOR_ID = "cXkaM-MAAAAJ"
+DEFAULT_PROFILE_URL = f"https://scholar.google.com/citations?user={DEFAULT_AUTHOR_ID}&hl=en"
 PROFILE_URL = os.environ.get("GOOGLE_SCHOLAR_PROFILE_URL", DEFAULT_PROFILE_URL)
+AUTHOR_ID = (
+    os.environ.get("GOOGLE_SCHOLAR_AUTHOR_ID", "").strip()
+    or parse_qs(urlparse(PROFILE_URL).query).get("user", [DEFAULT_AUTHOR_ID])[0]
+)
 OUTPUT_PATH = Path("_data/google_scholar.json")
 PUBLICATIONS_DIR = Path("_publications")
 USER_AGENT = os.environ.get(
@@ -29,6 +34,9 @@ USER_AGENT = os.environ.get(
 FETCH_RETRIES = max(1, int(os.environ.get("GOOGLE_SCHOLAR_FETCH_RETRIES", "3")))
 RETRY_DELAY_SECONDS = max(0.0, float(os.environ.get("GOOGLE_SCHOLAR_RETRY_DELAY_SECONDS", "4")))
 STATUS_OUTPUT_PATH = os.environ.get("GOOGLE_SCHOLAR_STATUS_OUTPUT", "")
+SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY", "").strip()
+SERPAPI_ENDPOINT = os.environ.get("SERPAPI_ENDPOINT", "https://serpapi.com/search.json").strip()
+SERPAPI_NO_CACHE = os.environ.get("SERPAPI_NO_CACHE", "").strip().lower() in {"1", "true", "yes"}
 WRITE_STALE_ON_FAILURE = os.environ.get(
     "GOOGLE_SCHOLAR_WRITE_STALE_ON_FAILURE", ""
 ).strip().lower() in {"1", "true", "yes"}
@@ -40,12 +48,24 @@ FETCH_HEADERS = {
 }
 
 
+def sync_provider() -> str:
+    return "serpapi_author_api" if SERPAPI_API_KEY else "google_scholar_html"
+
+
 def write_status(payload: dict) -> None:
     if not STATUS_OUTPUT_PATH:
         return
     path = Path(STATUS_OUTPUT_PATH)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def parse_int(value: object) -> int:
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, (int, float)):
+        return int(value)
+    return int(re.sub(r"\D", "", str(value)) or 0)
 
 
 def fetch_profile_html() -> str:
@@ -69,6 +89,36 @@ def fetch_profile_html() -> str:
     raise RuntimeError(f"Google Scholar fetch failed: {last_error}")
 
 
+def fetch_serpapi_author() -> dict:
+    params = {
+        "engine": "google_scholar_author",
+        "author_id": AUTHOR_ID,
+        "hl": "en",
+        "num": "100",
+        "api_key": SERPAPI_API_KEY,
+    }
+    if SERPAPI_NO_CACHE:
+        params["no_cache"] = "true"
+    request_url = f"{SERPAPI_ENDPOINT}?{urlencode(params)}"
+    request = urllib.request.Request(
+        request_url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "application/json",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=45) as response:
+        payload = json.loads(response.read().decode("utf-8", errors="replace"))
+
+    metadata = payload.get("search_metadata", {})
+    status = str(metadata.get("status", "")).lower()
+    if payload.get("error"):
+        raise RuntimeError(f"SerpApi Google Scholar sync failed: {payload['error']}")
+    if status and status not in {"success", "cached"}:
+        raise RuntimeError(f"SerpApi Google Scholar sync status was {metadata.get('status')}")
+    return payload
+
+
 def parse_metrics(page: str) -> dict:
     metric_labels = {
         "Citations": "citations",
@@ -87,13 +137,50 @@ def parse_metrics(page: str) -> dict:
         if not key:
             continue
         metrics[key] = {
-            "all": int(re.sub(r"\D", "", all_value) or 0),
-            "recent": int(re.sub(r"\D", "", recent_value) or 0),
+            "all": parse_int(all_value),
+            "recent": parse_int(recent_value),
         }
     required = {"citations", "h_index", "i10_index"}
     missing = required - set(metrics)
     if missing:
         raise ValueError(f"Missing Google Scholar metrics: {sorted(missing)}")
+    return metrics
+
+
+def serpapi_metric_name(label: str) -> str | None:
+    normalized = re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")
+    if "citation" in normalized:
+        return "citations"
+    if normalized in {"h_index", "hindex", "indice_h"}:
+        return "h_index"
+    if "i10" in normalized or "i_10" in normalized:
+        return "i10_index"
+    return None
+
+
+def parse_serpapi_metrics(payload: dict) -> dict:
+    metrics = {}
+    for row in payload.get("cited_by", {}).get("table", []):
+        if not isinstance(row, dict):
+            continue
+        for label, values in row.items():
+            key = serpapi_metric_name(str(label))
+            if not key or not isinstance(values, dict):
+                continue
+            recent_values = [
+                value
+                for value_key, value in values.items()
+                if str(value_key).lower() != "all"
+            ]
+            metrics[key] = {
+                "all": parse_int(values.get("all", 0)),
+                "recent": parse_int(recent_values[0] if recent_values else values.get("all", 0)),
+            }
+
+    required = {"citations", "h_index", "i10_index"}
+    missing = required - set(metrics)
+    if missing:
+        raise ValueError(f"Missing SerpApi Google Scholar metrics: {sorted(missing)}")
     return metrics
 
 
@@ -131,6 +218,21 @@ def parse_yearly_citations(page: str) -> list[dict]:
         {"year": year, "citations": values_by_year[year]}
         for _, year in sorted(year_positions, key=lambda item: item[1])
     ]
+
+
+def parse_serpapi_yearly_citations(payload: dict) -> list[dict]:
+    points = []
+    for item in payload.get("cited_by", {}).get("graph", []):
+        if not isinstance(item, dict):
+            continue
+        try:
+            year = int(item.get("year"))
+        except (TypeError, ValueError):
+            continue
+        points.append({"year": year, "citations": parse_int(item.get("citations", 0))})
+    if not points:
+        raise ValueError("Missing SerpApi Google Scholar yearly citation graph")
+    return sorted(points, key=lambda item: item["year"])
 
 
 def clean_text(value: str) -> str:
@@ -219,6 +321,36 @@ def parse_scholar_publications(page: str) -> list[dict]:
     return publications
 
 
+def parse_serpapi_publications(payload: dict) -> list[dict]:
+    rows = payload.get("articles", [])
+    if not rows:
+        raise ValueError("Missing SerpApi Google Scholar article table")
+
+    publications = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        title = clean_text(str(row.get("title", "")))
+        if not title:
+            continue
+        cited_by = row.get("cited_by", {})
+        if not isinstance(cited_by, dict):
+            cited_by = {}
+        publications.append(
+            {
+                "title": title,
+                "normalized_title": normalize_title(title),
+                "citation_count": parse_int(cited_by.get("value", 0)),
+                "scholar_url": urljoin(PROFILE_URL, str(row.get("link", ""))),
+                "citations_url": str(cited_by.get("link", "")),
+            }
+        )
+
+    if not publications:
+        raise ValueError("Could not parse SerpApi Google Scholar article rows")
+    return publications
+
+
 def match_publication_citations(local_publications: list[dict], scholar_publications: list[dict]) -> list[dict]:
     scholar_by_title = {
         item["normalized_title"]: item
@@ -257,19 +389,29 @@ def summary_title(points: list[dict]) -> str:
 
 
 def main() -> int:
-    page = fetch_profile_html()
-    yearly_citations = parse_yearly_citations(page)
+    provider = sync_provider()
+    if SERPAPI_API_KEY:
+        payload = fetch_serpapi_author()
+        yearly_citations = parse_serpapi_yearly_citations(payload)
+        scholar_publications = parse_serpapi_publications(payload)
+        metrics = parse_serpapi_metrics(payload)
+    else:
+        page = fetch_profile_html()
+        yearly_citations = parse_yearly_citations(page)
+        scholar_publications = parse_scholar_publications(page)
+        metrics = parse_metrics(page)
+
     local_publications = load_local_publications()
-    scholar_publications = parse_scholar_publications(page)
     data = {
         "profile_url": PROFILE_URL,
         "source": "Google Scholar",
+        "sync_provider": provider,
         "updated": datetime.now(timezone.utc).date().isoformat(),
         "last_attempted": datetime.now(timezone.utc).date().isoformat(),
         "sync_status": "ok",
         "last_error": "",
         "summary_title": summary_title(yearly_citations),
-        "metrics": parse_metrics(page),
+        "metrics": metrics,
         "citations_by_year": yearly_citations,
         "publication_citations": match_publication_citations(
             local_publications,
@@ -284,6 +426,7 @@ def main() -> int:
             "used_cache": False,
             "output_path": OUTPUT_PATH.as_posix(),
             "updated": data["updated"],
+            "provider": provider,
             "error": "",
         }
     )
@@ -292,6 +435,7 @@ def main() -> int:
 
 
 def keep_cached_data(exc: Exception) -> int:
+    provider = sync_provider()
     if not OUTPUT_PATH.exists():
         write_status(
             {
@@ -299,6 +443,7 @@ def keep_cached_data(exc: Exception) -> int:
                 "used_cache": False,
                 "output_path": OUTPUT_PATH.as_posix(),
                 "updated": "",
+                "provider": provider,
                 "error": str(exc),
             }
         )
@@ -316,6 +461,7 @@ def keep_cached_data(exc: Exception) -> int:
         "output_path": OUTPUT_PATH.as_posix(),
         "updated": data.get("updated", ""),
         "last_attempted": attempted,
+        "provider": provider,
         "error": str(exc),
         "committed_stale_status": WRITE_STALE_ON_FAILURE,
     }
