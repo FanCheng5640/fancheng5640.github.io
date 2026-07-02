@@ -2,8 +2,8 @@
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
   "sync_provider": "google_scholar_html",
-  "updated": "2026-07-01",
-  "last_attempted": "2026-07-01",
+  "updated": "2026-07-02",
+  "last_attempted": "2026-07-02",
   "sync_status": "ok",
   "last_error": "",
   "summary_title": "Google Scholar citations",
@@ -44,11 +44,11 @@
     },
     {
       "year": 2024,
-      "citations": 13
+      "citations": 12
     },
     {
       "year": 2025,
-      "citations": 18
+      "citations": 19
     },
     {
       "year": 2026,
