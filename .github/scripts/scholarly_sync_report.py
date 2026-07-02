@@ -209,6 +209,15 @@ def load_google_scholar() -> dict:
     }
 
 
+def google_scholar_current_for_today(data: dict) -> bool:
+    today = datetime.now(timezone.utc).date().isoformat()
+    return (
+        data.get("exists") is True
+        and data.get("sync_status") == "ok"
+        and data.get("updated") == today
+    )
+
+
 def snapshot() -> dict:
     publications = load_publications()
     return {
@@ -341,13 +350,15 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
     news_changed = before.get("news", {}).get("hash") != after.get("news", {}).get("hash")
     figures = figure_lines(before_pubs, after_pubs)
     scholar = scholar_metric_lines(before.get("google_scholar", {}), after.get("google_scholar", {}))
-    scholar_sync_alert = bool(
+    scholar_attempt_alert = bool(
         scholar_status
         and (
             scholar_status.get("used_cache")
             or scholar_status.get("status") == "failed"
         )
     )
+    scholar_already_current = google_scholar_current_for_today(after.get("google_scholar", {}))
+    scholar_sync_alert = scholar_attempt_alert and not scholar_already_current
 
     has_changes = any(
         [
@@ -413,10 +424,16 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         provider_label = f" ({provider})" if provider else ""
         used_cache = scholar_status.get("used_cache", False)
         if used_cache:
-            lines.append(
-                f"- Latest Google Scholar attempt used cached data{provider_label}: "
-                f"{scholar_status.get('error', '')}"
-            )
+            if scholar_already_current:
+                lines.append(
+                    "- Latest Google Scholar attempt used cached data"
+                    f"{provider_label}, but the public data is already current for today."
+                )
+            else:
+                lines.append(
+                    f"- Latest Google Scholar attempt used cached data{provider_label}: "
+                    f"{scholar_status.get('error', '')}"
+                )
             if scholar_status.get("committed_stale_status") is False:
                 lines.append(
                     "- Cached data file was left unchanged to avoid publishing a stale-status-only website update."
@@ -436,6 +453,7 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         "figures_changed": bool(figures),
         "google_scholar_changed": bool(scholar),
         "google_scholar_sync_alert": scholar_sync_alert,
+        "google_scholar_already_current": scholar_already_current,
         "scholar_status": scholar_status or {},
     }
     return report, metadata

@@ -3,7 +3,8 @@ name: Sync scholarly data
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 3 * * *"
+    # Run after the 06:45 local Windows Scholar fallback in both Israel winter/summer time.
+    - cron: "5 5 * * *"
 
 permissions:
   contents: write
