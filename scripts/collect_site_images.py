@@ -39,12 +39,14 @@ SKIP_DIRS = {
     "node_modules",
     "vendor",
 }
-PAPER_IMAGE_DIRS = (
+SITE_IMAGE_DIRS = (
+    "images",
     "files/papers/figures",
     "files/papers/videos/posters",
+    "references",
 )
 IMAGE_URL_PATTERN = re.compile(
-    r"""(?P<path>(?:/|(?:\.\./)*)(?:files/papers/figures|files/papers/videos/posters)/[^"'\s<>)\]}]+?\.(?:gif|ico|jpe?g|png|svg|webp))""",
+    r"""(?P<path>(?:/|(?:\.\./)*)(?:images|files/papers/figures|files/papers/videos/posters|references)/[^"'\s<>)\]}]+?\.(?:gif|ico|jpe?g|png|svg|webp))""",
     re.IGNORECASE,
 )
 
@@ -104,7 +106,7 @@ def site_path_for_file(root: Path, path: Path) -> str:
 def collect_candidate_paths(root: Path, output_dir: Path) -> set[str]:
     paths: set[str] = set()
 
-    for public_dir in PAPER_IMAGE_DIRS:
+    for public_dir in SITE_IMAGE_DIRS:
         base = root / public_dir
         if not base.exists():
             continue
@@ -123,6 +125,8 @@ def collect_candidate_paths(root: Path, output_dir: Path) -> set[str]:
 
 
 def image_category(source_path: str) -> str:
+    if source_path.startswith("/references/"):
+        return "source-screenshot"
     if source_path.startswith("/files/papers/videos/posters/"):
         return "video-poster"
     if source_path.startswith("/files/papers/figures/logos/"):
@@ -263,7 +267,7 @@ def render_index(output_dir: Path, records: list[ImageRecord], missing: list[str
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>论文图片个人库</title>
+  <title>网站图片个人库</title>
   <style>
     body {{
       margin: 0;
@@ -347,7 +351,7 @@ def render_index(output_dir: Path, records: list[ImageRecord], missing: list[str
 </head>
 <body>
   <header>
-    <h1>论文图片个人库</h1>
+    <h1>网站图片个人库</h1>
     <div class="summary">
       <span>生成时间：{html.escape(generated_at)}</span>
       <span>图片数量：{len(records)}</span>
@@ -373,7 +377,7 @@ def write_readme(output_dir: Path, records: list[ImageRecord]) -> None:
         f"图片副本在 `{IMAGE_DIR_NAME}/`，共 {len(records)} 张。\n"
         f"双击 `{INDEX_FILE_NAME}` 可以用浏览器查看缩略图索引。\n"
         "`manifest.csv` 记录每张图片在网站里的原始路径和校验值。\n\n"
-        "这个文件夹是自动生成的论文相关图片个人副本，可以随时重新生成；网站实际使用的原图仍保留在原来的公开路径。\n"
+        "这个文件夹是自动生成的网站图片个人副本，可以随时重新生成；网站实际使用的原图仍保留在原来的公开路径。\n"
     )
     (output_dir / "README.txt").write_text(text, encoding="utf-8")
 
@@ -393,7 +397,7 @@ def main() -> int:
     render_index(output_dir, records, missing)
     write_readme(output_dir, records)
 
-    print(f"Collected {len(records)} paper-related website images into: {output_dir}")
+    print(f"Collected {len(records)} website images into: {output_dir}")
     print(f"Open: {output_dir / INDEX_FILE_NAME}")
     if missing:
         print(f"Warning: {len(missing)} referenced image paths were not found.")

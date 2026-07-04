@@ -14,9 +14,9 @@ fancheng5640.github.io 引用清单
 
 
 [2026-06-17] Marian Gertner Institute logo
-    Usage: _pages/about.md; _pages/cv.md; _includes/gertner-award-brand.html; _sass/layout/_page.scss; images/logos/marian-gertner-institute-logo.png
+    Usage: _pages/about.md; _pages/cv.md; _includes/gertner-award-brand.html; _sass/layout/_page.scss; images/logos/marian-gertner-institute-logo.png; references/gertner_award_sources/marian-gertner-original-header-lockup.png; references/gertner_award_sources/gertner-scholars-2025-2026-fan-cheng-source.png
 
-    Method/source: The About page News award item uses the official Marian Gertner Institute header logo from the Tel Aviv University Faculty of Medicine website. The logo links to the official Scholars page for the award context.
+    Method/source: The About page News award item uses the official Marian Gertner Institute header logo from the Tel Aviv University Faculty of Medicine website. The logo links to the official Scholars page for the award context. The local references now also keep Playwright screenshots from the official Scholars page: one complete rendered header lockup with the right-side text, and one award-list evidence crop containing Fan Cheng in the 2025-2026 cohort.
 
     Source URLs:
     - Scholars page: https://en-med.tau.ac.il/scholars-gertner-med-2020
