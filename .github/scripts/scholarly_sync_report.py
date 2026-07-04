@@ -10,7 +10,7 @@ import re
 import smtplib
 import ssl
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from email.message import EmailMessage
 from pathlib import Path
 
@@ -19,6 +19,7 @@ PUBLICATIONS_DIR = Path("_publications")
 ABOUT_PAGE_PATH = Path("_pages/about.md")
 GOOGLE_SCHOLAR_PATH = Path("_data/google_scholar.json")
 EMAIL_RECIPIENT_SECRET = "SCHOLARLY_REPORT_EMAIL_TO"
+GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS = 2
 
 PUBLICATION_COMPARE_KEYS = [
     "title",
@@ -218,6 +219,23 @@ def google_scholar_current_for_today(data: dict) -> bool:
     )
 
 
+def parse_iso_date(value: str) -> date | None:
+    try:
+        return datetime.fromisoformat(str(value)).date()
+    except ValueError:
+        return None
+
+
+def google_scholar_recent_enough(data: dict) -> bool:
+    if data.get("exists") is not True or data.get("sync_status") != "ok":
+        return False
+    updated = parse_iso_date(data.get("updated", ""))
+    if not updated:
+        return False
+    age_days = (datetime.now(timezone.utc).date() - updated).days
+    return 0 <= age_days <= GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS
+
+
 def snapshot() -> dict:
     publications = load_publications()
     return {
@@ -357,8 +375,10 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
             or scholar_status.get("status") == "failed"
         )
     )
-    scholar_already_current = google_scholar_current_for_today(after.get("google_scholar", {}))
-    scholar_sync_alert = scholar_attempt_alert and not scholar_already_current
+    after_scholar = after.get("google_scholar", {})
+    scholar_already_current = google_scholar_current_for_today(after_scholar)
+    scholar_recent_enough = google_scholar_recent_enough(after_scholar)
+    scholar_sync_alert = scholar_attempt_alert and not scholar_recent_enough
 
     has_changes = any(
         [
@@ -424,10 +444,12 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         provider_label = f" ({provider})" if provider else ""
         used_cache = scholar_status.get("used_cache", False)
         if used_cache:
-            if scholar_already_current:
+            if scholar_recent_enough:
                 lines.append(
                     "- Latest Google Scholar attempt used cached data"
-                    f"{provider_label}, but the public data is already current for today."
+                    f"{provider_label}, but the public data is recent enough "
+                    f"(updated {after_scholar.get('updated', 'unknown')}; "
+                    f"alert threshold: {GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS} days)."
                 )
             else:
                 lines.append(
@@ -454,6 +476,8 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         "google_scholar_changed": bool(scholar),
         "google_scholar_sync_alert": scholar_sync_alert,
         "google_scholar_already_current": scholar_already_current,
+        "google_scholar_recent_enough": scholar_recent_enough,
+        "google_scholar_recent_max_age_days": GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS,
         "scholar_status": scholar_status or {},
     }
     return report, metadata
