@@ -12,6 +12,9 @@ local/
 # Keep personal photos local-only
 本地个人照片/
 
+# Keep generated personal website image library local-only
+个人图片库/
+
 # Ignore the Gemfile that is generated
 Gemfile.lock
 
