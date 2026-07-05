@@ -1,6 +1,6 @@
 param(
     [string]$TaskName = "FanChengLocalGoogleScholarAutoSync",
-    [string]$DailyAt = "09:00"
+    [string]$DailyAt = "08:58"
 )
 
 $ErrorActionPreference = "Stop"

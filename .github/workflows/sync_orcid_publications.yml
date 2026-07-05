@@ -3,10 +3,10 @@ name: Sync scholarly data
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron uses UTC. These two entries map to about 09:10 in Israel
+    # GitHub cron uses UTC. These two entries map to 09:00 in Israel
     # summer/winter time; the local-time gate below skips the non-matching one.
-    - cron: "10 6 * * *"
-    - cron: "10 7 * * *"
+    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
 
 permissions:
   contents: write
@@ -39,7 +39,7 @@ jobs:
                   microsecond=0,
               )
               scheduled_local = scheduled_utc.astimezone(ZoneInfo("Asia/Jerusalem"))
-              should_run = scheduled_local.hour == 9
+              should_run = scheduled_local.hour == 9 and scheduled_local.minute == 0
               print(f"Scheduled UTC: {scheduled_utc.isoformat()}")
               print(f"Scheduled Israel local time: {scheduled_local.isoformat()}")
               print(f"Run this schedule: {should_run}")
