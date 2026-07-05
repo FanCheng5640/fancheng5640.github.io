@@ -2,23 +2,23 @@
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
   "sync_provider": "google_scholar_html",
-  "updated": "2026-07-04",
-  "last_attempted": "2026-07-04",
+  "updated": "2026-07-05",
+  "last_attempted": "2026-07-05",
   "sync_status": "ok",
   "last_error": "",
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {
-      "all": 47,
-      "recent": 43
+      "all": 48,
+      "recent": 44
     },
     "h_index": {
       "all": 4,
       "recent": 4
     },
     "i10_index": {
-      "all": 2,
-      "recent": 1
+      "all": 3,
+      "recent": 2
     }
   },
   "citations_by_year": [
@@ -44,15 +44,15 @@
     },
     {
       "year": 2024,
-      "citations": 13
+      "citations": 12
     },
     {
       "year": 2025,
-      "citations": 18
+      "citations": 19
     },
     {
       "year": 2026,
-      "citations": 10
+      "citations": 11
     }
   ],
   "publication_citations": [
@@ -68,7 +68,7 @@
     {
       "doi": "10.1038/s41467-023-40205-0",
       "title": "Absorption-induced transmission in plasma microphotonics",
-      "citation_count": 9,
+      "citation_count": 10,
       "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:u-x6o8ySG0sC",
       "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=8479134549555414394",
       "matched_by": "normalized_title",
