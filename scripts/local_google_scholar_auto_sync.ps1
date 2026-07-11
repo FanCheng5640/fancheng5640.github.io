@@ -186,7 +186,20 @@ try {
     Invoke-Git @("fetch", $Remote, $Branch) | Out-Null
     $comparison = (Invoke-Git @("rev-list", "--left-right", "--count", "$Branch...$Remote/$Branch") | Select-Object -First 1).ToString().Trim()
     $parts = $comparison -split "\s+"
-    if ($parts.Count -lt 2 -or $parts[0] -ne "0" -or $parts[1] -ne "0") {
+    if ($parts.Count -lt 2) {
+        throw "Could not compare local $Branch with $Remote/$Branch. Raw comparison: $comparison"
+    }
+    $localAhead = [int]$parts[0]
+    $remoteAhead = [int]$parts[1]
+    if ($localAhead -eq 0 -and $remoteAhead -gt 0) {
+        Write-RunLog "INFO" "Local $Branch is behind $Remote/$Branch by $remoteAhead commit(s); fast-forwarding before Scholar sync."
+        Invoke-Git @("merge", "--ff-only", "$Remote/$Branch") | Out-Null
+        $statusAfterFastForward = @(Invoke-Git @("status", "--porcelain", "--untracked-files=all"))
+        if ($statusAfterFastForward.Count -gt 0) {
+            throw "Worktree is not clean after fast-forward: $($statusAfterFastForward -join ', ')"
+        }
+    }
+    elseif ($localAhead -ne 0 -or $remoteAhead -ne 0) {
         Finish-Run "skipped" "Local $Branch and $Remote/$Branch are not aligned ($comparison); no files were changed."
     }
 

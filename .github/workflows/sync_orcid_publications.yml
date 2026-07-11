@@ -73,6 +73,8 @@ jobs:
           SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
           GOOGLE_SCHOLAR_STATUS_OUTPUT: ${{ runner.temp }}/google-scholar-status.json
           GOOGLE_SCHOLAR_WRITE_STALE_ON_FAILURE: "0"
+          GOOGLE_SCHOLAR_FETCH_RETRIES: "6"
+          GOOGLE_SCHOLAR_RETRY_DELAY_SECONDS: "10"
         run: python .github/scripts/sync_google_scholar.py
 
       - name: Validate Journal Impact Factor freshness

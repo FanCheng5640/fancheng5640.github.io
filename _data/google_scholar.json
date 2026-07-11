@@ -2,15 +2,15 @@
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
   "sync_provider": "google_scholar_html",
-  "updated": "2026-07-10",
-  "last_attempted": "2026-07-10",
+  "updated": "2026-07-11",
+  "last_attempted": "2026-07-11",
   "sync_status": "ok",
   "last_error": "",
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {
-      "all": 48,
-      "recent": 44
+      "all": 49,
+      "recent": 45
     },
     "h_index": {
       "all": 4,
@@ -44,15 +44,15 @@
     },
     {
       "year": 2024,
-      "citations": 12
+      "citations": 13
     },
     {
       "year": 2025,
-      "citations": 19
+      "citations": 18
     },
     {
       "year": 2026,
-      "citations": 11
+      "citations": 12
     }
   ],
   "publication_citations": [
