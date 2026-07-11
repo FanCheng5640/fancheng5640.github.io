@@ -1,0 +1,41 @@
+{%- assign start_parts = include.start | split: "-" -%}
+{%- assign start_year = start_parts[0] | plus: 0 -%}
+{%- assign start_month = start_parts[1] | plus: 0 -%}
+{%- assign end_value = include.end | default: "present" -%}
+{%- assign end_key = end_value | downcase -%}
+{%- if end_key == "present" or end_key == "current" -%}
+  {%- assign end_year = site.time | date: "%Y" | plus: 0 -%}
+  {%- assign end_month = site.time | date: "%m" | plus: 0 -%}
+{%- else -%}
+  {%- assign end_parts = end_value | split: "-" -%}
+  {%- assign end_year = end_parts[0] | plus: 0 -%}
+  {%- assign end_month = end_parts[1] | plus: 0 -%}
+{%- endif -%}
+{%- assign duration_months = end_year | minus: start_year | times: 12 | plus: end_month | minus: start_month | plus: 1 -%}
+{%- if duration_months < 1 -%}
+  {%- assign duration_months = 1 -%}
+{%- endif -%}
+{%- assign duration_years = duration_months | divided_by: 12 -%}
+{%- assign remaining_months = duration_months | modulo: 12 -%}
+{%- assign duration_text = "" -%}
+{%- if duration_years > 0 -%}
+  {%- assign year_text = duration_years | append: " yr" -%}
+  {%- if duration_years != 1 -%}
+    {%- assign year_text = year_text | append: "s" -%}
+  {%- endif -%}
+  {%- assign duration_text = year_text -%}
+{%- endif -%}
+{%- if remaining_months > 0 or duration_years == 0 -%}
+  {%- assign month_text = remaining_months | append: " mo" -%}
+  {%- if remaining_months != 1 -%}
+    {%- assign month_text = month_text | append: "s" -%}
+  {%- endif -%}
+  {%- if duration_text == "" -%}
+    {%- assign duration_text = month_text -%}
+  {%- else -%}
+    {%- assign duration_text = duration_text | append: " " | append: month_text -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign duration_prefix = include.prefix | default: "" -%}
+{%- assign duration_suffix = include.suffix | default: "" -%}
+{{ duration_prefix }}<span class="cv-duration" data-cv-duration data-start="{{ include.start | escape }}" data-end="{{ end_value | escape }}">{{ duration_text }}</span>{{ duration_suffix }}

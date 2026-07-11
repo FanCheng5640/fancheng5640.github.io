@@ -19,7 +19,7 @@ Education
       <h3>Ph.D. Candidate in Optics</h3>
       <p>School of Electrical Engineering<br>
       Tel Aviv University<br>
-      Tel Aviv, Israel | 2021-03 - Present<br>
+      Tel Aviv, Israel | 2021-03 - Present{% include cv-duration.html start="2021-03" end="present" prefix=" (" suffix=")" %}<br>
       Optics (optical microresonators)<br>
       Supervisor: <span class="cv-advisor"><a href="https://scholar.google.com/citations?user=tiFit0cAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Google Scholar">Prof. Tal Carmon</a> (<a href="https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/" title="Lab website">Lab</a>)</span></p>
     </div>
@@ -32,8 +32,9 @@ Education
     <div class="cv-education__body">
       <h3>M.Sc. in Optics</h3>
       <p>Shanxi University<br>
-      Taiyuan, China | 2014-09 - 2017-07<br>
+      Taiyuan, China | 2014-09 - 2017-07{% include cv-duration.html start="2014-09" end="2017-07" prefix=" (" suffix=")" %}<br>
       Optics (optical microresonators)<br>
+      Thesis: <em>Experimental investigation on the coupling between microtoroidal resonators and tapered nanofibers</em><br>
       <span class="cv-advisors">
         <span class="cv-advisors__label">Supervisors:</span>
         <span class="cv-advisor"><a href="https://scholar.google.com/citations?user=DTAaDZAAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Google Scholar">Prof. Tiancai Zhang</a></span>
@@ -50,7 +51,7 @@ Education
     <div class="cv-education__body">
       <h3>B.Sc. in Physics</h3>
       <p>Shanxi University<br>
-      Taiyuan, China | 2010-09 - 2014-07</p>
+      Taiyuan, China | 2010-09 - 2014-07{% include cv-duration.html start="2010-09" end="2014-07" prefix=" (" suffix=")" %}</p>
     </div>
     <a class="cv-education__logo-link" href="https://en.wikipedia.org/wiki/Shanxi_University" target="_blank" rel="noopener" title="Shanxi University">
       <img class="cv-education__logo" src="/images/logos/shanxi-university-logo-cv.png" alt="Shanxi University logo" width="260" height="88" loading="lazy" decoding="async">

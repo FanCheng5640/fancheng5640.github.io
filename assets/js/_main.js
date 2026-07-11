@@ -909,6 +909,53 @@ let initPublicationAuthorNameWrap = () => {
   });
 };
 
+let initCvDurations = () => {
+  const parseYearMonth = (value) => {
+    const normalized = (value || "").trim().toLowerCase();
+    if (normalized === "present" || normalized === "current") {
+      const now = new Date();
+      return { year: now.getFullYear(), month: now.getMonth() + 1 };
+    }
+
+    const match = normalized.match(/^(\d{4})-(\d{1,2})$/);
+    if (!match) {
+      return null;
+    }
+
+    return {
+      year: Number(match[1]),
+      month: Number(match[2]),
+    };
+  };
+
+  const formatDuration = (startValue, endValue) => {
+    const start = parseYearMonth(startValue);
+    const end = parseYearMonth(endValue);
+    if (!start || !end) {
+      return "";
+    }
+
+    const totalMonths = Math.max(1, ((end.year - start.year) * 12) + end.month - start.month + 1);
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+    const parts = [];
+    if (years > 0) {
+      parts.push(`${years} yr${years === 1 ? "" : "s"}`);
+    }
+    if (months > 0 || parts.length === 0) {
+      parts.push(`${months} mo${months === 1 ? "" : "s"}`);
+    }
+    return parts.join(" ");
+  };
+
+  document.querySelectorAll("[data-cv-duration]").forEach((element) => {
+    const duration = formatDuration(element.dataset.start, element.dataset.end);
+    if (duration) {
+      element.textContent = duration;
+    }
+  });
+};
+
 let initCvEducationLayout = () => {
   const groups = document.querySelectorAll(".cv-education");
   if (groups.length === 0) {
@@ -1065,6 +1112,7 @@ $(document).ready(function () {
   initPublicationAuthorNameWrap();
   initPublicationListLayout();
   initDismissibleDetails();
+  initCvDurations();
   initCvEducationLayout();
 
   // Follow menu drop down
