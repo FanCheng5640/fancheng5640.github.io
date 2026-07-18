@@ -10,9 +10,11 @@ import re
 import smtplib
 import ssl
 import sys
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from email.message import EmailMessage
 from pathlib import Path
+
+from scholarly_freshness import google_scholar_current_for_today, parse_iso_date
 
 
 PUBLICATIONS_DIR = Path("_publications")
@@ -208,22 +210,6 @@ def load_google_scholar() -> dict:
         "publication_citations": publication_citations,
         "sha256": sha256_text(json.dumps(data, sort_keys=True, ensure_ascii=False)),
     }
-
-
-def google_scholar_current_for_today(data: dict) -> bool:
-    today = datetime.now(timezone.utc).date().isoformat()
-    return (
-        data.get("exists") is True
-        and data.get("sync_status") == "ok"
-        and data.get("updated") == today
-    )
-
-
-def parse_iso_date(value: str) -> date | None:
-    try:
-        return datetime.fromisoformat(str(value)).date()
-    except ValueError:
-        return None
 
 
 def google_scholar_recent_enough(data: dict) -> bool:

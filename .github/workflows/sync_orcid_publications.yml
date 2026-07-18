@@ -3,10 +3,14 @@ name: Sync scholarly data
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron uses UTC. These two entries map to 07:30 in Israel
-    # summer/winter time; the local-time gate below skips the non-matching one.
-    - cron: "30 4 * * *"
-    - cron: "30 5 * * *"
+    # The first attempt runs the full daily sync. Later attempts run only if
+    # Google Scholar data is still stale, so a temporary block can self-heal.
+    - cron: "30 7 * * *"
+      timezone: "Asia/Jerusalem"
+    - cron: "30 8 * * *"
+      timezone: "Asia/Jerusalem"
+    - cron: "30 9 * * *"
+      timezone: "Asia/Jerusalem"
 
 permissions:
   contents: write
@@ -16,59 +20,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check Israel local notification window
-        id: local_time_gate
+      - uses: actions/checkout@v6
+
+      - name: Decide whether this attempt is needed
+        id: retry_policy
         env:
           GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule }}
-        run: |
-          python - <<'PY'
-          import os
-          from datetime import datetime, timezone
-          from zoneinfo import ZoneInfo
-
-          event_name = os.environ.get("GITHUB_EVENT_NAME", "")
-          schedule = os.environ.get("GITHUB_EVENT_SCHEDULE", "")
-          should_run = True
-
-          if event_name == "schedule":
-              minute, hour, *_ = schedule.split()
-              scheduled_utc = datetime.now(timezone.utc).replace(
-                  hour=int(hour),
-                  minute=int(minute),
-                  second=0,
-                  microsecond=0,
-              )
-              scheduled_local = scheduled_utc.astimezone(ZoneInfo("Asia/Jerusalem"))
-              should_run = scheduled_local.hour == 7 and scheduled_local.minute == 30
-              print(f"Scheduled UTC: {scheduled_utc.isoformat()}")
-              print(f"Scheduled Israel local time: {scheduled_local.isoformat()}")
-              print(f"Run this schedule: {should_run}")
-          else:
-              print(f"Manual event {event_name}; running immediately.")
-
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
-              handle.write(f"should_run={'true' if should_run else 'false'}\n")
-          PY
-
-      - uses: actions/checkout@v4
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        run: python .github/scripts/scholarly_retry_policy.py
 
       - name: Set up Python
-        if: steps.local_time_gate.outputs.should_run == 'true'
-        uses: actions/setup-python@v5
+        if: steps.retry_policy.outputs.should_sync == 'true'
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
       - name: Snapshot scholarly data before sync
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        if: steps.retry_policy.outputs.should_sync == 'true'
         run: python .github/scripts/scholarly_sync_report.py snapshot --output "$RUNNER_TEMP/scholarly-before.json"
 
       - name: Sync publications from ORCID
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        if: steps.retry_policy.outputs.should_sync == 'true'
         run: python .github/scripts/sync_orcid_publications.py
 
       - name: Sync Google Scholar citation metrics
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        if: steps.retry_policy.outputs.should_sync == 'true'
         env:
           SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
           GOOGLE_SCHOLAR_STATUS_OUTPUT: ${{ runner.temp }}/google-scholar-status.json
@@ -78,11 +53,11 @@ jobs:
         run: python .github/scripts/sync_google_scholar.py
 
       - name: Validate Journal Impact Factor freshness
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        if: steps.retry_policy.outputs.should_sync == 'true'
         run: python scripts/check_journal_metrics_freshness.py
 
       - name: Generate scholarly update report
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        if: steps.retry_policy.outputs.should_sync == 'true'
         id: report
         run: >
           python .github/scripts/scholarly_sync_report.py report
@@ -93,7 +68,7 @@ jobs:
           --append-summary
 
       - name: Commit updated scholarly data
-        if: steps.local_time_gate.outputs.should_run == 'true'
+        if: steps.retry_policy.outputs.should_sync == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -106,7 +81,11 @@ jobs:
           fi
 
       - name: Email scholarly update report
-        if: steps.local_time_gate.outputs.should_run == 'true' && steps.report.outputs.has_changes == 'true'
+        if: >-
+          steps.retry_policy.outputs.should_sync == 'true' &&
+          steps.report.outputs.has_changes == 'true' &&
+          (steps.report.outputs.google_scholar_sync_alert != 'true' ||
+          steps.retry_policy.outputs.final_attempt == 'true')
         env:
           REPORT_EMAIL_TO: ${{ secrets.SCHOLARLY_REPORT_EMAIL_TO }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
@@ -123,8 +102,12 @@ jobs:
           --only-if-changed
 
       - name: Require fresh Google Scholar metrics
-        if: steps.local_time_gate.outputs.should_run == 'true' && steps.report.outputs.google_scholar_sync_alert == 'true'
+        if: >-
+          steps.retry_policy.outputs.should_sync == 'true' &&
+          steps.report.outputs.google_scholar_sync_alert == 'true' &&
+          steps.retry_policy.outputs.final_attempt == 'true'
         run: |
-          echo "Google Scholar citation metrics were not refreshed. Public cached metrics were left unchanged."
+          echo "Google Scholar citation metrics were not refreshed after all three daily attempts."
+          echo "Public cached metrics were left unchanged."
           echo "Configure SERPAPI_API_KEY for stable scheduled Google Scholar updates, or check the report above for the direct-fetch error."
           exit 1
