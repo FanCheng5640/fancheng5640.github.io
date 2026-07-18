@@ -1,6 +1,41 @@
 fancheng5640.github.io 引用清单
 ==============================
 
+[2026-07-18] GitHub Actions timezone-aware Scholar retry schedule
+    Usage: .github/workflows/sync_orcid_publications.yml; .github/scripts/scholarly_retry_policy.py; .github/scripts/scholarly_freshness.py
+
+    Method/source: The cloud scholarly workflow uses three timezone-aware schedule events at 07:30, 08:30, and 09:30 in Asia/Jerusalem. GitHub documents that a workflow can contain multiple schedule events and that an IANA timezone can be attached to a schedule. The workflow also uses the current Node 24-compatible checkout and setup-python action major versions.
+
+    Source URLs and locating screenshots:
+    - GitHub Actions schedule event and timezone: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule ; screenshot references/github_actions_retry_sources/github-actions-schedule-timezone.png
+    - actions/checkout v6: https://github.com/actions/checkout#checkout-v6 ; screenshot references/github_actions_retry_sources/actions-checkout-v6.png
+    - actions/setup-python v6.0.0 Node 24 release: https://github.com/actions/setup-python/releases/tag/v6.0.0 ; screenshot references/github_actions_retry_sources/actions-setup-python-v6.png
+
+    BibTeX:
+    @misc{github_actions_schedule_2026,
+      author = {{GitHub}},
+      title = {Events that trigger workflows: schedule},
+      year = {2026},
+      url = {https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule},
+      note = {Accessed 2026-07-18}
+    }
+
+    @misc{github_actions_checkout_v6,
+      author = {{GitHub Actions}},
+      title = {Checkout v6},
+      year = {2026},
+      url = {https://github.com/actions/checkout#checkout-v6},
+      note = {Accessed 2026-07-18}
+    }
+
+    @misc{github_actions_setup_python_v6,
+      author = {{GitHub Actions}},
+      title = {Setup Python v6.0.0},
+      year = {2025},
+      url = {https://github.com/actions/setup-python/releases/tag/v6.0.0},
+      note = {Accessed 2026-07-18}
+    }
+
 [2026-07-01] SerpApi Google Scholar Author API optional sync path
     Usage: .github/scripts/sync_google_scholar.py; .github/workflows/sync_orcid_publications.yml; .github/scripts/scholarly_sync_report.py
 
