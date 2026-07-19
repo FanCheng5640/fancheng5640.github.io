@@ -108,6 +108,7 @@ class ScholarlyRetryPolicyTests(unittest.TestCase):
         )
         self.assertIn('worktree", "add", "--detach"', script)
         self.assertIn('worktree", "remove", "--force"', script)
+        self.assertIn("$env:BUNDLE_PATH = $bundleCache", script)
         self.assertNotIn("Worktree is not clean before sync", script)
 
 

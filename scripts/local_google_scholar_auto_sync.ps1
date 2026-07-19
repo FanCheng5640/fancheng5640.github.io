@@ -140,6 +140,12 @@ try {
         (Join-Path $env:LOCALAPPDATA "Programs\Python\Python310\python.exe")
     )
     $bundle = Resolve-Tool "bundle" @("C:\Ruby33-x64\bin\bundle.bat")
+    $bundleCache = Join-Path $repoRoot "vendor\bundle"
+    if (-not (Test-Path -LiteralPath $bundleCache)) {
+        throw "Shared Ruby dependency cache was not found: $bundleCache"
+    }
+    $env:BUNDLE_PATH = $bundleCache
+    Write-RunLog "INFO" "Using the main repository's read-only Ruby dependency cache."
 
     if (Test-Path -LiteralPath $scholarStatusPath) {
         Remove-Item -LiteralPath $scholarStatusPath -Force
