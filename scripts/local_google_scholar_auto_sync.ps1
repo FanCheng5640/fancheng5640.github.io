@@ -53,7 +53,6 @@ function Finish-Run {
     )
     Write-RunLog $Status.ToUpperInvariant() $Message
     Write-RunState $Status $Message
-    Pop-Location
     exit $Code
 }
 
@@ -104,60 +103,6 @@ function Resolve-Tool {
     throw "Required command was not found: $Name"
 }
 
-function Decode-Utf8 {
-    param([string]$Base64)
-    return [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($Base64))
-}
-
-function Get-ChecklistSection {
-    param(
-        [string]$Text,
-        [string]$StartHeader,
-        [string]$EndHeader
-    )
-    $pattern = "(?s)" + [regex]::Escape($StartHeader) + "\s*(.*?)\s*" + [regex]::Escape($EndHeader)
-    $match = [regex]::Match($Text, $pattern)
-    if (-not $match.Success) {
-        return ""
-    }
-    return $match.Groups[1].Value.Trim()
-}
-
-function Test-ChecklistBlocksAutoSync {
-    if ($IgnoreChecklist) {
-        Write-RunLog "INFO" "Checklist gate bypassed for an explicit operator run."
-        return $false
-    }
-
-    $checklistPath = Join-Path $repoRoot (Decode-Utf8 "6ZyA5rGC5riF5Y2VLnR4dA==")
-    if (-not (Test-Path -LiteralPath $checklistPath)) {
-        return $false
-    }
-
-    $text = [System.IO.File]::ReadAllText($checklistPath, [System.Text.Encoding]::UTF8)
-    $high = Get-ChecklistSection `
-        -Text $text `
-        -StartHeader (Decode-Utf8 "PT09IOaWsOmcgOaxgu+8iOmrmOS8mOWFiOe6p++8jOWcqOi/memHjOWGme+8iSA9PT0=") `
-        -EndHeader (Decode-Utf8 "PT09IOaWsOmcgOaxgu+8iOS9juS8mOWFiOe6p++8jOWcqOi/memHjOWGme+8iSA9PT0=")
-    $low = Get-ChecklistSection `
-        -Text $text `
-        -StartHeader (Decode-Utf8 "PT09IOaWsOmcgOaxgu+8iOS9juS8mOWFiOe6p++8jOWcqOi/memHjOWGme+8iSA9PT0=") `
-        -EndHeader (Decode-Utf8 "PT09IOW3suWujOaIkO+8iOWAkuW6j++8jOacgOaWsOWcqOacgOWJje+8iSA9PT0=")
-
-    if ($high.Length -gt 0) {
-        Write-RunLog "INFO" "Checklist has high-priority items; auto sync will wait."
-        return $true
-    }
-    if ($text.Contains((Decode-Utf8 "W+acquWujOaIkF0=")) -or $text.Contains((Decode-Utf8 "W+mDqOWIhuWujOaIkF0="))) {
-        Write-RunLog "INFO" "Checklist has unfinished legacy items; auto sync will wait."
-        return $true
-    }
-    if ($low.Length -gt 0) {
-        Write-RunLog "INFO" "Checklist has low-priority queued items; continuing because the worktree is clean and this sync only touches Scholar data."
-    }
-    return $false
-}
-
 function Get-ChangedPaths {
     $unstaged = @(Invoke-Git @("diff", "--name-only"))
     $staged = @(Invoke-Git @("diff", "--cached", "--name-only"))
@@ -166,43 +111,31 @@ function Get-ChangedPaths {
 }
 
 Write-RunLog "INFO" "Starting local Google Scholar auto sync."
-Push-Location $repoRoot
+$syncWorktree = Join-Path $stateDir ("worktree-" + [guid]::NewGuid().ToString("N"))
+$worktreeAdded = $false
+$insideSyncWorktree = $false
+$finalMessage = ""
 
 try {
-    if (Test-ChecklistBlocksAutoSync) {
-        Finish-Run "skipped" "High-priority or unfinished checklist items are still pending; no files were changed."
-    }
-
-    $currentBranch = (Invoke-Git @("rev-parse", "--abbrev-ref", "HEAD") | Select-Object -First 1).ToString().Trim()
-    if ($currentBranch -ne $Branch) {
-        Finish-Run "skipped" "Current branch is $currentBranch, not $Branch; no files were changed."
-    }
-
-    $initialStatus = @(Invoke-Git @("status", "--porcelain", "--untracked-files=all"))
-    if ($initialStatus.Count -gt 0) {
-        Finish-Run "skipped" "Worktree is not clean before sync; no files were changed."
-    }
-
-    Invoke-Git @("fetch", $Remote, $Branch) | Out-Null
-    $comparison = (Invoke-Git @("rev-list", "--left-right", "--count", "$Branch...$Remote/$Branch") | Select-Object -First 1).ToString().Trim()
-    $parts = $comparison -split "\s+"
-    if ($parts.Count -lt 2) {
-        throw "Could not compare local $Branch with $Remote/$Branch. Raw comparison: $comparison"
-    }
-    $localAhead = [int]$parts[0]
-    $remoteAhead = [int]$parts[1]
-    if ($localAhead -eq 0 -and $remoteAhead -gt 0) {
-        Write-RunLog "INFO" "Local $Branch is behind $Remote/$Branch by $remoteAhead commit(s); fast-forwarding before Scholar sync."
-        Invoke-Git @("merge", "--ff-only", "$Remote/$Branch") | Out-Null
-        $statusAfterFastForward = @(Invoke-Git @("status", "--porcelain", "--untracked-files=all"))
-        if ($statusAfterFastForward.Count -gt 0) {
-            throw "Worktree is not clean after fast-forward: $($statusAfterFastForward -join ', ')"
+    Push-Location $repoRoot
+    try {
+        $mainStatus = @(Invoke-Git @("status", "--porcelain", "--untracked-files=all"))
+        if ($mainStatus.Count -gt 0) {
+            Write-RunLog "INFO" "Main worktree has user changes; continuing safely in an isolated worktree."
         }
+        if ($IgnoreChecklist) {
+            Write-RunLog "INFO" "IgnoreChecklist is retained for backward compatibility; isolated sync never edits the main worktree."
+        }
+        Invoke-Git @("fetch", $Remote, $Branch) | Out-Null
+        Invoke-Git @("worktree", "add", "--detach", $syncWorktree, "$Remote/$Branch") | Out-Null
+        $worktreeAdded = $true
     }
-    elseif ($localAhead -ne 0 -or $remoteAhead -ne 0) {
-        Finish-Run "skipped" "Local $Branch and $Remote/$Branch are not aligned ($comparison); no files were changed."
+    finally {
+        Pop-Location
     }
 
+    Push-Location $syncWorktree
+    $insideSyncWorktree = $true
     $python = Resolve-Tool "python" @(
         (Join-Path $env:LOCALAPPDATA "Programs\Python\Python310\python.exe")
     )
@@ -228,33 +161,62 @@ try {
 
     $changedPaths = @(Get-ChangedPaths)
     if ($changedPaths.Count -eq 0) {
-        Finish-Run "ok" "Google Scholar sync returned fresh data; repository data was already current."
+        $finalMessage = "Google Scholar sync returned fresh data; repository data was already current."
     }
-    if ($changedPaths.Count -ne 1 -or $changedPaths[0] -ne $targetDataPath) {
+    elseif ($changedPaths.Count -ne 1 -or $changedPaths[0] -ne $targetDataPath) {
         throw "Unexpected changed paths after Scholar sync: $($changedPaths -join ', ')"
     }
+    else {
+        Invoke-Capture $python @(
+            "-B",
+            "-m",
+            "py_compile",
+            ".github/scripts/sync_google_scholar.py",
+            ".github/scripts/scholarly_sync_report.py"
+        ) | Out-Null
+        Invoke-Capture $python @("scripts/check_journal_metrics_freshness.py") | Out-Null
+        Invoke-Capture $bundle @("exec", "jekyll", "build") | Out-Null
 
-    Invoke-Capture $python @(
-        "-B",
-        "-m",
-        "py_compile",
-        ".github/scripts/sync_google_scholar.py",
-        ".github/scripts/scholarly_sync_report.py"
-    ) | Out-Null
-    Invoke-Capture $python @("scripts/check_journal_metrics_freshness.py") | Out-Null
-    Invoke-Capture $bundle @("exec", "jekyll", "build") | Out-Null
+        Invoke-Git @("add", "--", $targetDataPath) | Out-Null
+        $commitTitle = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("6Ieq5Yqo5pu05pawIEdvb2dsZSBTY2hvbGFyIOW8leeUqOaVsOaNrg=="))
+        $commitBody = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("5pys5py65a6a5pe25ZCM5q2lIEdvb2dsZSBTY2hvbGFyIOW8leeUqOaVsOaNruOAgg=="))
+        Invoke-Git @("commit", "-m", $commitTitle, "-m", $commitBody) | Out-Null
+        Invoke-Git @("push", $Remote, "HEAD:$Branch") | Out-Null
+        $finalMessage = "Committed and pushed fresh Google Scholar data from the isolated worktree."
+    }
+    Pop-Location
+    $insideSyncWorktree = $false
 
-    Invoke-Git @("add", "--", $targetDataPath) | Out-Null
-    $commitTitle = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("6Ieq5Yqo5pu05pawIEdvb2dsZSBTY2hvbGFyIOW8leeUqOaVsOaNrg=="))
-    $commitBody = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("5pys5py65a6a5pe25ZCM5q2lIEdvb2dsZSBTY2hvbGFyIOW8leeUqOaVsOaNruOAgg=="))
-    Invoke-Git @("commit", "-m", $commitTitle, "-m", $commitBody) | Out-Null
-    Invoke-Git @("push", $Remote, $Branch) | Out-Null
+    Push-Location $repoRoot
+    try {
+        Invoke-Git @("worktree", "remove", "--force", "--", $syncWorktree) | Out-Null
+        $worktreeAdded = $false
+    }
+    finally {
+        Pop-Location
+    }
 
-    Finish-Run "ok" "Committed and pushed fresh Google Scholar data."
+    Finish-Run "ok" $finalMessage
 }
 catch {
-    Write-RunState "failed" "$_"
-    Write-RunLog "ERROR" "$_"
-    Pop-Location
+    $runError = $_
+    if ($insideSyncWorktree) {
+        Pop-Location
+        $insideSyncWorktree = $false
+    }
+    if ($worktreeAdded) {
+        Push-Location $repoRoot
+        try {
+            Invoke-Git @("worktree", "remove", "--force", "--", $syncWorktree) | Out-Null
+        }
+        catch {
+            Write-RunLog "ERROR" "Could not remove isolated worktree $syncWorktree`: $_"
+        }
+        finally {
+            Pop-Location
+        }
+    }
+    Write-RunState "failed" "$runError"
+    Write-RunLog "ERROR" "$runError"
     exit 1
 }

@@ -13,9 +13,10 @@ from scholarly_freshness import google_scholar_current_for_today
 
 
 SCHEDULE_ATTEMPTS = {
-    "30 7 * * *": 1,
-    "30 8 * * *": 2,
-    "30 9 * * *": 3,
+    "15 6 * * *": 1,
+    "45 6 * * *": 2,
+    "15 7 * * *": 3,
+    "5 9 * * *": 4,
 }
 TOTAL_ATTEMPTS = len(SCHEDULE_ATTEMPTS)
 

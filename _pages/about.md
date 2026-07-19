@@ -90,7 +90,7 @@ Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University
 </section>
 {% endif %}
 
-<p class="site-last-updated">Last updated: {{ site.time | date: "%b %d, %Y" }}</p>
+<p class="site-last-updated">Website last updated: {{ site.website_last_updated | date: "%b %d, %Y" }}</p>
 <p class="site-privacy-notice">
   <span>This site uses Google Analytics to collect anonymized usage statistics.</span>
   <span>No personally identifiable information is collected.</span>

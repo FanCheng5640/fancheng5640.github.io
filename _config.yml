@@ -17,6 +17,9 @@ url                      : https://fancheng.org # The base hostname & protocol f
                                                            # or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "FanCheng5640/fancheng5640.github.io"
+# Update this date manually when the website content changes. Automated
+# Google Scholar syncs use _data/google_scholar.json and must not change it.
+website_last_updated     : "2026-07-18"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
 #               If a field is blank the icon and link will not appear, otherwise it will be shown.

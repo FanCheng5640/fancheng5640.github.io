@@ -3,13 +3,16 @@ name: Sync scholarly data
 on:
   workflow_dispatch:
   schedule:
-    # The first attempt runs the full daily sync. Later attempts run only if
-    # Google Scholar data is still stale, so a temporary block can self-heal.
-    - cron: "30 7 * * *"
+    # Three recovery attempts finish before the workday. The final 09:05
+    # attempt is also the only scheduled run allowed to send a failure email.
+    # Off-round minutes reduce exposure to GitHub's busiest schedule times.
+    - cron: "15 6 * * *"
       timezone: "Asia/Jerusalem"
-    - cron: "30 8 * * *"
+    - cron: "45 6 * * *"
       timezone: "Asia/Jerusalem"
-    - cron: "30 9 * * *"
+    - cron: "15 7 * * *"
+      timezone: "Asia/Jerusalem"
+    - cron: "5 9 * * *"
       timezone: "Asia/Jerusalem"
 
 permissions:
@@ -84,7 +87,7 @@ jobs:
         if: >-
           steps.retry_policy.outputs.should_sync == 'true' &&
           steps.report.outputs.has_changes == 'true' &&
-          (steps.report.outputs.google_scholar_sync_alert != 'true' ||
+          (github.event_name == 'workflow_dispatch' ||
           steps.retry_policy.outputs.final_attempt == 'true')
         env:
           REPORT_EMAIL_TO: ${{ secrets.SCHOLARLY_REPORT_EMAIL_TO }}
@@ -107,7 +110,7 @@ jobs:
           steps.report.outputs.google_scholar_sync_alert == 'true' &&
           steps.retry_policy.outputs.final_attempt == 'true'
         run: |
-          echo "Google Scholar citation metrics were not refreshed after all three daily attempts."
+          echo "Google Scholar citation metrics were not refreshed after all four daily cloud attempts."
           echo "Public cached metrics were left unchanged."
           echo "Configure SERPAPI_API_KEY for stable scheduled Google Scholar updates, or check the report above for the direct-fetch error."
           exit 1
