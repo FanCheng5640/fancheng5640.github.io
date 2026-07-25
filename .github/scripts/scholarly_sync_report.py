@@ -21,7 +21,7 @@ PUBLICATIONS_DIR = Path("_publications")
 ABOUT_PAGE_PATH = Path("_pages/about.md")
 GOOGLE_SCHOLAR_PATH = Path("_data/google_scholar.json")
 EMAIL_RECIPIENT_SECRET = "SCHOLARLY_REPORT_EMAIL_TO"
-GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS = 0
+DEFAULT_GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS = 0
 
 PUBLICATION_COMPARE_KEYS = [
     "title",
@@ -219,7 +219,14 @@ def google_scholar_recent_enough(data: dict) -> bool:
     if not updated:
         return False
     age_days = (datetime.now(timezone.utc).date() - updated).days
-    return 0 <= age_days <= GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS
+    return 0 <= age_days <= google_scholar_recent_max_age_days()
+
+
+def google_scholar_recent_max_age_days() -> int:
+    value = os.environ.get("GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS", "").strip()
+    if not value:
+        return DEFAULT_GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS
+    return max(0, int(value))
 
 
 def snapshot() -> dict:
@@ -435,7 +442,7 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
                     "- Latest Google Scholar attempt used cached data"
                     f"{provider_label}, but the public data is recent enough "
                     f"(updated {after_scholar.get('updated', 'unknown')}; "
-                    f"alert threshold: {GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS} days)."
+                    f"alert threshold: {google_scholar_recent_max_age_days()} days)."
                 )
             else:
                 lines.append(
@@ -463,7 +470,7 @@ def build_report(before: dict, after: dict, scholar_status: dict | None = None) 
         "google_scholar_sync_alert": scholar_sync_alert,
         "google_scholar_already_current": scholar_already_current,
         "google_scholar_recent_enough": scholar_recent_enough,
-        "google_scholar_recent_max_age_days": GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS,
+        "google_scholar_recent_max_age_days": google_scholar_recent_max_age_days(),
         "scholar_status": scholar_status or {},
     }
     return report, metadata

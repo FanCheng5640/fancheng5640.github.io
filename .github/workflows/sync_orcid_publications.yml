@@ -62,6 +62,10 @@ jobs:
       - name: Generate scholarly update report
         if: steps.retry_policy.outputs.should_sync == 'true'
         id: report
+        env:
+          # Scheduled runs tolerate a short shutdown gap because the local
+          # Windows fallback cannot run while the computer is off.
+          GOOGLE_SCHOLAR_RECENT_MAX_AGE_DAYS: ${{ github.event_name == 'schedule' && '2' || '0' }}
         run: >
           python .github/scripts/scholarly_sync_report.py report
           --before "$RUNNER_TEMP/scholarly-before.json"
