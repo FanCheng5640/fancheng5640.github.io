@@ -1,0 +1,19 @@
+{% assign chart_max_citations = include.max_citations | default: 1 %}
+{% if chart_max_citations < 1 %}
+  {% assign chart_max_citations = 1 %}
+{% endif %}
+
+<div class="scholar-metrics__chart{% if include.all_years %} scholar-metrics__chart--all{% endif %}" aria-label="{{ include.aria_label | default: 'Google Scholar citations by year' }}">
+  {% for point in include.points %}
+    {% assign bar_height = point.citations | times: 100 | divided_by: chart_max_citations %}
+    <div class="scholar-metrics__bar-group" aria-label="{{ point.year }}: {{ point.citations }} citation{% unless point.citations == 1 %}s{% endunless %}">
+      <div class="scholar-metrics__bar-stack">
+        <span class="scholar-metrics__bar-measure" style="height: {{ bar_height }}%;">
+          <span class="scholar-metrics__value">{{ point.citations }}</span>
+          <span class="scholar-metrics__bar" aria-hidden="true"></span>
+        </span>
+      </div>
+      <span class="scholar-metrics__year" aria-hidden="true">{{ point.year }}</span>
+    </div>
+  {% endfor %}
+</div>

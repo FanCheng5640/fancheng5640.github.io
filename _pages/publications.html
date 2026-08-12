@@ -19,8 +19,14 @@ hide_title: true
 
 {% assign scholar = site.data.google_scholar %}
 {% if scholar and scholar.citations_by_year and scholar.citations_by_year.size > 0 %}
+  {% assign recent_year_count = 5 %}
+  {% assign recent_year_start = scholar.citations_by_year.size | minus: recent_year_count %}
+  {% if recent_year_start < 0 %}
+    {% assign recent_year_start = 0 %}
+  {% endif %}
+  {% assign recent_citations = scholar.citations_by_year | slice: recent_year_start, recent_year_count %}
   {% assign max_citations = 0 %}
-  {% for point in scholar.citations_by_year %}
+  {% for point in recent_citations %}
     {% if point.citations > max_citations %}
       {% assign max_citations = point.citations %}
     {% endif %}
@@ -31,6 +37,7 @@ hide_title: true
     {% capture scholar_sync_title %}Google Scholar data updated {{ scholar_updated_label }}{% endcapture %}
     <h2 id="scholar-metrics-title" class="scholar-metrics__title">
       <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener" title="{{ scholar_sync_title | strip }}">{{ scholar.summary_title }}</a>
+      <a id="scholar-citations-all-link" class="scholar-metrics__all-link" href="{{ '/publications/citations/' | relative_url }}" target="scholar-citations-all" rel="noopener">View all years</a>
     </h2>
     <div class="scholar-metrics__content">
       <table class="scholar-metrics__table">
@@ -56,20 +63,32 @@ hide_title: true
         </tbody>
       </table>
 
-      <div class="scholar-metrics__chart" aria-label="Google Scholar citations by year">
-        {% for point in scholar.citations_by_year %}
-          {% assign bar_height = point.citations | times: 100 | divided_by: max_citations %}
-          <div class="scholar-metrics__bar-group">
-            <div class="scholar-metrics__bar-stack">
-              <span class="scholar-metrics__value">{{ point.citations }}</span>
-              <span class="scholar-metrics__bar" style="height: {{ bar_height }}%;"></span>
-            </div>
-            <span class="scholar-metrics__year">{{ point.year }}</span>
-          </div>
-        {% endfor %}
-      </div>
+      {% include scholar-citation-chart.html points=recent_citations max_citations=max_citations aria_label="Google Scholar citations for the five most recent years" %}
     </div>
   </section>
+  <script>
+    (function () {
+      var link = document.getElementById("scholar-citations-all-link");
+      if (!link) return;
+
+      link.addEventListener("click", function (event) {
+        if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+
+        var width = Math.round(Math.min(960, window.screen.availWidth * 0.9));
+        var height = Math.round(Math.min(720, window.screen.availHeight * 0.9));
+        var left = Math.max(0, Math.round((window.screen.availWidth - width) / 2));
+        var top = Math.max(0, Math.round((window.screen.availHeight - height) / 2));
+        var features = "popup=yes,resizable=yes,scrollbars=yes,width=" + width + ",height=" + height + ",left=" + left + ",top=" + top;
+        var popup = window.open(link.href, link.target, features);
+
+        if (popup) {
+          event.preventDefault();
+          popup.opener = null;
+          popup.focus();
+        }
+      });
+    }());
+  </script>
 {% endif %}
 
 <h2 class="publication-count-heading">Publications ({{ site.publications | size }})</h2><hr class="publication-count-rule" />

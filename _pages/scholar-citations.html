@@ -1,0 +1,26 @@
+---
+layout: archive
+title: "Google Scholar citations — all years"
+permalink: /publications/citations/
+author_profile: false
+---
+
+{% assign scholar = site.data.google_scholar %}
+{% if scholar and scholar.citations_by_year and scholar.citations_by_year.size > 0 %}
+  {% assign max_citations = 0 %}
+  {% for point in scholar.citations_by_year %}
+    {% if point.citations > max_citations %}
+      {% assign max_citations = point.citations %}
+    {% endif %}
+  {% endfor %}
+  {% assign scholar_updated_label = scholar.updated | date: "%b %d, %Y" %}
+
+  <section class="scholar-citations-all" aria-label="Google Scholar citations for all available years">
+    <p class="scholar-citations-all__intro">
+      Annual citation counts from <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener">Google Scholar</a>. Data updated <time datetime="{{ scholar.updated }}">{{ scholar_updated_label }}</time>.
+    </p>
+    {% include scholar-citation-chart.html points=scholar.citations_by_year max_citations=max_citations all_years=true aria_label="Google Scholar citations for all available years" %}
+  </section>
+{% else %}
+  <p>Google Scholar citation data is not available.</p>
+{% endif %}
