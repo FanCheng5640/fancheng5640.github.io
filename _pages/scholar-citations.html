@@ -19,7 +19,10 @@ author_profile: false
     <p class="scholar-citations-all__intro">
       Annual citation counts from <a href="{{ scholar.profile_url }}" target="_blank" rel="noopener">Google Scholar</a>. Data updated <time datetime="{{ scholar.updated }}">{{ scholar_updated_label }}</time>.
     </p>
-    {% include scholar-citation-chart.html points=scholar.citations_by_year max_citations=max_citations all_years=true aria_label="Google Scholar citations for all available years" %}
+    <div class="scholar-metrics__content">
+      {% include scholar-metrics-table.html scholar=scholar %}
+      {% include scholar-citation-chart.html points=scholar.citations_by_year max_citations=max_citations all_years=true aria_label="Google Scholar citations for all available years" %}
+    </div>
   </section>
 {% else %}
   <p>Google Scholar citation data is not available.</p>

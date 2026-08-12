@@ -11,10 +11,11 @@
 
 .scholar-metrics__all-link {
   display: inline-block;
-  padding: 0.35rem 0.72rem;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid #bdc1c4;
   border-radius: 0.25rem;
-  background: #1565c0;
-  color: #fff;
+  background: #fff;
+  color: #1565c0;
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.2;
@@ -22,14 +23,14 @@
 }
 
 .scholar-metrics__all-link:visited,
-.scholar-metrics__all-link:hover,
 .scholar-metrics__all-link:focus {
-  color: #fff;
+  color: #1565c0;
 }
 
 .scholar-metrics__all-link:hover,
 .scholar-metrics__all-link:focus {
-  background: #0d47a1;
+  background: #e0e0e0;
+  color: #212121;
 }
 
 .scholar-metrics__all-link:focus-visible {
@@ -77,6 +78,21 @@
   min-height: 11rem;
   padding-top: 1.2rem;
   border-bottom: 1px solid #d7d7d7;
+}
+
+.scholar-metrics__chart-block {
+  justify-self: start;
+  width: max-content;
+  max-width: 100%;
+}
+
+.scholar-metrics__chart-label {
+  margin-bottom: 0.2rem;
+  color: var(--global-text-color);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .scholar-metrics__bar-group {

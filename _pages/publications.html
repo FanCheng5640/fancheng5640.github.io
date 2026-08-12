@@ -40,30 +40,9 @@ hide_title: true
       <a id="scholar-citations-all-link" class="scholar-metrics__all-link" href="{{ '/publications/citations/' | relative_url }}" target="scholar-citations-all" rel="noopener">View all years</a>
     </h2>
     <div class="scholar-metrics__content">
-      <table class="scholar-metrics__table">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col">All</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Citations</th>
-            <td>{{ scholar.metrics.citations.all }}</td>
-          </tr>
-          <tr>
-            <th scope="row">h-index</th>
-            <td>{{ scholar.metrics.h_index.all }}</td>
-          </tr>
-          <tr>
-            <th scope="row">i10-index</th>
-            <td>{{ scholar.metrics.i10_index.all }}</td>
-          </tr>
-        </tbody>
-      </table>
+      {% include scholar-metrics-table.html scholar=scholar %}
 
-      {% include scholar-citation-chart.html points=recent_citations max_citations=max_citations aria_label="Google Scholar citations for the five most recent years" %}
+      {% include scholar-citation-chart.html points=recent_citations max_citations=max_citations label="Recent 5 years" aria_label="Google Scholar citations for the five most recent years" %}
     </div>
   </section>
   <script>
