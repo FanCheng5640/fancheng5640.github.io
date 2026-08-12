@@ -1,0 +1,17 @@
+---
+layout: compress
+---
+
+<!doctype html>
+<html lang="{{ site.locale | slice: 0,2 }}" class="no-js">
+  <head>
+    {% include head.html %}
+    {% include head/custom.html %}
+  </head>
+  <body class="scholar-popup-page">
+    <main class="scholar-popup" aria-labelledby="scholar-popup-title">
+      <h1 id="scholar-popup-title" class="scholar-popup__title">{{ page.title }}</h1>
+      {{ content }}
+    </main>
+  </body>
+</html>
