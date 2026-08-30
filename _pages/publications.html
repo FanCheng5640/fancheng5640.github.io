@@ -54,7 +54,7 @@ hide_title: true
       {% if scholar_default_year_view == "recent" %}
         {% include scholar-citation-chart.html points=recent_citations max_citations=recent_max_citations label="Recent 5 years" aria_label="Google Scholar citations for the five most recent years" %}
       {% else %}
-        {% include scholar-citation-chart.html points=scholar.citations_by_year max_citations=all_max_citations label="All years" all_years=true aria_label="Google Scholar citations for all available years" %}
+        {% include scholar-citation-chart.html points=scholar.citations_by_year max_citations=all_max_citations all_years=true aria_label="Google Scholar citations for all available years" %}
       {% endif %}
     </div>
   </section>
