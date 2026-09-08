@@ -9,8 +9,8 @@
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {
-      "all": 58,
-      "recent": 54
+      "all": 59,
+      "recent": 55
     },
     "h_index": {
       "all": 4,
@@ -52,7 +52,7 @@
     },
     {
       "year": 2026,
-      "citations": 21
+      "citations": 22
     }
   ],
   "publication_citations": [
