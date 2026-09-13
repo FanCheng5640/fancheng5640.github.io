@@ -2,15 +2,15 @@
   "profile_url": "https://scholar.google.com/citations?user=cXkaM-MAAAAJ&hl=en",
   "source": "Google Scholar",
   "sync_provider": "google_scholar_html",
-  "updated": "2026-09-12",
-  "last_attempted": "2026-09-12",
+  "updated": "2026-09-13",
+  "last_attempted": "2026-09-13",
   "sync_status": "ok",
   "last_error": "",
   "summary_title": "Google Scholar citations",
   "metrics": {
     "citations": {
-      "all": 59,
-      "recent": 55
+      "all": 61,
+      "recent": 56
     },
     "h_index": {
       "all": 4,
@@ -24,7 +24,7 @@
   "citations_by_year": [
     {
       "year": 2019,
-      "citations": 1
+      "citations": 2
     },
     {
       "year": 2020,
@@ -52,14 +52,14 @@
     },
     {
       "year": 2026,
-      "citations": 22
+      "citations": 23
     }
   ],
   "publication_citations": [
     {
       "doi": "10.1364/oe.26.031500",
       "title": "Nondestructive measurement of nanofiber diameters using microfiber tip",
-      "citation_count": 12,
+      "citation_count": 13,
       "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:u5HHmVD_uO8C",
       "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=11075354479402646840",
       "matched_by": "normalized_title",
@@ -113,9 +113,9 @@
     {
       "doi": "10.1063/5.0279509",
       "title": "Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities",
-      "citation_count": 0,
+      "citation_count": 1,
       "scholar_url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=cXkaM-MAAAAJ&citation_for_view=cXkaM-MAAAAJ:Se3iqnhoufwC",
-      "citations_url": "",
+      "citations_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1781176146538684511",
       "matched_by": "normalized_title",
       "source_title": "Resonantly enhanced evaporation sensing in liquid droplet whispering-gallery cavities"
     }
