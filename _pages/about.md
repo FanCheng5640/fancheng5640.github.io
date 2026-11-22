@@ -10,7 +10,7 @@ redirect_from:
 
 ## Current Position
 
-Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University, Israel.
+Ph.D. Candidate in Optics, School of Electrical and Computer Engineering, Tel Aviv University, Israel.
 
 {% assign research_interests = site.author.research_interests %}
 {% if research_interests and research_interests.items %}
@@ -66,7 +66,7 @@ Ph.D. Candidate in Optics, School of Electrical Engineering, Tel Aviv University
 </details>
 
 {% assign collaborators = site.author.collaborators %}
-{% if collaborators and collaborators.groups %}
+{% if collaborators.enabled and collaborators.groups %}
 <section class="collaborators" aria-labelledby="collaborators-title">
   <h2 id="collaborators-title" class="collaborators__title">{{ collaborators.title }}</h2>
   <div class="collaborators__grid">

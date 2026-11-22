@@ -17,11 +17,11 @@ Education
   <section class="cv-education__item">
     <div class="cv-education__body">
       <h3>Ph.D. Candidate in Optics</h3>
-      <p>School of Electrical Engineering<br>
+      <p>School of Electrical and Computer Engineering<br>
       Tel Aviv University<br>
       Tel Aviv, Israel | 2021-03 - Present{% include cv-duration.html start="2021-03" end="present" prefix=" (" suffix=")" %}<br>
       Optics (optical microresonators)<br>
-      Supervisor: <span class="cv-advisor"><a href="https://scholar.google.com/citations?user=tiFit0cAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Google Scholar">Prof. Tal Carmon</a> (<a href="https://web2.eng.tau.ac.il/wtest/carmon1/index.php/publication/" title="Lab website">Lab</a>)</span></p>
+      Supervisor: <span class="cv-advisor"><a href="https://scholar.google.com/citations?user=tiFit0cAAAAJ&amp;hl=en&amp;inst=2457744612629960019" title="Google Scholar">Prof. Tal Carmon</a> (<a href="https://carmonresonators.github.io/index.php/publication/" title="Lab website">Lab</a>)</span></p>
     </div>
     <a class="cv-education__logo-link" href="http://en.wikipedia.org/wiki/Tel_Aviv_University" target="_blank" rel="noopener" title="Tel Aviv University">
       <img class="cv-education__logo" src="/images/logos/tel-aviv-university-logo-cv.png" alt="Tel Aviv University logo" width="190" height="102" loading="lazy" decoding="async">
