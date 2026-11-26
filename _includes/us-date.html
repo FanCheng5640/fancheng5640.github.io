@@ -1,0 +1,4 @@
+{%- assign us_date_months = "Jan.|Feb.|Mar.|Apr.|May|June|July|Aug.|Sept.|Oct.|Nov.|Dec." | split: "|" -%}
+{%- assign us_date_month_index = include.date | date: "%m" | plus: 0 | minus: 1 -%}
+{%- assign us_date_day = include.date | date: "%d" | plus: 0 -%}
+{{- us_date_months[us_date_month_index] }} {{ us_date_day }}, {{ include.date | date: "%Y" -}}
