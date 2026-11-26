@@ -91,8 +91,10 @@ School of Electrical and Computer Engineering, Tel Aviv University, Israel.
 </section>
 {% endif %}
 
+<footer class="site-page-meta" aria-label="Website information">
 <p class="site-last-updated">Website last updated: {{ site.website_last_updated | date: "%b %d, %Y" }}</p>
 <p class="site-privacy-notice">
   <span>This site uses Google Analytics to collect anonymized usage statistics.</span>
   <span>No personally identifiable information is collected.</span>
 </p>
+</footer>
