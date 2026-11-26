@@ -10,7 +10,8 @@ redirect_from:
 
 ## Current Position
 
-Ph.D. Candidate in Optics, School of Electrical and Computer Engineering, Tel Aviv University, Israel.
+Ph.D. Candidate in Optics<br>
+School of Electrical and Computer Engineering, Tel Aviv University, Israel.
 
 {% assign research_interests = site.author.research_interests %}
 {% if research_interests and research_interests.items %}
